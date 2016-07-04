@@ -648,7 +648,7 @@ TStatus FAT_Init(void)
   else
   	if (res>1) 
 		{
-			SET_CLOCK_SPEED(CLK_8MHz); 
+			
 			return FORMAT();	 //пытаемся отформатировать
 		}	  
 
@@ -1128,6 +1128,7 @@ int main(void)
 	 //сохринить калибровочный параметр
 	 //BKP_WriteBackupRegister(BKP_DR2, REG(K_VIBRO));
 		IWDG_ReloadCounter();
+		SET_CLOCK_SPEED(CLK_8MHz);
 			
 		while(1)	
 		if (key_CHECK_EV(key_EVENT_PRESSED_ENTER)) 

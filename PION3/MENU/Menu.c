@@ -2632,8 +2632,9 @@ void men_EN_MENU(void)
 	FILE  		*pRFile = 0;	
   int k=0;
 	DWORD sector[2];
-//	uint8_t ffarr1[1000];
-//	uint8_t ffarr2[50000];
+	uint8_t ffarr1[1000];
+	uint8_t ffarr2[50000];
+	uint8_t sinus[50]={0,13,25,37,48,59,68,77,84,90,95,98,100,100,98,95,91,84,77,69,59,48,37,25,13,0,-13,-25,-37,-48,-59,-68,-77,-84,-90,-95,-98,-100,-100,-98,-95,-91,-85,-77,-69,-60,-48,-37,-25,-13};
  
 	switch (men_STATUS)
   {
@@ -2706,13 +2707,12 @@ void men_EN_MENU(void)
 								}
 
 															
-//								__disable_irq();
-//								__disable_fiq();
+
 																
 								//Эксперемент по стиранию области, куда будут сохраняться данные
-								//for (k=0; k<1000; k++) ffarr1[k] = 0xff;
-								//for (k=0; k<40; k++) memcpy(&ffarr2[k*1000], ffarr1, 1000);
-
+//								for (k=0; k<100; k++) ffarr1[k] = 0xff;
+//								for (k=0; k<40; k++) memcpy(&ffarr2[k*1000], ffarr1, 1000);
+for (k=0; k<50000; k++) { ext_adc_SIM[k] = 0x1; IWDG_ReloadCounter();}
 								
 								//dat_CreateFile(FileName,ext_adc_SIM,25000,&k_reg);		  //создаем DAT файл								
 				
@@ -2721,12 +2721,14 @@ void men_EN_MENU(void)
 								savefiledirTCHAR = savefiledir;
 								savefilenameTCHAR = savefilename;
 
+								IWDG_ReloadCounter();
 								
 								f_mount(&fls, "0:", 1);
 								res_t = f_mkdir(savefiledirTCHAR);								
-								res_t = f_open(&Fil,savefilenameTCHAR, FA_CREATE_ALWAYS | FA_WRITE);
-								//res_t = f_write(&Fil,&k_reg,4,&iout);		
-								res_t = f_write(&Fil,ext_adc_SIM,25000*2,&iout);																		
+								res_t = f_open(&Fil,savefilenameTCHAR, FA_WRITE | FA_CREATE_ALWAYS );
+								//res_t = f_write(&Fil,&k_reg,4,&iout);										
+								res_t = f_write(&Fil,ext_adc_SIM,25000*2,&iout);																										
+								//res_t = f_printf(&Fil, "%d", ffarr2);
 								f_close(&Fil);			
 								f_mount(0,"0:", 0);		
 								
@@ -2737,30 +2739,18 @@ void men_EN_MENU(void)
 								V = calc_from_dat_V(FileName);								
 
 	
-								f_mount(&fls, "0:", 1);
-								res_t = f_open(&Fil,savefilenameTCHAR, FA_READ | FA_WRITE);  
-								res_t = f_lseek(&Fil, f_size(&Fil));
-								res_t = f_write(&Fil,&A,2,&iout);		
-								res_t = f_write(&Fil,&V,2,&iout);		
-								f_close(&Fil);			
-								f_mount(0,"0:", 0);								
+//								f_mount(&fls, "0:", 1);
+//								res_t = f_open(&Fil,savefilenameTCHAR, FA_READ | FA_WRITE);  
+//								res_t = f_lseek(&Fil, f_size(&Fil));
+//								res_t = f_write(&Fil,&A,2,&iout);		
+//								res_t = f_write(&Fil,&V,2,&iout);		
+//								f_close(&Fil);			
+//								f_mount(0,"0:", 0);								
 								
 								crtflag = 1;
-								
-								
-								
-								sector[0] = Fil.clust;
-								vga_CLEAR();
-								vga_SET_POS_TEXT(5,20);						
-								sprintf(temp,"%d", (int) sector[0]);						
-								vga_PRINT_STR(temp,&FONT_4x7);
-								vga_UPDATE();						
-								Delay(1000000);
-							
-							
 
-							
-							
+								
+					
 								//*Alex
 							  REGW(NUMFILE,temp_reg); //снимаем лок-байт
 							  SET_CLOCK_SPEED(CLK_8MHz);
