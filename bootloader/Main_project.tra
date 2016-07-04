@@ -1,0 +1,93 @@
+*** Creating Trace Output File 'Main_project.tra' Ok.
+### Preparing for ADS-LD.
+### Creating ADS-LD Command Line
+### List of Objects: adding '"main.o"'
+### List of Objects: adding '"stm32f10x_it.o"'
+### List of Objects: adding '"wav.o"'
+### List of Objects: adding '"iir.o"'
+### List of Objects: adding '"adc.o"'
+### List of Objects: adding '"flash.o"'
+### List of Objects: adding '"fm25v10.o"'
+### List of Objects: adding '"ext_adc.o"'
+### List of Objects: adding '"keyboard.o"'
+### List of Objects: adding '"params.o"'
+### List of Objects: adding '"reg.o"'
+### List of Objects: adding '"realtime.o"'
+### List of Objects: adding '"flash_at45db.o"'
+### List of Objects: adding '"road.o"'
+### List of Objects: adding '"system_stm32f10x.o"'
+### List of Objects: adding '"core_cm3.o"'
+### List of Objects: adding '"misc.o"'
+### List of Objects: adding '"stm32f10x_rcc.o"'
+### List of Objects: adding '"stm32f10x_usart.o"'
+### List of Objects: adding '"stm32f10x_gpio.o"'
+### List of Objects: adding '"stm32f10x_dma.o"'
+### List of Objects: adding '"stm32f10x_adc.o"'
+### List of Objects: adding '"stm32f10x_rtc.o"'
+### List of Objects: adding '"stm32f10x_spi.o"'
+### List of Objects: adding '"stm32f10x_tim.o"'
+### List of Objects: adding '"stm32f10x_bkp.o"'
+### List of Objects: adding '"stm32f10x_pwr.o"'
+### List of Objects: adding '"stm32f10x_exti.o"'
+### List of Objects: adding '"stm32f10x_flash.o"'
+### List of Objects: adding '"startup_stm32f10x_md.o"'
+### List of Objects: adding '"diskimg.o"'
+### List of Objects: adding '"usbuser.o"'
+### List of Objects: adding '"mscuser.o"'
+### List of Objects: adding '"usbcore.o"'
+### List of Objects: adding '"usbdesc.o"'
+### List of Objects: adding '"usbhw.o"'
+### List of Objects: adding '"retarget.o"'
+### List of Objects: adding '"_fs_ffind.o"'
+### List of Objects: adding '"_fs_fclose.o"'
+### List of Objects: adding '"_fs_fcreate.o"'
+### List of Objects: adding '"_fs_fdelete.o"'
+### List of Objects: adding '"_fs_flashio.o"'
+### List of Objects: adding '"_fs_flushbuf.o"'
+### List of Objects: adding '"_fs_fopen.o"'
+### List of Objects: adding '"_fs_frename.o"'
+### List of Objects: adding '"_fs_getfsize.o"'
+### List of Objects: adding '"_fs_read.o"'
+### List of Objects: adding '"_fs_setfpos.o"'
+### List of Objects: adding '"_fs_write.o"'
+### List of Objects: adding '"file_config.o"'
+### List of Objects: adding '"fs_fanalyse.o"'
+### List of Objects: adding '"fs_fcheck.o"'
+### List of Objects: adding '"fs_fdefrag.o"'
+### List of Objects: adding '"fs_fdelete.o"'
+### List of Objects: adding '"fs_ffree.o"'
+### List of Objects: adding '"fs_finit.o"'
+### List of Objects: adding '"fs_flashprg.o"'
+### List of Objects: adding '"fs_frename.o"'
+### List of Objects: adding '"fs_lib.o"'
+### List of Objects: adding '"fs_time.o"'
+### List of Objects: adding '"spi_stm32f103.o"'
+### List of Objects: adding '"fs_fat.o"'
+### List of Objects: adding '"fs_ffind.o"'
+### List of Objects: adding '"fs_fformat.o"'
+### List of Objects: adding '"ssd1303.o"'
+### List of Objects: adding '"vga_lib.o"'
+### List of Objects: adding '"font_6x8.o"'
+### List of Objects: adding '"font_7x10_thin.o"'
+### List of Objects: adding '"font_7x10_bold.o"'
+### List of Objects: adding '"font_12x16.o"'
+### List of Objects: adding '"font_4x7.o"'
+### List of Objects: adding '"types.o"'
+### List of Objects: adding '"items.o"'
+### List of Objects: adding '"menu.o"'
+### ADS-LD Command completed:
+--cpu Cortex-M3 "main.o" "stm32f10x_it.o" "wav.o" "iir.o" "adc.o" "flash.o" "fm25v10.o" "ext_adc.o" "keyboard.o" "params.o" "reg.o" "realtime.o" "flash_at45db.o" "road.o" "system_stm32f10x.o" "core_cm3.o" "misc.o" "stm32f10x_rcc.o" "stm32f10x_usart.o" "stm32f10x_gpio.o" "stm32f10x_dma.o" "stm32f10x_adc.o" "stm32f10x_rtc.o" "stm32f10x_spi.o" "stm32f10x_tim.o" "stm32f10x_bkp.o" "stm32f10x_pwr.o" "stm32f10x_exti.o" "stm32f10x_flash.o" "startup_stm32f10x_md.o" "diskimg.o" "usbuser.o" "mscuser.o" "usbcore.o" "usbdesc.o" "usbhw.o" "retarget.o" "_fs_ffind.o" "_fs_fclose.o" "_fs_fcreate.o" "_fs_fdelete.o" "_fs_flashio.o" "_fs_flushbuf.o" "_fs_fopen.o" "_fs_frename.o" "_fs_getfsize.o" "_fs_read.o" "_fs_setfpos.o" "_fs_write.o" "file_config.o" "fs_fanalyse.o" "fs_fcheck.o" "fs_fdefrag.o" "fs_fdelete.o" "fs_ffree.o" "fs_finit.o" "fs_flashprg.o" "fs_frename.o" "fs_lib.o" "fs_time.o" "spi_stm32f103.o" "fs_fat.o" "fs_ffind.o" "fs_fformat.o" "ssd1303.o" "vga_lib.o" "font_6x8.o" "font_7x10_thin.o" "font_7x10_bold.o" "font_12x16.o" "font_4x7.o" "types.o" "items.o" "menu.o" 
+--strict --scatter "Main_project.sct" 
+--summary_stderr --info summarysizes --map --xref --callgraph --symbols 
+--info sizes --info totals --info unused --info veneers 
+ --list ".\Main_project.map" -o Main_project.axf### Preparing Environment (PrepEnvAds)
+### ADS-LD Output File: 'Main_project.axf'
+### ADS-LD Command File: 'Main_project.l2p'
+### Checking for dirty Components...
+### Creating CmdFile 'Main_project.l2p', Handle=0x000001E4
+### Writing '.lnp' file
+### ADS-LD Command file 'Main_project.l2p' is ready.
+### ADS-LD: About to start ADS-LD Thread.
+### ADS-LD: executed with 0 errors
+### Updating obj list
+### LDADS_file() completed.

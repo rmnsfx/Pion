@@ -1,0 +1,1 @@
+.\logos.o: logos.c

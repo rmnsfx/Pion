@@ -1,0 +1,513 @@
+;#<FEEDBACK># ARM Linker, 5050106: Last Updated: Thu Nov 05 12:08:28 2015
+;VERSION 0.2
+;FILE _fs_fclose.o
+;FILE _fs_fcreate.o
+;FILE _fs_fdelete.o
+;FILE _fs_ffind.o
+_ffind <= USED 0
+;FILE _fs_flashio.o
+;FILE _fs_flushbuf.o
+__flushbuf <= USED 0
+;FILE _fs_fopen.o
+;FILE _fs_frename.o
+_frename <= USED 0
+;FILE _fs_getfsize.o
+;FILE _fs_read.o
+;FILE _fs_setfpos.o
+;FILE _fs_write.o
+;FILE adc.o
+adc_BAT_MEASURE <= USED 0
+adc_BAT_PERCENT <= USED 0
+adc_POWER <= USED 0
+;FILE core_cm3.o
+__REV16 <= USED 0
+__REVSH <= USED 0
+__get_MSP <= USED 0
+__get_PSP <= USED 0
+__set_PSP <= USED 0
+;FILE ext_adc.o
+calc_from_dat <= USED 0
+ext_adc_GET_PROCESS <= USED 0
+ext_adc_GET_STATUS <= USED 0
+ext_adc_SAMPLING <= USED 0
+ext_adc_SETUP <= USED 0
+ext_adc_START <= USED 0
+ext_adc_STOP <= USED 0
+ext_adc_WAIT <= USED 0
+;FILE flash.o
+mmc_read_config <= USED 0
+;FILE flash_at45db.o
+AT45DB_CHIP_ERASE <= USED 0
+AT45DB_CHIP_SET <= USED 0
+AT45DB_PAGE_ERASE <= USED 0
+AT45DB_PAGE_SET <= USED 0
+AT45DB_READ_DATA <= USED 0
+AT45DB_READ_STATUS <= USED 0
+AT45DB_SEND_OPCODE <= USED 0
+AT45DB_WRITE_DATA <= USED 0
+;FILE fm25v10.o
+fram_ERASE_BULK <= USED 0
+fram_GET_BYTE <= USED 0
+fram_READ <= USED 0
+fram_SETUP <= USED 0
+fram_WRITE <= USED 0
+fram_WRITE_ENABLE <= USED 0
+;FILE fs_fanalyse.o
+fanalyse <= USED 0
+;FILE fs_fat.o
+fat_ffind <= USED 0
+fat_format <= USED 0
+fat_free <= USED 0
+fat_rename <= USED 0
+;FILE fs_fcheck.o
+fcheck <= USED 0
+;FILE fs_fdefrag.o
+fdefrag <= USED 0
+;FILE fs_fdelete.o
+;FILE fs_ffind.o
+ffind <= USED 0
+;FILE fs_fformat.o
+fformat <= USED 0
+;FILE fs_ffree.o
+ffree <= USED 0
+;FILE fs_finit.o
+;FILE fs_flashprg.o
+;FILE fs_frename.o
+frename <= USED 0
+;FILE fs_lib.o
+fs_strpos <= USED 0
+;FILE fs_time.o
+;FILE iir.o
+iir_CreateFilterDec <= USED 0
+iir_CreateFilterFlo <= USED 0
+iir_DEC_FILTER_CHANGE <= USED 0
+iir_DEC_FILTER_RESET <= USED 0
+iir_DEC_INTEGRATOR_2ORD <= USED 0
+iir_DETECTOR_RESET <= USED 0
+iir_FLO_FILTER_1ORD <= USED 0
+iir_FLO_FILTER_2ORD <= USED 0
+iir_RETURN_MAX_PIK <= USED 0
+iir_RETURN_MIN_PIK <= USED 0
+iir_RETURN_OVER <= USED 0
+iir_RETURN_PIK_PIK <= USED 0
+iir_RETURN_RMS <= USED 0
+;FILE keyboard.o
+key_CHECK_STATUS <= USED 0
+key_RES_EVENT <= USED 0
+;FILE main.o
+CONTROL_BAT <= USED 0
+CONTROL_POWER <= USED 0
+FIL <= USED 0
+InitAll <= USED 0
+NVIC_Configuration <= USED 0
+TINGULAR <= USED 0
+;FILE menu.o
+men_CALLBACK <= USED 0
+men_CALL_CUB_ITEM <= USED 0
+men_CHECK_EVENT <= USED 0
+men_CLEAR_ITEM <= USED 0
+men_DEC_POINT <= USED 0
+men_DW_MENU <= USED 0
+men_EN_MENU <= USED 0
+men_ES_MENU <= USED 0
+men_GET_CONFIG <= USED 0
+men_GET_NEXT_ITEM <= USED 0
+men_GET_PREV_ITEM <= USED 0
+men_INC_POINT <= USED 0
+men_MENU_CONTROL <= USED 0
+men_READ_PARAM <= USED 0
+men_READ_VALUE_PARAM <= USED 0
+men_RETURN_SUB_ITEM <= USED 0
+men_SETUP <= USED 0
+men_SET_CONFIG <= USED 0
+men_SHOW_BAT <= USED 0
+men_SHOW_CURSOR <= USED 0
+men_SHOW_CURSOR_EDIT <= USED 0
+men_SHOW_ITEM <= USED 0
+men_SHOW_ITEMS <= USED 0
+men_SHOW_ITEM_VALUE <= USED 0
+men_SHOW_MAINFORMS <= USED 0
+men_SHOW_MENU <= USED 0
+men_SHOW_MESSAGE <= USED 0
+men_SHOW_ONEITEM <= USED 0
+men_SHOW_RECT <= USED 0
+men_SHOW_REFRESH <= USED 0
+men_UP_MENU <= USED 0
+men_WRITE_VALUE_PARAM <= USED 0
+;FILE misc.o
+NVIC_PriorityGroupConfig <= USED 0
+NVIC_SystemLPConfig <= USED 0
+SysTick_CLKSourceConfig <= USED 0
+;FILE mscuser.o
+;FILE realtime.o
+rtc_CHECK_EVENT_1S <= USED 0
+rtc_COPY_BUFER_TO_RTC <= USED 0
+rtc_RESET <= USED 0
+rtc_SETUP <= USED 0
+rtc_WRITE <= USED 0
+rtc_WRITE_DAY <= USED 0
+rtc_WRITE_HOUR <= USED 0
+rtc_WRITE_MIN <= USED 0
+rtc_WRITE_MON <= USED 0
+rtc_WRITE_SEC <= USED 0
+rtc_WRITE_YEAR <= USED 0
+;FILE reg.o
+reg_LOAD <= USED 0
+reg_RESET <= USED 0
+reg_SETUP <= USED 0
+reg_WRITE <= USED 0
+;FILE retarget.o
+_sys_command_string <= USED 0
+_sys_ensure <= USED 0
+_sys_tmpnam <= USED 0
+;FILE road.o
+rod_GET_NameElement <= USED 0
+rod_INIT <= USED 0
+;FILE spi_stm32f103.o
+spi_hi_speed <= USED 0
+spi_init <= USED 0
+spi_send <= USED 0
+spi_ss <= USED 0
+;FILE ssd1303.o
+ssd_PRINT <= USED 0
+ssd_TEST <= USED 0
+;FILE startup_stm32f10x_md.o
+;FILE stm32f10x_adc.o
+ADC_AnalogWatchdogCmd <= USED 0
+ADC_AnalogWatchdogSingleChannelConfig <= USED 0
+ADC_AnalogWatchdogThresholdsConfig <= USED 0
+ADC_AutoInjectedConvCmd <= USED 0
+ADC_ClearFlag <= USED 0
+ADC_ClearITPendingBit <= USED 0
+ADC_DMACmd <= USED 0
+ADC_DeInit <= USED 0
+ADC_DiscModeChannelCountConfig <= USED 0
+ADC_DiscModeCmd <= USED 0
+ADC_ExternalTrigConvCmd <= USED 0
+ADC_ExternalTrigInjectedConvCmd <= USED 0
+ADC_ExternalTrigInjectedConvConfig <= USED 0
+ADC_GetConversionValue <= USED 0
+ADC_GetDualModeConversionValue <= USED 0
+ADC_GetFlagStatus <= USED 0
+ADC_GetITStatus <= USED 0
+ADC_GetInjectedConversionValue <= USED 0
+ADC_GetSoftwareStartConvStatus <= USED 0
+ADC_GetSoftwareStartInjectedConvCmdStatus <= USED 0
+ADC_ITConfig <= USED 0
+ADC_InjectedChannelConfig <= USED 0
+ADC_InjectedDiscModeCmd <= USED 0
+ADC_InjectedSequencerLengthConfig <= USED 0
+ADC_SetInjectedOffset <= USED 0
+ADC_SoftwareStartConvCmd <= USED 0
+ADC_SoftwareStartInjectedConvCmd <= USED 0
+ADC_StructInit <= USED 0
+ADC_TempSensorVrefintCmd <= USED 0
+;FILE stm32f10x_bkp.o
+BKP_ClearFlag <= USED 0
+BKP_ClearITPendingBit <= USED 0
+BKP_DeInit <= USED 0
+BKP_GetFlagStatus <= USED 0
+BKP_GetITStatus <= USED 0
+BKP_ITConfig <= USED 0
+BKP_RTCOutputConfig <= USED 0
+BKP_ReadBackupRegister <= USED 0
+BKP_SetRTCCalibrationValue <= USED 0
+BKP_TamperPinCmd <= USED 0
+BKP_TamperPinLevelConfig <= USED 0
+BKP_WriteBackupRegister <= USED 0
+;FILE stm32f10x_dma.o
+DMA_ClearFlag <= USED 0
+DMA_ClearITPendingBit <= USED 0
+DMA_Cmd <= USED 0
+DMA_DeInit <= USED 0
+DMA_GetCurrDataCounter <= USED 0
+DMA_GetFlagStatus <= USED 0
+DMA_GetITStatus <= USED 0
+DMA_ITConfig <= USED 0
+DMA_Init <= USED 0
+DMA_StructInit <= USED 0
+;FILE stm32f10x_exti.o
+EXTI_ClearFlag <= USED 0
+EXTI_ClearITPendingBit <= USED 0
+EXTI_DeInit <= USED 0
+EXTI_GenerateSWInterrupt <= USED 0
+EXTI_GetFlagStatus <= USED 0
+EXTI_GetITStatus <= USED 0
+EXTI_Init <= USED 0
+EXTI_StructInit <= USED 0
+;FILE stm32f10x_flash.o
+FLASH_ClearFlag <= USED 0
+FLASH_EnableWriteProtection <= USED 0
+FLASH_EraseAllPages <= USED 0
+FLASH_EraseOptionBytes <= USED 0
+FLASH_GetFlagStatus <= USED 0
+FLASH_GetPrefetchBufferStatus <= USED 0
+FLASH_GetReadOutProtectionStatus <= USED 0
+FLASH_GetUserOptionByte <= USED 0
+FLASH_GetWriteProtectionOptionByte <= USED 0
+FLASH_HalfCycleAccessCmd <= USED 0
+FLASH_ITConfig <= USED 0
+FLASH_PrefetchBufferCmd <= USED 0
+FLASH_ProgramHalfWord <= USED 0
+FLASH_ProgramOptionByteData <= USED 0
+FLASH_ReadOutProtection <= USED 0
+FLASH_SetLatency <= USED 0
+FLASH_UserOptionByteConfig <= USED 0
+;FILE stm32f10x_gpio.o
+GPIO_AFIODeInit <= USED 0
+GPIO_DeInit <= USED 0
+GPIO_ETH_MediaInterfaceConfig <= USED 0
+GPIO_EXTILineConfig <= USED 0
+GPIO_EventOutputCmd <= USED 0
+GPIO_EventOutputConfig <= USED 0
+GPIO_PinLockConfig <= USED 0
+GPIO_PinRemapConfig <= USED 0
+GPIO_ReadInputData <= USED 0
+GPIO_ReadOutputDataBit <= USED 0
+GPIO_StructInit <= USED 0
+;FILE stm32f10x_it.o
+;FILE stm32f10x_pwr.o
+PWR_BackupAccessCmd <= USED 0
+PWR_ClearFlag <= USED 0
+PWR_DeInit <= USED 0
+PWR_EnterSTANDBYMode <= USED 0
+PWR_EnterSTOPMode <= USED 0
+PWR_GetFlagStatus <= USED 0
+PWR_PVDCmd <= USED 0
+PWR_PVDLevelConfig <= USED 0
+PWR_WakeUpPinCmd <= USED 0
+;FILE stm32f10x_rcc.o
+RCC_ADCCLKConfig <= USED 0
+RCC_AHBPeriphClockCmd <= USED 0
+RCC_APB1PeriphClockCmd <= USED 0
+RCC_APB1PeriphResetCmd <= USED 0
+RCC_APB2PeriphResetCmd <= USED 0
+RCC_AdjustHSICalibrationValue <= USED 0
+RCC_BackupResetCmd <= USED 0
+RCC_ClearFlag <= USED 0
+RCC_ClearITPendingBit <= USED 0
+RCC_ClockSecuritySystemCmd <= USED 0
+RCC_DeInit <= USED 0
+RCC_GetClocksFreq <= USED 0
+RCC_GetFlagStatus <= USED 0
+RCC_GetITStatus <= USED 0
+RCC_GetSYSCLKSource <= USED 0
+RCC_HCLKConfig <= USED 0
+RCC_HSEConfig <= USED 0
+RCC_HSICmd <= USED 0
+RCC_ITConfig <= USED 0
+RCC_LSEConfig <= USED 0
+RCC_LSICmd <= USED 0
+RCC_MCOConfig <= USED 0
+RCC_PCLK1Config <= USED 0
+RCC_PCLK2Config <= USED 0
+RCC_PLLCmd <= USED 0
+RCC_PLLConfig <= USED 0
+RCC_RTCCLKCmd <= USED 0
+RCC_RTCCLKConfig <= USED 0
+RCC_SYSCLKConfig <= USED 0
+RCC_USBCLKConfig <= USED 0
+RCC_WaitForHSEStartUp <= USED 0
+;FILE stm32f10x_rtc.o
+RTC_ClearFlag <= USED 0
+RTC_ClearITPendingBit <= USED 0
+RTC_EnterConfigMode <= USED 0
+RTC_ExitConfigMode <= USED 0
+RTC_GetDivider <= USED 0
+RTC_GetFlagStatus <= USED 0
+RTC_GetITStatus <= USED 0
+RTC_ITConfig <= USED 0
+RTC_SetAlarm <= USED 0
+RTC_SetCounter <= USED 0
+RTC_SetPrescaler <= USED 0
+RTC_WaitForLastTask <= USED 0
+RTC_WaitForSynchro <= USED 0
+;FILE stm32f10x_spi.o
+I2S_Cmd <= USED 0
+I2S_Init <= USED 0
+I2S_StructInit <= USED 0
+SPI_BiDirectionalLineConfig <= USED 0
+SPI_CalculateCRC <= USED 0
+SPI_Cmd <= USED 0
+SPI_DataSizeConfig <= USED 0
+SPI_GetCRC <= USED 0
+SPI_GetCRCPolynomial <= USED 0
+SPI_I2S_ClearFlag <= USED 0
+SPI_I2S_ClearITPendingBit <= USED 0
+SPI_I2S_DMACmd <= USED 0
+SPI_I2S_DeInit <= USED 0
+SPI_I2S_GetFlagStatus <= USED 0
+SPI_I2S_GetITStatus <= USED 0
+SPI_I2S_ITConfig <= USED 0
+SPI_Init <= USED 0
+SPI_NSSInternalSoftwareConfig <= USED 0
+SPI_SSOutputCmd <= USED 0
+SPI_StructInit <= USED 0
+SPI_TransmitCRC <= USED 0
+;FILE stm32f10x_tim.o
+TIM_ARRPreloadConfig <= USED 0
+TIM_BDTRConfig <= USED 0
+TIM_BDTRStructInit <= USED 0
+TIM_CCPreloadControl <= USED 0
+TIM_CCxCmd <= USED 0
+TIM_CCxNCmd <= USED 0
+TIM_ClearFlag <= USED 0
+TIM_ClearOC1Ref <= USED 0
+TIM_ClearOC2Ref <= USED 0
+TIM_ClearOC3Ref <= USED 0
+TIM_ClearOC4Ref <= USED 0
+TIM_Cmd <= USED 0
+TIM_CounterModeConfig <= USED 0
+TIM_CtrlPWMOutputs <= USED 0
+TIM_DMACmd <= USED 0
+TIM_DMAConfig <= USED 0
+TIM_DeInit <= USED 0
+TIM_ETRClockMode1Config <= USED 0
+TIM_ETRClockMode2Config <= USED 0
+TIM_ETRConfig <= USED 0
+TIM_EncoderInterfaceConfig <= USED 0
+TIM_ForcedOC1Config <= USED 0
+TIM_ForcedOC2Config <= USED 0
+TIM_ForcedOC3Config <= USED 0
+TIM_ForcedOC4Config <= USED 0
+TIM_GenerateEvent <= USED 0
+TIM_GetCapture1 <= USED 0
+TIM_GetCapture2 <= USED 0
+TIM_GetCapture3 <= USED 0
+TIM_GetCapture4 <= USED 0
+TIM_GetCounter <= USED 0
+TIM_GetFlagStatus <= USED 0
+TIM_GetITStatus <= USED 0
+TIM_GetPrescaler <= USED 0
+TIM_ICInit <= USED 0
+TIM_ICStructInit <= USED 0
+TIM_ITConfig <= USED 0
+TIM_ITRxExternalClockConfig <= USED 0
+TIM_InternalClockConfig <= USED 0
+TIM_OC1FastConfig <= USED 0
+TIM_OC1Init <= USED 0
+TIM_OC1NPolarityConfig <= USED 0
+TIM_OC1PolarityConfig <= USED 0
+TIM_OC1PreloadConfig <= USED 0
+TIM_OC2FastConfig <= USED 0
+TIM_OC2Init <= USED 0
+TIM_OC2NPolarityConfig <= USED 0
+TIM_OC2PolarityConfig <= USED 0
+TIM_OC2PreloadConfig <= USED 0
+TIM_OC3FastConfig <= USED 0
+TIM_OC3Init <= USED 0
+TIM_OC3NPolarityConfig <= USED 0
+TIM_OC3PolarityConfig <= USED 0
+TIM_OC3PreloadConfig <= USED 0
+TIM_OC4FastConfig <= USED 0
+TIM_OC4Init <= USED 0
+TIM_OC4PolarityConfig <= USED 0
+TIM_OC4PreloadConfig <= USED 0
+TIM_OCStructInit <= USED 0
+TIM_PWMIConfig <= USED 0
+TIM_PrescalerConfig <= USED 0
+TIM_SelectCCDMA <= USED 0
+TIM_SelectCOM <= USED 0
+TIM_SelectHallSensor <= USED 0
+TIM_SelectInputTrigger <= USED 0
+TIM_SelectMasterSlaveMode <= USED 0
+TIM_SelectOCxM <= USED 0
+TIM_SelectOnePulseMode <= USED 0
+TIM_SelectOutputTrigger <= USED 0
+TIM_SelectSlaveMode <= USED 0
+TIM_SetAutoreload <= USED 0
+TIM_SetClockDivision <= USED 0
+TIM_SetCompare1 <= USED 0
+TIM_SetCompare2 <= USED 0
+TIM_SetCompare3 <= USED 0
+TIM_SetCompare4 <= USED 0
+TIM_SetCounter <= USED 0
+TIM_SetIC1Prescaler <= USED 0
+TIM_SetIC2Prescaler <= USED 0
+TIM_SetIC3Prescaler <= USED 0
+TIM_SetIC4Prescaler <= USED 0
+TIM_TIxExternalClockConfig <= USED 0
+TIM_TimeBaseInit <= USED 0
+TIM_TimeBaseStructInit <= USED 0
+TIM_UpdateDisableConfig <= USED 0
+TIM_UpdateRequestConfig <= USED 0
+;FILE stm32f10x_usart.o
+USART_ClearITPendingBit <= USED 0
+USART_ClockInit <= USED 0
+USART_ClockStructInit <= USED 0
+USART_Cmd <= USED 0
+USART_DMACmd <= USED 0
+USART_DeInit <= USED 0
+USART_GetFlagStatus <= USED 0
+USART_HalfDuplexCmd <= USED 0
+USART_ITConfig <= USED 0
+USART_Init <= USED 0
+USART_IrDACmd <= USED 0
+USART_IrDAConfig <= USED 0
+USART_LINBreakDetectLengthConfig <= USED 0
+USART_LINCmd <= USED 0
+USART_ReceiverWakeUpCmd <= USED 0
+USART_SendBreak <= USED 0
+USART_SetAddress <= USED 0
+USART_SetGuardTime <= USED 0
+USART_SetPrescaler <= USED 0
+USART_SmartCardCmd <= USED 0
+USART_SmartCardNACKCmd <= USED 0
+USART_StructInit <= USED 0
+USART_WakeUpConfig <= USED 0
+;FILE system_stm32f10x.o
+;FILE types.o
+typ_DEC_DATAVALUE <= USED 0
+typ_DEC_DIGITVAL <= USED 0
+typ_DEC_ENUM <= USED 0
+typ_DEC_TIMEVALUE <= USED 0
+typ_DEC_VALUR <= USED 0
+typ_DEC_ZnachCountTime <= USED 0
+typ_FORMAT_STR <= USED 0
+typ_INC_DATAVALUE <= USED 0
+typ_INC_DIGIT <= USED 0
+typ_INC_DIGITVAL <= USED 0
+typ_INC_ENUM <= USED 0
+typ_INC_TIMEVALUE <= USED 0
+typ_INC_VALUR <= USED 0
+typ_INC_ZnachCountTime <= USED 0
+typ_RET_DIGIT <= USED 0
+typ_Ret_Enum_El <= USED 0
+typ_Ret_Next_V <= USED 0
+typ_Ret_Pred_V <= USED 0
+typ_SHOW_COUNTTIME_VALUE <= USED 0
+typ_SHOW_DATA_VALUE <= USED 0
+typ_SHOW_ENUM_VALUE <= USED 0
+typ_SHOW_PAROL <= USED 0
+typ_SHOW_TIME_VALUE <= USED 0
+typ_SHOW_VALUE_0 <= USED 0
+typ_SHOW_ZNAK <= USED 0
+typ_STR_Insert <= USED 0
+;FILE usbcore.o
+;FILE usbhw.o
+USB_GetFrame <= USED 0
+USB_Resume <= USED 0
+;FILE usbuser.o
+USB_EndPoint10 <= USED 0
+USB_EndPoint11 <= USED 0
+USB_EndPoint12 <= USED 0
+USB_EndPoint13 <= USED 0
+USB_EndPoint14 <= USED 0
+USB_EndPoint15 <= USED 0
+USB_EndPoint3 <= USED 0
+USB_EndPoint4 <= USED 0
+USB_EndPoint5 <= USED 0
+USB_EndPoint6 <= USED 0
+USB_EndPoint7 <= USED 0
+USB_EndPoint8 <= USED 0
+USB_EndPoint9 <= USED 0
+;FILE vga_lib.o
+vga_CIRCLE <= USED 0
+vga_DRAW_PIXEL <= USED 0
+vga_FILL_STR <= USED 0
+vga_GET_DRAW_MODE <= USED 0
+vga_LINE <= USED 0
+vga_RECTANGLE <= USED 0
+;FILE wav.o
+dat_CreateFile <= USED 0
+wav_CreateFile <= USED 0

@@ -1,0 +1,5 @@
+-c --cpu Cortex-M3 -g -O1 -Otime --apcs=interwork -I.\CMSIS -I.\DRIVER\inc -I.\DRIVER\src -I..\Project -I.\USB -I.\FAT -I.\OLED -I.\MENU -I.\fatfs 
+-I C:\Keil\ARM\RV31\INC 
+-I C:\Keil\ARM\CMSIS\Include 
+-I C:\Keil\ARM\Inc\ST\STM32F10x 
+-o "syscall.o" --depend "syscall.d" "fatfs\option\syscall.c"

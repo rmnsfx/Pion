@@ -1,0 +1,5 @@
+--cpu Cortex-M3 -g --apcs=interwork -I.\CMSIS 
+-I C:\Keil\ARM\RV31\INC 
+-I C:\Keil\ARM\CMSIS\Include 
+-I C:\Keil\ARM\Inc\ST\STM32F10x 
+--list ".\FFTCM3.lst" --xref -o "FFTCM3.o" --depend "FFTCM3.d" "CMSIS\FFTCM3.s"

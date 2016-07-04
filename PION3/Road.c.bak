@@ -1,0 +1,354 @@
+#include "stm32f10x.h"
+#include <File_Config.h>
+#include <stdio.h>
+#include <string.h>
+#include "Road.h"
+#include "ff.h"
+#include "diskio.h"
+#include "vga_lib.h"
+#include "Pin.h"
+
+
+#define MaxNumElement 500					  //???????????? ????? ????? ? ????????
+#define SizeElement	  (sizeof(TNameElement))
+#define MaxFileSize	  (SizeElement*500)
+#define FileName	  "M:\\Road.000"
+u8		t[512];
+TNameElement NEl;
+FILE  		*pRFile = 0;
+
+
+s8 rod_INIT(void)
+{
+	char temp[20];
+	
+	//pRFile = fopen ("M:\\Road.log","r");
+	if (pRFile == 0) pRFile = fopen ("M:\\Road.log","r");
+	else 
+	{
+		fclose(pRFile);	
+		pRFile = fopen ("M:\\Road.log","r");
+	}
+	if (pRFile!=0)
+	{
+	//fread(temp,1,20,pRFile);
+	fscanf(pRFile, "%s", temp);
+		
+	fclose(pRFile);	
+	//sprintf(temp,"M:\\%s","Road.001");
+	pRFile = fopen (temp,"r");
+		
+		if (pRFile == 0)
+		{
+			pRFile = fopen ("M:\\Road.000","r");
+			if (pRFile == 0)
+			{
+				///rod_CreateFile();
+				rod_CreateFile_edit();
+				pRFile = fopen ("M:\\Road.000","r");
+			}
+		}
+	return 0;
+	}
+	
+	
+ pRFile = fopen (FileName,"r");
+
+ if (pRFile==0) return -1; //?????? ???????? ?????
+
+ return 0;
+}
+
+
+void rod_DEINIT ( void )
+{
+	if (pRFile != NULL) fclose (pRFile);
+}
+
+
+s8 rod_GET_NameElement(TNameElement * Element, unsigned char num)
+{
+ if (pRFile==0) return -1;
+
+/*	if (num == 1)
+	{
+	 memset(Element,0x00,SizeElement);
+	 return -1;		
+	}*/
+ memset(Element,' ',SizeElement);
+ //if (num>MaxNumElement)	return -1;
+ if (num==0)	return -1;
+
+ fseek(pRFile, (u32)(num-1)*SizeElement, SEEK_SET);
+ if (fread(Element,1,SizeElement,pRFile)==SizeElement) 
+  if (Element->StringName_1[0]==0)
+	{
+	 memset(Element,0x00,SizeElement);
+	 return -1;
+	}
+   else return 0;
+ 
+ return -1; 
+}
+
+
+s8 rod_CreateFile(void)
+{
+  FILE  		*pFile;
+  //TNameElement 	NEl;
+  s32 			i = MaxNumElement;
+  u8			j;
+	char str_out[5];
+	int file_size;
+	FIL * fil;
+	FRESULT result;
+	
+	
+
+__disable_irq();
+__disable_fiq(); 
+	
+	
+	Delay(200000);	
+	
+	//pFile = fopen (FileName,"w");
+	pFile = fopen ("M:\\Road.000","w");
+
+	
+  //if (pFile==0) return -1;
+	
+	if (pFile==0) 
+	{ 
+		vga_CLEAR();
+		vga_SET_POS_TEXT(1,1);
+		sprintf(str_out,"Ошибка форматирования", 0);						
+		vga_PRINT_STR(str_out,&FONT_6x8);
+		vga_UPDATE();	
+				
+//		vga_SET_POS_TEXT(1,12);
+//		sprintf(str_out,"повторите процедуру", 0);						
+//		vga_PRINT_STR(str_out,&FONT_6x8);
+//		vga_UPDATE();	
+//		
+//		vga_SET_POS_TEXT(1,24);
+//		sprintf(str_out,"еще раз...", 0);						
+//		vga_PRINT_STR(str_out,&FONT_6x8);
+//		vga_UPDATE();	
+		
+		fclose(pFile);
+		Delay(4000000);
+		ShowPowerOffForm();
+		Delay(1500000);
+		pin_OFF();		
+		
+	}
+	
+
+  memset(&NEl,0,SizeElement);
+  memset(&t,0,512);
+  //?????? ?????? ????, ?????? ????? - 8 ????????? - 4096 ????
+
+IWDG_ReloadCounter();	
+  
+
+	while (i--)
+   {
+    fwrite(&NEl,1,SizeElement,pFile);		 
+   }
+
+
+
+	 fseek(pFile,0,SEEK_SET);
+	 fprintf (pFile,"без маршрута   ");
+	 fputc(0,pFile);
+
+	 i=1;
+	 
+IWDG_ReloadCounter();	 
+Delay(100000);
+
+	 
+	while(i<=100)
+	{
+		fprintf (pFile,"точка %03u      ",i);
+		fputc(i,pFile);
+		i++;
+
+	}
+
+		
+	fprintf (pFile,"               ",i);
+	fputc(0,pFile);
+
+	//Проверка на ошибку
+	//if (ferror (pFile)) 
+
+  fclose(pFile);
+	
+//	result = f_open(fil, "Road.000", FA_READ|FA_OPEN_EXISTING);
+//	file_size = f_size(fil);
+//	
+//	
+//		vga_CLEAR();
+//		vga_SET_POS_TEXT(1,1);				
+//		sprintf(str_out,"%d", file_size);		
+//		vga_PRINT_STR(str_out,&FONT_6x8);
+//		vga_UPDATE();	
+				
+
+	
+__enable_irq();
+__enable_fiq(); 
+  
+  return 0;		 
+}
+
+
+s8 rod_create_files ( void )
+{
+	FILE  		*pFile;
+
+	pFile = fopen ("M:\\Road.log","w");
+	
+	if (pFile != NULL)
+	{
+		fprintf(pFile,"Road.%03u",0);
+		fclose(pFile);
+	}	
+	else return -1;
+
+	pFile = fopen ("Roads.txt","w");
+	if ( pFile != NULL) 
+	{
+		fprintf(pFile,"Road.%03u",0);
+		fclose(pFile);
+	}
+	else return -2;
+}
+
+
+
+s8 rod_CreateFile_edit (void)
+{
+
+  s32 i = 0;  		
+	FIL Fil;
+	FRESULT result;	
+	FATFS   fls;          
+	FILINFO fno;
+	
+	finit();
+
+__disable_irq();
+__disable_fiq(); 
+		
+	f_mount(&fls, "0:", 1);
+				
+	f_open(&Fil,"0:Road.000", FA_CREATE_ALWAYS | FA_WRITE);
+	
+	f_printf(&Fil,"%s", "без маршрута   ");
+	f_putc(0,&Fil);
+	
+	for(i=1;i<1000;i++)
+	{
+
+			{
+					f_printf(&Fil,"%s %03u      ","точка",i);				
+					f_putc(i,&Fil);
+			}
+						
+	}
+		
+	f_close(&Fil);
+	
+	
+	f_open(&Fil,"0:Road.log", FA_CREATE_ALWAYS | FA_WRITE);
+	f_printf(&Fil,"%s", "Road.000");
+	f_close(&Fil);
+	
+	f_open(&Fil,"0:Roads.txt", FA_CREATE_ALWAYS | FA_WRITE);
+	f_printf(&Fil,"%s", "Road.000");
+	f_close(&Fil);
+		
+	
+	f_mount(0,"0:", 0);
+	
+__enable_irq();
+__enable_fiq();
+  
+  return 0;		 
+}
+
+s8 create_road000 (void)
+{
+
+  s32 i = 0;  		
+	FIL Fil;
+	FRESULT result;	
+	FATFS   fls;          
+	FILINFO fno;
+	
+	finit();
+
+__disable_irq();
+__disable_fiq(); 
+
+	vga_CLEAR();
+	
+	vga_SET_POS_TEXT(1,1);
+	vga_PRINT_STR("Проверка системных",&FONT_6x8);
+	
+	vga_SET_POS_TEXT(1,15);
+	vga_PRINT_STR("файлов...",&FONT_6x8);
+	
+	vga_UPDATE();
+	
+	f_mount(&fls, "0:", 1);
+				
+	f_open(&Fil,"0:Road.000", FA_CREATE_ALWAYS | FA_WRITE);
+	
+	f_printf(&Fil,"%s", "без маршрута   ");
+	f_putc(0,&Fil);
+	
+	IWDG_ReloadCounter();
+	
+	for(i=1;i<1000;i++)
+	{
+
+			{
+					f_printf(&Fil,"%s %03u      ","точка",i);				
+					f_putc(i,&Fil);
+			}
+						
+	}
+		
+	f_close(&Fil);
+		
+	f_mount(0,"0:", 0);
+	
+	IWDG_ReloadCounter();
+	
+	
+	
+	vga_SET_POS_TEXT(1,45);
+	vga_PRINT_STR("Успешно!",&FONT_6x8);
+	vga_UPDATE();
+	
+	Delay(1500000);
+	
+	vga_CLEAR();
+  vga_SET_POS_TEXT(28,25);  
+	vga_PRINT_STR("ВЫКЛЮЧЕНИЕ",&FONT_7x10_bold);
+	vga_UPDATE();
+	
+	Delay(1000000);
+
+__enable_irq();
+__enable_fiq();
+  
+	
+	NVIC_SystemReset();
+	
+  return 0;		 
+}
+

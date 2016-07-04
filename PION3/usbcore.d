@@ -1,0 +1,10 @@
+.\usbcore.o: USB\usbcore.c
+.\usbcore.o: USB\type.h
+.\usbcore.o: USB\usb.h
+.\usbcore.o: USB\usbcfg.h
+.\usbcore.o: USB\usbhw.h
+.\usbcore.o: USB\usbcore.h
+.\usbcore.o: USB\usbdesc.h
+.\usbcore.o: USB\usbuser.h
+.\usbcore.o: USB\msc.h
+.\usbcore.o: USB\mscuser.h

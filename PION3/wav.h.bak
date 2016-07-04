@@ -1,0 +1,53 @@
+#include <File_Config.h>
+
+
+//создаем структуру для файл файла
+typedef struct {
+	U32	 Riff; // - идентификатор файла = "RIFF" = 0x46464952
+	U32  Len;  // - длина файла без этого заголовка
+} IDRiff;
+
+
+typedef struct {
+        //заголовок WAV
+	U32 Wav; // - идентификатор = "WAVE" = 0x45564157
+	U32 Fmt; // - идентификатор = "fmt " = 0x20746D66
+	U32 Len; // - длина этого куска WAV - файла,
+        //описание куста WAV
+    U16 Type;  	// - тип звуковых данных, бывает - !!!
+		    		//	1 - просто выборка;
+		    		//	0x101 - IBM mu-law;
+                    //  0x102 - IBM a-law;
+                    //  0x103 - ADPCM.
+    U16 Channels;          //- число каналов 1/2 - !!!
+    U32 SamplesPerSec;     //- частота выборки - !!!
+    U32 AvgBytesPerSec;    //- частота выдачи байтов
+    U16 Align;             //- выравнивание
+    U16 Bits;              //- число бит на выборку  - !!!
+} IDWave;
+
+typedef struct {
+	U32 Data; //- идентификатор ="data" =0x61746164
+    U32 Len;  // - длина выборки в байтах( кратно 2 )
+} IDSampleWave;
+
+typedef struct 
+ {
+  S16 L;
+  S16 R;
+ } IDubleChFrame;
+
+typedef struct 
+ {
+  S16 L;
+ } ISingleChFrame;
+
+
+S8 wav_CreateFile(const char *FileName, void *Frame, U32 LengthFrame, U8 Channels, U32 SamplesPerSec);
+S8 dat_CreateFile(const char *FileName, void *Frame, U32 LengthFrame, float *k_norm); //создание дат файлов
+void dat_CreateFile_edit(char FileName, void *Frame, U32 LengthFrame, float *k_norm); //создание дат файлов
+
+#define wav_WriteMonoFile(a,b,c,d) wav_CreateFile(a,b,c,1,d); 
+#define wav_WriteSterFile(a,b,c,d) wav_CreateFile(a,b,c,2,d); 
+
+
