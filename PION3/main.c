@@ -684,7 +684,7 @@ void CONTROL_BAT(unsigned char MIN_VAL_BAT)
 							men_SHOW_MAINFORMS(form_MESUARE); 		 						
 					 }
 					 
-					 if ( akbemk_percent == 0 && measure_stat == 0 && akbemk_volt <= 2.5 )   
+					 if ( akbemk_percent == 0 && measure_stat == 0 && akbemk_volt <= 2.5 && message_status == 0 )   
 					 {	
 							vga_CLEAR();					
 							vga_SET_POS_TEXT(5,20);
@@ -694,11 +694,13 @@ void CONTROL_BAT(unsigned char MIN_VAL_BAT)
 						
 							vga_UPDATE();						
 							 
-							Delay(5000000);
+							Delay(2500000);
 							
 							vga_CLEAR();
 							vga_UPDATE();
-							pin_OFF(); //отключаем					
+							//pin_OFF(); //отключаем			
+
+							message_status = 1;						 						 
 					 }
 					 
 	}
@@ -1379,7 +1381,7 @@ int main(void)
 						
 	
 		///Обновляем индикацию АКБ				
-		if (id_akb == 0) 
+		if (id_akb == 0 && measure_stat == 0) 
 		{
 				frzbat1 = akbemk_percent; 
 				frzbat2 = akbemk_percent;

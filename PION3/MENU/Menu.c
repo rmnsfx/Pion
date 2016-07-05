@@ -820,17 +820,17 @@ void men_SHOW_REFRESH(void)
 												fread(&V,2,1,pRFile);
 											 
 												memset(t_str,'\0', 20);
-												sprintf(t_str,"A = %3.02f м/с%c  СКЗ",(float)A/100,0xbd);
-												vga_SET_POS_TEXT(2,43);
+												sprintf(t_str,"СКЗ A = %3.02f м/с%c",(float)A/100,0xbd);
+												vga_SET_POS_TEXT(2,45);
 												vga_PRINT_TEXT(t_str,20,&FONT_6x8);
 
 
-												sprintf(t_str,"V = %3.01f мм/с       ", (float)V/100);
-												vga_SET_POS_TEXT(2,53);
+												sprintf(t_str,"СКЗ V = %3.01f мм/с", (float)V/100);
+												vga_SET_POS_TEXT(2,57);
 												vga_PRINT_TEXT(t_str,20,&FONT_6x8);
-												memset(t_str,' ', 20);
-												vga_SET_POS_TEXT(2,60);
-												vga_PRINT_TEXT(t_str,20,&FONT_6x8);
+//												memset(t_str,' ', 20);
+//												vga_SET_POS_TEXT(2,60);
+//												vga_PRINT_TEXT(t_str,20,&FONT_6x8);
 											 
 												fclose(pRFile);
 												SampleAlreadyExist = 1;
@@ -1027,8 +1027,7 @@ void men_SHOW_REFRESH(void)
 	}
 	else //Старый АКБ
 	{
-						vga_CLEAR();
-						//if (timer2 == 0) frzbat1 = adc_BAT_PERCENT_edit();
+						vga_CLEAR();						
 						men_SHOW_LARGE_BAT( adc_BAT_PERCENT_edit_charge() );
 						vga_UPDATE();
 	
@@ -2632,9 +2631,9 @@ void men_EN_MENU(void)
 	FILE  		*pRFile = 0;	
   int k=0;
 	DWORD sector[2];
-	uint8_t ffarr1[1000];
-	uint8_t ffarr2[50000];
-	uint8_t sinus[50]={0,13,25,37,48,59,68,77,84,90,95,98,100,100,98,95,91,84,77,69,59,48,37,25,13,0,-13,-25,-37,-48,-59,-68,-77,-84,-90,-95,-98,-100,-100,-98,-95,-91,-85,-77,-69,-60,-48,-37,-25,-13};
+	uint8_t ffarr1[10] = {1,2,3,4,5,6,7,8,9,0};
+//	uint8_t ffarr2[50000];
+	
  
 	switch (men_STATUS)
   {
@@ -2648,7 +2647,9 @@ void men_EN_MENU(void)
 								temp_reg = REG(NUMFILE_CURENT);
 								sprintf(FileName,"Signal %d.dat",NEl.Number);								
 				  
-								men_SHOW_MESSAGE("Сохранение...","",0);								
+								men_SHOW_MESSAGE("Сохранение...","",0);			
+
+									
 								
 								SET_CLOCK_SPEED(CLK_72MHz); 			
 						
@@ -2712,7 +2713,7 @@ void men_EN_MENU(void)
 								//Эксперемент по стиранию области, куда будут сохраняться данные
 //								for (k=0; k<100; k++) ffarr1[k] = 0xff;
 //								for (k=0; k<40; k++) memcpy(&ffarr2[k*1000], ffarr1, 1000);
-for (k=0; k<50000; k++) { ext_adc_SIM[k] = 0x1; IWDG_ReloadCounter();}
+
 								
 								//dat_CreateFile(FileName,ext_adc_SIM,25000,&k_reg);		  //создаем DAT файл								
 				
@@ -2725,27 +2726,49 @@ for (k=0; k<50000; k++) { ext_adc_SIM[k] = 0x1; IWDG_ReloadCounter();}
 								
 								f_mount(&fls, "0:", 1);
 								res_t = f_mkdir(savefiledirTCHAR);								
-								res_t = f_open(&Fil,savefilenameTCHAR, FA_WRITE | FA_CREATE_ALWAYS );
+								res_t = f_open(&Fil, savefilenameTCHAR, FA_WRITE | FA_CREATE_ALWAYS);
 								//res_t = f_write(&Fil,&k_reg,4,&iout);										
-								res_t = f_write(&Fil,ext_adc_SIM,25000*2,&iout);																										
-								//res_t = f_printf(&Fil, "%d", ffarr2);
+								res_t = f_write(&Fil,ext_adc_SIM,25000*2,&iout);			
+								//res_t = f_printf(&Fil, "%d", 1);
+								
+								
+								if (iout < 50000)	
+								{
+									vga_CLEAR();					
+									vga_SET_POS_TEXT(1,1);
+									vga_PRINT_STR("Диск переполнен", &FONT_6x8);	
+									vga_UPDATE();
+								}
+								
+								if (res_t != 0x00 || iout != 50000)	
+								{
+									vga_CLEAR();					
+									vga_SET_POS_TEXT(1,1);
+									vga_PRINT_STR("Ошибка: ", &FONT_6x8);										
+									vga_SET_POS_TEXT(55,1);
+									sprintf(temp,"%d", res_t);						
+									vga_PRINT_STR(temp, &FONT_6x8);	
+									vga_UPDATE();
+								}									
+
+								
 								f_close(&Fil);			
 								f_mount(0,"0:", 0);		
 								
-								IWDG_ReloadCounter();	
+								
 								
 								/// Вычисляем ускорение и скорость
 								A = calc_from_dat_A(FileName);								
 								V = calc_from_dat_V(FileName);								
 
 	
-//								f_mount(&fls, "0:", 1);
-//								res_t = f_open(&Fil,savefilenameTCHAR, FA_READ | FA_WRITE);  
-//								res_t = f_lseek(&Fil, f_size(&Fil));
-//								res_t = f_write(&Fil,&A,2,&iout);		
-//								res_t = f_write(&Fil,&V,2,&iout);		
-//								f_close(&Fil);			
-//								f_mount(0,"0:", 0);								
+								f_mount(&fls, "0:", 1);
+								res_t = f_open(&Fil,savefilenameTCHAR, FA_READ | FA_WRITE);  
+								res_t = f_lseek(&Fil, f_size(&Fil));
+								res_t = f_write(&Fil,&A,2,&iout);		
+								res_t = f_write(&Fil,&V,2,&iout);		
+								f_close(&Fil);			
+								f_mount(0,"0:", 0);								
 								
 								crtflag = 1;
 
