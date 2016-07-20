@@ -63,7 +63,8 @@ extern float akbemk_percent;
 extern unsigned int usb_charge_state;
 
 
-
+//Выключатель usb для отладки 
+#define USB_SWITCH 1
 
 
 

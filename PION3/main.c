@@ -94,6 +94,7 @@ int message_status = 0;
 int timer1=0;
 int timer2=0;
 int timer3=0;
+int timer4=0;
  
 int frzbat1=0;
 int frzbat2=0; 
@@ -148,14 +149,21 @@ extern unsigned int road_cursor_pos;
 
 void Timer_1ms_CallBack(void)
 {
+	
+	
+	
 			IWDG_ReloadCounter();
 
-			GLOBAL_TIMER_1ms++;
-			 
+			GLOBAL_TIMER_1ms++;			 
+			
+			men_1ms();			
 			key_1ms();
-			men_1ms();
 
-
+			if(timer4 == 5)
+			{
+				
+				timer4=0;	
+			}
 				
 			POWER_OFF--;
 				
@@ -168,7 +176,7 @@ void Timer_1ms_CallBack(void)
 
 			
 			if (timer1 == 1000) 
-			{
+			{				
 				timer1 = 0;
 				timer2++;
 				timer3++;
@@ -177,8 +185,10 @@ void Timer_1ms_CallBack(void)
 			
 			if (timer2 == 30) timer2 = 0; ///30 секунд
 			if (timer3 == 900000) timer3 = 0; ///15 мин.
-			
+			timer4++;
 									
+			
+			
 }
 
 
@@ -240,17 +250,17 @@ void GPIO_SETUP()
    //GPIO_SetBits(GPIOA,GPIO_Pin_4);
    GPIO_Init(GPIOA, &GPIO_InitStructure);
    //настраиваем вход аналоговый вход PFI
-//   GPIO_InitStructure.GPIO_Pin = GPIO_Pin_1;
-//   GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AIN;
-//   GPIO_Init(GPIOA, &GPIO_InitStructure);
+   GPIO_InitStructure.GPIO_Pin = GPIO_Pin_1;
+   GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AIN;
+   GPIO_Init(GPIOA, &GPIO_InitStructure);
    //настраиваем вход USB5V
    GPIO_InitStructure.GPIO_Pin = GPIO_Pin_2;
    GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IPD;
    GPIO_Init(GPIOA, &GPIO_InitStructure);
    //настраиваем вход DISCHARGE
-//   GPIO_InitStructure.GPIO_Pin = GPIO_Pin_3;
-//   GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;
-//   GPIO_Init(GPIOA, &GPIO_InitStructure);
+   GPIO_InitStructure.GPIO_Pin = GPIO_Pin_3;
+   GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;
+   GPIO_Init(GPIOA, &GPIO_InitStructure);
 //	 DISCHARGE_OFF();
    //настраиваем выход SPI MCS
    GPIO_InitStructure.GPIO_Pin = GPIO_Pin_4;
@@ -264,8 +274,7 @@ void GPIO_SETUP()
    GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
    GPIO_SetBits(GPIOA,GPIO_Pin_5);
    GPIO_SetBits(GPIOA,GPIO_Pin_7);
-   GPIO_Init(GPIOA, &GPIO_InitStructure);
-	 
+   GPIO_Init(GPIOA, &GPIO_InitStructure);	 
 	 //Зарядка
 	 GPIO_InitStructure.GPIO_Pin = GPIO_Pin_8;
    GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IPU;
@@ -279,11 +288,29 @@ void GPIO_SETUP()
    GPIO_InitStructure.GPIO_Pin = GPIO_Pin_0;
    //GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;
    GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IPU;
-   GPIO_Init(GPIOB, &GPIO_InitStructure);
-   //настраиваем вход KEY2
+   GPIO_Init(GPIOB, &GPIO_InitStructure);   	 
+	 //настраиваем вход KEY2
    GPIO_InitStructure.GPIO_Pin = GPIO_Pin_1;
    GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IPU;
-   GPIO_Init(GPIOB, &GPIO_InitStructure);
+   GPIO_Init(GPIOB, &GPIO_InitStructure);	 
+	 
+///Отладка---	 	 
+
+	 GPIO_InitStructure.GPIO_Pin = GPIO_Pin_11;															  
+   GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;
+   GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
+   GPIO_ResetBits(GPIOA,GPIO_Pin_11);
+   GPIO_Init(GPIOA, &GPIO_InitStructure);
+	 
+	 GPIO_InitStructure.GPIO_Pin = GPIO_Pin_12;															  
+   GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;
+   GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
+   GPIO_ResetBits(GPIOA,GPIO_Pin_12);
+   GPIO_Init(GPIOA, &GPIO_InitStructure);
+	 
+///----------
+	 
+	 
    //входы B2-B4 пропускаем
    //настраиваем выход CS
    GPIO_InitStructure.GPIO_Pin = GPIO_Pin_5;															  
@@ -323,6 +350,12 @@ void GPIO_SETUP()
    GPIO_InitStructure.GPIO_Pin = GPIO_Pin_11;
    GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IPU;
    GPIO_Init(GPIOB, &GPIO_InitStructure); 	
+
+
+	 
+
+	 
+	 
    //внешний АЦП
    //настраиваем ADC_CS
    GPIO_InitStructure.GPIO_Pin = GPIO_Pin_12;
@@ -443,6 +476,9 @@ void EXTI9_5_IRQHandler ( void )
 {
 	uint32_t i;
 	
+	
+  
+	
 	if ( (pin_USB_5V) || (usb_transit) )
 	{
 		
@@ -464,6 +500,8 @@ void EXTI9_5_IRQHandler ( void )
 			pin_OFF();	
 			while(1) IWDG_ReloadCounter();
 	}
+	
+	
 	
 }
 
@@ -727,7 +765,7 @@ void CONTROL_BAT(unsigned char MIN_VAL_BAT)
 					 }
 
 						
-					if (adc_BAT_PERCENT_edit() == 0 && measure_stat == 0)   
+					if (adc_BAT_PERCENT_edit() == 0 && measure_stat == 0 && message_status == 0)   
 					{	
 						vga_CLEAR();					
 						vga_SET_POS_TEXT(5,20);
@@ -738,17 +776,19 @@ void CONTROL_BAT(unsigned char MIN_VAL_BAT)
 					
 						vga_UPDATE();						
 						 
-						Delay(5000000);
+						//Delay(5000000);
 						//for(i=0;i<0x2FFFFF;i++){__NOP();}
 
-						ShowPowerOffForm();
+						//ShowPowerOffForm();
 						 
 						Delay(5000000);
 						 
 						//pin_SSD_RES(LOW);		 
 						vga_CLEAR();
 						vga_UPDATE();
-						pin_OFF(); //отключаем
+						//pin_OFF(); //отключаем
+						
+						message_status = 1; 
 					
 					}
 										
@@ -1261,150 +1301,152 @@ int main(void)
 	 CAPACITY();	
 
 
+	if (USB_SWITCH == 1)
+	{
+			
+		 usb_addr = USB_DeviceAddress; /// Адрес присвоенный хостом при подключении USB
 		
-	 usb_addr = USB_DeviceAddress; /// Адрес присвоенный хостом при подключении USB
-	
-   //----------- USB ---------------------------------------------------------//
-   if (USB_CONNECT != pin_USB_5V)
-	 {				
-		 
-		 USB_CONNECT = pin_USB_5V;	 
+		 //----------- USB ---------------------------------------------------------//
+		 if (USB_CONNECT != pin_USB_5V)
+		 {				
+			 
+			 USB_CONNECT = pin_USB_5V;	 
 
-		 
-	  if (USB_CONNECT)  //если было событие подключен USB
-	  {								
-				
-				STOP_MESUARE();				
-				measure_stat = 0;
-				rod_DEINIT();	
-				Delay(200000);				   //антидребезговая задержка								
-				
-				//жесткий костыль ))
-				if (REG(LOCK_REG) == 100) REGW(LOCK_REG,99);
-				else 
+			 
+			if (USB_CONNECT)  //если было событие подключен USB
+			{								
+					
+					STOP_MESUARE();				
+					measure_stat = 0;
+					rod_DEINIT();	
+					Delay(200000);				   //антидребезговая задержка								
+					
+					//жесткий костыль ))
+					if (REG(LOCK_REG) == 100) REGW(LOCK_REG,99);
+					else 
+					{
+						REGW(LOCK_REG,100);
+						__enable_irq();
+						__enable_fiq();
+						NVIC_SystemReset();
+					}			
+				 
+				 
+				 SET_CLOCK_SPEED(CLK_72MHz);								
+			
+				 usb_transit = 0;	
+								 
+			}
+			else 			   
 				{
-					REGW(LOCK_REG,100);
-					__enable_irq();
-					__enable_fiq();
-					NVIC_SystemReset();
-				}			
-			 
-			 
-	     SET_CLOCK_SPEED(CLK_72MHz);								
-		
-			 usb_transit = 0;	
-							 
-		}
-	  else 			   
-	    {
-								
 									
-					usb_transit = 1; /// флаг для бана кнопки "откл."
-				
-					//Alex	
-					usb_stat = 0;				
-					vga_CLEAR();
-					vga_SET_POS_TEXT(1,1);
-					vga_PRINT_STR("Подождите...",&FONT_6x8);
-					vga_UPDATE();
-					temp_reg = 0;
-							
-				
-					__disable_irq();
-					__disable_fiq();
+										
+						usb_transit = 1; /// флаг для бана кнопки "откл."
 					
-				
-					f_mount(&fls, "0:", 1);
-				
-					for (j=0;j<=255;j++)
-					{
-						sprintf(FileName,"M:\\%03u.%03u\\Signal %d.dat",0,0,j);						
-						if (f_stat(FileName, &fno) == FR_OK) temp_reg++;						
-					}
+						//Alex	
+						usb_stat = 0;				
+						vga_CLEAR();
+						vga_SET_POS_TEXT(1,1);
+						vga_PRINT_STR("Подождите...",&FONT_6x8);
+						vga_UPDATE();
+						temp_reg = 0;
+								
 					
+						__disable_irq();
+						__disable_fiq();
+						
 					
-					IWDG_ReloadCounter();	
+						f_mount(&fls, "0:", 1);
 					
-					f_open(&FileTmp,"Roads.txt", FA_CREATE_ALWAYS | FA_WRITE);
-					
-					sprintf(FileName,"Road.%01u  ",0);
-					f_printf(&FileTmp,FileName);
-					f_putc('\n',&FileTmp);
-	
-					
-					for(i=1;i<255;i++)
-					{
-						sprintf(FileName,"Road.%03u",i);
-						if (f_stat(FileName, &fno) == FR_OK)
+						for (j=0;j<=255;j++)
 						{
-							f_printf(&FileTmp,FileName);
-							f_putc('\n',&FileTmp);
-						}						
-
-						IWDG_ReloadCounter();							
-					}
-					
-	
-					f_close(&FileTmp);
-
-				  f_getlabel("", FileName, 0);
-					if(strcmp(FileName, "PION-3"))
-					{
-						f_setlabel("PION-3");
-					}
-						
-					f_mount(0,"0:", 0);
-						
-					__enable_irq();
-					__enable_fiq();
-						
-					
-					Num_of_Signals = temp_reg;
-					
-					REGW(BEYOND_ROAD,temp_reg+1);
-					i = 0;
-					j = 0;
+							sprintf(FileName,"M:\\%03u.%03u\\Signal %d.dat",0,0,j);						
+							if (f_stat(FileName, &fno) == FR_OK) temp_reg++;						
+						}
 						
 						
-					//*Alex
-			if ((pRFile = fopen ("M:\\prog1.bin","rb")) != NULL) 
-			{
-					JumpToApplication(0x8000000);
-					road_pos = 0;
-					road_cursor_pos = 0;
-			}	
-
-					
-	
-		 SET_CLOCK_SPEED(CLK_8MHz); 
-		 Delay(200000);				   //антидребезговая задержка
+						IWDG_ReloadCounter();	
 						
-	
-		///Обновляем индикацию АКБ				
-		if (id_akb == 0 && measure_stat == 0) 
-		{
-				frzbat1 = akbemk_percent; 
-				frzbat2 = akbemk_percent;
-		}
-		else
-		{
-				frzbat1 = adc_BAT_PERCENT_edit(); 
-				frzbat2 = adc_BAT_PERCENT_edit();
-		}
-			
-		 rod_INIT();
-			
-		 men_SHOW_MAINFORMS(form_MESUARE); 			
-		 		 
-
-		}		
+						f_open(&FileTmp,"Roads.txt", FA_CREATE_ALWAYS | FA_WRITE);
+						
+						sprintf(FileName,"Road.%01u  ",0);
+						f_printf(&FileTmp,FileName);
+						f_putc('\n',&FileTmp);
 		
-	  USB_Connect(USB_CONNECT); 			
+						
+						for(i=1;i<255;i++)
+						{
+							sprintf(FileName,"Road.%03u",i);
+							if (f_stat(FileName, &fno) == FR_OK)
+							{
+								f_printf(&FileTmp,FileName);
+								f_putc('\n',&FileTmp);
+							}						
+
+							IWDG_ReloadCounter();							
+						}
+						
 		
-	 }
+						f_close(&FileTmp);
+
+						f_getlabel("", FileName, 0);
+						if(strcmp(FileName, "PION-3"))
+						{
+							f_setlabel("PION-3");
+						}
+							
+						f_mount(0,"0:", 0);
+							
+						__enable_irq();
+						__enable_fiq();
+							
+						
+						Num_of_Signals = temp_reg;
+						
+						REGW(BEYOND_ROAD,temp_reg+1);
+						i = 0;
+						j = 0;
+							
+							
+						//*Alex
+				if ((pRFile = fopen ("M:\\prog1.bin","rb")) != NULL) 
+				{
+						JumpToApplication(0x8000000);
+						road_pos = 0;
+						road_cursor_pos = 0;
+				}	
+
+						
+		
+				SET_CLOCK_SPEED(CLK_8MHz); 
+				Delay(200000);				   //антидребезговая задержка
+							
+		
+				rod_INIT();
+				
+				men_SHOW_MAINFORMS(form_MESUARE); 			
+					 
+
+			}		
+				
+				///Обновляем индикацию АКБ				
+				if (id_akb == 0 && measure_stat == 0) 
+				{
+						frzbat1 = akbemk_percent; 
+						frzbat2 = akbemk_percent;
+				}
+				else
+				{
+						frzbat1 = adc_BAT_PERCENT_edit(); 
+						frzbat2 = adc_BAT_PERCENT_edit();
+				}
+				
+				USB_Connect(USB_CONNECT); 			
+			
+		 }
 
 
-	
+	}
  
 	 
    //-------------------------------------------------------------------------//
@@ -1417,8 +1459,7 @@ int main(void)
 						usb_charge_state = 1;
 						
 						usb_transit = 0; 
-		
-						CONTROL_BAT(0);
+								
 						LED_CHARGE_OFF();
 						CHARGE_OFF();
 
@@ -1432,9 +1473,9 @@ int main(void)
 							measure_stat = 2;
 							
 							if (men_STATUS==men_MAIN)
-										{
+										{											
 												SET_CLOCK_SPEED(CLK_72MHz);
-												START_MESUARE();								
+												START_MESUARE();																												
 										}
 							
 						}
@@ -1444,7 +1485,8 @@ int main(void)
 						
 						//ловим событие отжатия кн. "измерение"
 						if (measure_stat == 0)
-						{
+						{						
+											
 								STOP_MESUARE();
 
 								if (ext_adc_GET_STATUS()==ext_adc_STATUS_STOP)
@@ -1452,16 +1494,14 @@ int main(void)
 										i++;
 								}
 
-								SET_CLOCK_SPEED(CLK_8MHz);
+								SET_CLOCK_SPEED(CLK_8MHz);							
+							
 						}
 
 					 
 						if (measure_stat == 0) CONTROL_BAT(0); ///Проверка АКБ на разряд только вне режима измерения
 					 
 					 
-						CONTROL_POWER(1); ///Выключение в теч. 10 мин., если не нажата кнопка
-
-
 						//расчет скз или выборка
 						if ((REG(PION_STATUS)&ST_MESUARE)>0)
 						{
@@ -1485,25 +1525,11 @@ int main(void)
 
 					
 						//контроль вывода
-						if (men_MENU_CONTROL()) CONTROL_POWER(1);
+						if (men_MENU_CONTROL()) CONTROL_POWER(1); ///Выключение в теч. 10 мин., если не нажата кнопка
 						else					CONTROL_POWER(0);
 						
 						//обновить режим
 						UPDATE_MODE_REG();
-						
-//						if (id_akb == 0 && measure_stat == 0)
-//						{
-//								frzbat1 = akbemk_percent; 
-//								frzbat2 = akbemk_percent;
-//						}
-//						else
-//						{
-//							if (measure_stat == 0)
-//							{
-//								frzbat1 = adc_BAT_PERCENT_edit(); 
-//								frzbat2 = adc_BAT_PERCENT_edit();
-//							}
-//						}
 
 
 	}	//конец - "работаем в нормальном режиме"

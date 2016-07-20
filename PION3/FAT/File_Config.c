@@ -11,7 +11,7 @@
 
 #include <File_Config.h>
 #include <stdio.h>
-#include <absacc.h>
+
 
 /*----------------------------------------------------------------------------
  *      User configuration part

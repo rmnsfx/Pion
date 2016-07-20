@@ -37,11 +37,14 @@ BOOL mmc_write_sect (U32 sect, U8 *buf, U32 cnt)
  if (sect<MSC_BlockCount)
   {
    //memcpy(&Memory[sect*512],buf,cnt*512);
+		GPIO_SetBits(GPIOA,GPIO_Pin_12);
+										
 		__disable_irq();
 		__disable_fiq();
    AT45DB_WRITE_PAGE(sect+DISK_OFFSET,buf);
 		__enable_irq();
 		__enable_fiq();
+		GPIO_ResetBits(GPIOA,GPIO_Pin_12);										
    //fram_WRITE(sect*MSC_BlockSize + MSC_Offset,buf,cnt*MSC_BlockSize);
    return (__TRUE);
   }

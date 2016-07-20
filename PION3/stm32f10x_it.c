@@ -23,6 +23,7 @@
 /* Includes ------------------------------------------------------------------*/
 #include "stm32f10x_it.h"
 #include "Pin.h"
+#include "main.h"
 
 extern void Timer_1ms_CallBack(void);
 
@@ -135,15 +136,18 @@ void PendSV_Handler(void)
   * @retval None
   */
 void SysTick_Handler(void)
-{
- Timer_1ms_CallBack();
-
- 
+{	
+	
+ Timer_1ms_CallBack(); 
+	
 }											 
 
 void USART2_IRQHandler(void)
 {
- static unsigned char f=1;
+ 
+	
+	
+	static unsigned char f=1;
 
  if(USART_GetITStatus(USART2, USART_IT_RXNE) != RESET)
   {
@@ -161,10 +165,6 @@ void USART2_IRQHandler(void)
   }
 
 
- 
-
-  
- 
 
 
 }

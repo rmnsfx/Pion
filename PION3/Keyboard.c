@@ -19,6 +19,8 @@ volatile unsigned long key_EVENT		  = key_NO;
 
 void key_1ms(void)
 {
+	
+	
  if (_key_UP) 		key_STATE|= key_UP; 
  else 				key_STATE&= ~key_UP;
 
@@ -54,6 +56,7 @@ void key_1ms(void)
 					}
 
  if (key_bounce>0) key_bounce--;
+					
 }
 
 TKEY_EVENT key_CHECK_EVENT(unsigned long mask_event)

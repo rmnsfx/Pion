@@ -228,10 +228,10 @@ void ext_adc_SETUP(u16 period_sample)
   //TIM_ITConfig(TIM1, TIM_IT_Update, ENABLE);
 
  
-  /* Enable the TIM2 gloabal Interrupt */
+  /* Enable the TIM1 gloabal Interrupt */
   NVIC_InitStructure.NVIC_IRQChannel = TIM1_UP_IRQn;
   NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 0;
-  NVIC_InitStructure.NVIC_IRQChannelSubPriority = 1;
+  NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0;
   NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
 
   NVIC_Init(&NVIC_InitStructure);
@@ -330,6 +330,12 @@ void ext_adc_START(s16 *data_in, u16 count_sample)
 
 void TIM1_UP_IRQHandler(void)
 {
+	
+GPIO_SetBits(GPIOA,GPIO_Pin_11);
+
+	
+
+	
   //pin_KEY(HIGTH);
 	k_reg_mul = (float)REG(K_VIBRO)/1000;
 	//k_reg_mul = (float)REG(K_VIBRO)/300000;
@@ -484,16 +490,17 @@ void TIM1_UP_IRQHandler(void)
    {
     ext_adc_COUNT--;
 		ext_adc_VAL = ext_adc_VALUE*k_reg_mul;
-	*ext_adc_DATA++ = ((ext_adc_VAL+16384)>>15);
+	  *ext_adc_DATA++ = ((ext_adc_VAL+16384)>>15);
 	
    }
 
   }
 
-  
    
-  //pin_KEY(LOW);
- 
+  //pin_KEY(LOW);	
+	GPIO_ResetBits(GPIOA,GPIO_Pin_11);	
+	
+	
 }
 
 void ext_adc_SAMPLING(s16 *data_in, u16 count_sample)
@@ -523,6 +530,9 @@ void ext_adc_SAMPLING_RESET(s16 *data_in, u16 count_sample)
 
 void ext_adc_START(void)
 {
+	
+	
+	
  ext_adc_COUNT = 0;
 
  pin_ADC_CS(HIGTH);
@@ -538,6 +548,8 @@ void ext_adc_START(void)
 
  ext_adc_DELAY = 25000;//25000; //1 секунда	дл€ 25 к√ц
 
+	
+
  ext_mode_reg = REG(MODE_REG);
 	
 			iir_DEC_FILTER_RESET(pHPF_1section);
@@ -547,6 +559,8 @@ void ext_adc_START(void)
 			iir_DEC_FILTER_RESET(pINTEGRAL_1section);
 			iir_DEC_FILTER_RESET(pINTEGRAL_2section);
  
+	
+
 
  switch (ext_mode_reg)
 		   {
@@ -677,11 +691,15 @@ void ext_adc_START(void)
 						 iir_DEC_FILTER_SET(FILTER_6_TWO_SECTION, pLPF_2section);
 
 						 DECIMATOR = 0x01;//деление частоты на 2
-						 ext_adc_DELAY = 62500;//50000;//40000; //2.5 секунда
+						 ext_adc_DELAY = 62500;//50000;//40000; //2.5 секунда						 						
 						 iir_DETECTOR_RESET(&DETECTOR,25000);//25000//50000
 
 			default: 	 break;		
    		  }
+
+
+
+		
 
 
  /* Enable SPI1  */
@@ -690,6 +708,7 @@ void ext_adc_START(void)
  TIM_Cmd(TIM1, ENABLE);		//пуск таймера
  TIM_ITConfig(TIM1, TIM_IT_Update, ENABLE);
 
+			
 
 }
 
@@ -697,6 +716,7 @@ void ext_adc_START(void)
 
 void ext_adc_STOP(void)
 {
+	
  //pin_ADC_CLK(LOW);
  //ext_adc_COUNT = 0;
  ext_adc_OVER = 0;

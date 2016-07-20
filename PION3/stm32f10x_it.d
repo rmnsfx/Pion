@@ -18,3 +18,5 @@
 .\stm32f10x_it.o: .\DRIVER\inc\stm32f10x_usart.h
 .\stm32f10x_it.o: .\DRIVER\inc\misc.h
 .\stm32f10x_it.o: Pin.h
+.\stm32f10x_it.o: main.h
+.\stm32f10x_it.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdio.h

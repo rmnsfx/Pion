@@ -256,7 +256,7 @@ unsigned char men_CHECK_EVENT(unsigned char mask_event)
 //----------------------------------------------------------------//
 void men_1ms(void)
 {
- 
+	
  if (men_TIME_REF) men_TIME_REF--;
  else 
   {
@@ -282,7 +282,8 @@ void men_1ms(void)
 	   */
 
   if (men_TIMER>0) men_TIMER--;
-  if (!men_TIMER)  men_TIMER=1000;
+  if (!men_TIMER)  men_TIMER=1000; 
+	
 }
 
 //----------------------------------------------------------------//
@@ -714,10 +715,15 @@ void men_SHOW_REFRESH(void)
 								
 						/////////////////////////////////////////////////////								
 
-						//Текущая емкость
-						vga_SET_POS_TEXT(5,45);						
-						sprintf(t_str,"%0.5f", (float) akbemk_count);						
-						vga_PRINT_STR(t_str,&FONT_4x7);
+//						//Текущая емкость
+//						vga_SET_POS_TEXT(5,45);						
+//						sprintf(t_str,"%0.5f", (float) akbemk_count);						
+//						vga_PRINT_STR(t_str,&FONT_4x7);
+//						
+//						//Напряжение АКБ, старого образца
+//						vga_SET_POS_TEXT(35,45);						
+//						sprintf(t_str,"%d", adc_BAT_MEASURE_edit());						
+//						vga_PRINT_STR(t_str,&FONT_4x7);
 //		
 //						//Мгновенная емкость
 //						vga_SET_POS_TEXT(45,45);						
@@ -771,6 +777,7 @@ void men_SHOW_REFRESH(void)
 										__disable_irq();
 										__disable_fiq();
 										
+										
 										///sprintf(t_str,"M:\\%03u.%03u\\Signal %d.dat",Road_Number,REG(ROUTE_NUM),NEl.Number);
 										sprintf(t_str,"M:\\%03u.%03u\\Signal %d.dat",road_pos_int,REG(ROUTE_NUM),NEl.Number);								
 																		
@@ -790,7 +797,8 @@ void men_SHOW_REFRESH(void)
 										f_mount(0,"0:", 0);							
 										
 										__enable_irq();
-										__enable_fiq();					   										 
+										__enable_fiq();	
+										
 
 										crtflag = 0;
 										temp_reg = REG(NUMFILE_CURENT);
@@ -811,32 +819,36 @@ void men_SHOW_REFRESH(void)
 								
 							 //sprintf(t_str,"M:\\%03u.%03u\\Signal %d.dat",Road_Number,REG(ROUTE_NUM),NEl.Number);	
 							 sprintf(t_str,"M:\\%03u.%03u\\Signal %d.dat",road_indicator,REG(ROUTE_NUM),NEl.Number);	
-							 
-							
-									 if (pRFile = fopen (t_str,"r"))
-										 {
-												fseek(pRFile,-4,SEEK_END);
-												fread(&A,2,1,pRFile);
-												fread(&V,2,1,pRFile);
-											 
-												memset(t_str,'\0', 20);
-												sprintf(t_str,"СКЗ A = %3.02f м/с%c",(float)A/100,0xbd);
-												vga_SET_POS_TEXT(2,45);
-												vga_PRINT_TEXT(t_str,20,&FONT_6x8);
 
-
-												sprintf(t_str,"СКЗ V = %3.01f мм/с", (float)V/100);
-												vga_SET_POS_TEXT(2,57);
-												vga_PRINT_TEXT(t_str,20,&FONT_6x8);
-//												memset(t_str,' ', 20);
-//												vga_SET_POS_TEXT(2,60);
+								
+//Отключено отображение (A,V), т.к. вызывает задержку входа в прерывание таймера для АЦП-ния сигнала
+//							
+//									 if (pRFile = fopen (t_str,"r"))
+//										 {
+//												fseek(pRFile,-4,SEEK_END);
+//												fread(&A,2,1,pRFile);
+//												fread(&V,2,1,pRFile);
+//											 
+//												memset(t_str,'\0', 20);
+//												sprintf(t_str,"СКЗ A = %3.02f м/с%c",(float)A/100,0xbd);
+//												vga_SET_POS_TEXT(2,45);
 //												vga_PRINT_TEXT(t_str,20,&FONT_6x8);
-											 
-												fclose(pRFile);
-												SampleAlreadyExist = 1;
-										 }
-										 else SampleAlreadyExist = 0;
-												vga_RECTANGLE(2,25,2+122*temp_val/100,29,drRECT_FILL);
+
+
+//												sprintf(t_str,"СКЗ V = %3.01f мм/с", (float)V/100);
+//												vga_SET_POS_TEXT(2,57);
+//												vga_PRINT_TEXT(t_str,20,&FONT_6x8);
+////												memset(t_str,' ', 20);
+////												vga_SET_POS_TEXT(2,60);
+////												vga_PRINT_TEXT(t_str,20,&FONT_6x8);
+//											 
+//												fclose(pRFile);
+//												SampleAlreadyExist = 1;
+//										 }
+//										 else SampleAlreadyExist = 0;
+
+
+										 vga_RECTANGLE(2,25,2+122*temp_val/100,29,drRECT_FILL);
 										 
 										 if (!BeyondRoad)
 										 {
@@ -923,7 +935,7 @@ void men_SHOW_REFRESH(void)
 						vga_SET_POS_TEXT(23,1);	
 						vga_PRINT_STR(temp_str,&FONT_4x7);	
 	
-						if (id_akb == 0) men_SHOW_BAT_edit(1,1, akbemk_count * 100 / 0.6 );	
+						if (id_akb == 0) men_SHOW_BAT_edit(1,1, frzbat1);	
 							else men_SHOW_BAT_edit(1,1,adc_BAT_PERCENT_edit_charge());	
 	
 						vga_SET_POS_TEXT(45,24);
@@ -975,6 +987,7 @@ void men_SHOW_REFRESH(void)
 										vga_SET_POS_TEXT(50,55);						
 										sprintf(t_str,"%0.5f", (float) akbemk_count);						
 										vga_PRINT_STR(t_str,&FONT_4x7);
+						
 //						
 //										//Мгновенная емкость
 //										vga_SET_POS_TEXT(45,55);						
@@ -1013,8 +1026,7 @@ void men_SHOW_REFRESH(void)
 								vga_UPDATE();
 													
 								while (pin_USB_5V) {}
-									
-								pin_OFF();
+								
 						}
 						
 						//Запоминаем состояние usb и pa8
@@ -2630,9 +2642,10 @@ void men_EN_MENU(void)
 	//float fft_res[128]; 
 	FILE  		*pRFile = 0;	
   int k=0;
+	int d=0;
 	DWORD sector[2];
-	uint8_t ffarr1[10] = {1,2,3,4,5,6,7,8,9,0};
-//	uint8_t ffarr2[50000];
+	uint8_t ffarr1[50000];
+	TCHAR* ffarr2;
 	
  
 	switch (men_STATUS)
@@ -2713,7 +2726,12 @@ void men_EN_MENU(void)
 								//Эксперемент по стиранию области, куда будут сохраняться данные
 //								for (k=0; k<100; k++) ffarr1[k] = 0xff;
 //								for (k=0; k<40; k++) memcpy(&ffarr2[k*1000], ffarr1, 1000);
-
+//								memcpy(&ext_adc_SIM, ffarr2, 50000);								
+//								for (k=0; k<50000; k++) 
+//								{
+//									ffarr1[k] = d++;								
+//									if (d > 8) d = 0;
+//								}
 								
 								//dat_CreateFile(FileName,ext_adc_SIM,25000,&k_reg);		  //создаем DAT файл								
 				
@@ -2727,9 +2745,17 @@ void men_EN_MENU(void)
 								f_mount(&fls, "0:", 1);
 								res_t = f_mkdir(savefiledirTCHAR);								
 								res_t = f_open(&Fil, savefilenameTCHAR, FA_WRITE | FA_CREATE_ALWAYS);
-								//res_t = f_write(&Fil,&k_reg,4,&iout);										
-								res_t = f_write(&Fil,ext_adc_SIM,25000*2,&iout);			
-								//res_t = f_printf(&Fil, "%d", 1);
+								f_sync(&Fil);
+								
+								res_t = f_write(&Fil,&k_reg,4,&iout);										
+								res_t = f_write(&Fil,ext_adc_SIM,25000*2,&iout);		
+								//res_t = f_write(&Fil,ffarr1,25000,&iout);		
+								
+											
+								//res_t = f_printf(&Fil, ffarr2);
+								
+								f_sync(&Fil);
+								
 								
 								
 								if (iout < 50000)	
@@ -2754,6 +2780,15 @@ void men_EN_MENU(void)
 								
 								f_close(&Fil);			
 								f_mount(0,"0:", 0);		
+								
+								
+//								Delay(100000);
+//								
+//								f_mount(&fls, "0:", 1);
+//								res_t = f_open(&Fil, "0:control.dat", FA_WRITE | FA_CREATE_ALWAYS);
+//								res_t = f_write(&Fil,ext_adc_SIM,25000*2,&iout);
+//								f_close(&Fil);			
+//								f_mount(0,"0:", 0);
 								
 								
 								
