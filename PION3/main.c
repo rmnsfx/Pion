@@ -292,24 +292,7 @@ void GPIO_SETUP()
 	 //настраиваем вход KEY2
    GPIO_InitStructure.GPIO_Pin = GPIO_Pin_1;
    GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IPU;
-   GPIO_Init(GPIOB, &GPIO_InitStructure);	 
-	 
-///Отладка---	 	 
-
-	 GPIO_InitStructure.GPIO_Pin = GPIO_Pin_11;															  
-   GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;
-   GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
-   GPIO_ResetBits(GPIOA,GPIO_Pin_11);
-   GPIO_Init(GPIOA, &GPIO_InitStructure);
-	 
-	 GPIO_InitStructure.GPIO_Pin = GPIO_Pin_12;															  
-   GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;
-   GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
-   GPIO_ResetBits(GPIOA,GPIO_Pin_12);
-   GPIO_Init(GPIOA, &GPIO_InitStructure);
-	 
-///----------
-	 
+   GPIO_Init(GPIOB, &GPIO_InitStructure);	  
 	 
    //входы B2-B4 пропускаем
    //настраиваем выход CS

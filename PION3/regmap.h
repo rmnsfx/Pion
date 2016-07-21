@@ -29,4 +29,5 @@
 	 #define LOCK_REG						 27
    #define ROAD_NUM     			 28 // Номер маршрута
 	 #define COUNT_REG     			 29 // кол-во регистров
-	 
+
+	

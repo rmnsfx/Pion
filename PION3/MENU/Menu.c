@@ -167,6 +167,9 @@ void men_SET_CONFIG(unsigned char conf);
 	unsigned int old_state_usb = 0; 
 	unsigned int old_state_pa8 = 0;
 	unsigned char VALUE=0;
+	char path_to_file[25];
+	uint16_t A_VALUE = 0;  	
+	uint16_t V_VALUE = 0;  	
 
 
 
@@ -335,6 +338,8 @@ void men_SETUP(void)
 	}
 	
 	first_flag = 2;
+	
+	DISPLAY_A_V();
 }
 
 //----------------------------------------------------------------//
@@ -750,6 +755,14 @@ void men_SHOW_REFRESH(void)
 //						vga_SET_POS_TEXT(38,45);				
 //						sprintf(t_str,"%d", usb_charge_state);
 //						vga_PRINT_STR(t_str,&FONT_4x7);
+
+//						vga_SET_POS_TEXT(20,25);				
+//						sprintf(t_str,"%d", (int)A_VALUE);
+//						vga_PRINT_STR(t_str,&FONT_6x8);
+
+
+
+
 						
 						
 						/////////////////////////////////////////////////////
@@ -777,7 +790,7 @@ void men_SHOW_REFRESH(void)
 										__disable_irq();
 										__disable_fiq();
 										
-										
+										//Определяем путь к файлу
 										///sprintf(t_str,"M:\\%03u.%03u\\Signal %d.dat",Road_Number,REG(ROUTE_NUM),NEl.Number);
 										sprintf(t_str,"M:\\%03u.%03u\\Signal %d.dat",road_pos_int,REG(ROUTE_NUM),NEl.Number);								
 																		
@@ -815,37 +828,27 @@ void men_SHOW_REFRESH(void)
 								}
 							
 								
-								///Отображение A,V в выборке
-								
-							 //sprintf(t_str,"M:\\%03u.%03u\\Signal %d.dat",Road_Number,REG(ROUTE_NUM),NEl.Number);	
+								///Отображение A,V в выборке							 
 							 sprintf(t_str,"M:\\%03u.%03u\\Signal %d.dat",road_indicator,REG(ROUTE_NUM),NEl.Number);	
 
 								
-//Отключено отображение (A,V), т.к. вызывает задержку входа в прерывание таймера для АЦП-ния сигнала
-//							
-//									 if (pRFile = fopen (t_str,"r"))
-//										 {
-//												fseek(pRFile,-4,SEEK_END);
-//												fread(&A,2,1,pRFile);
-//												fread(&V,2,1,pRFile);
-//											 
-//												memset(t_str,'\0', 20);
-//												sprintf(t_str,"СКЗ A = %3.02f м/с%c",(float)A/100,0xbd);
-//												vga_SET_POS_TEXT(2,45);
-//												vga_PRINT_TEXT(t_str,20,&FONT_6x8);
 
 
-//												sprintf(t_str,"СКЗ V = %3.01f мм/с", (float)V/100);
-//												vga_SET_POS_TEXT(2,57);
-//												vga_PRINT_TEXT(t_str,20,&FONT_6x8);
-////												memset(t_str,' ', 20);
-////												vga_SET_POS_TEXT(2,60);
-////												vga_PRINT_TEXT(t_str,20,&FONT_6x8);
-//											 
-//												fclose(pRFile);
-//												SampleAlreadyExist = 1;
-//										 }
-//										 else SampleAlreadyExist = 0;
+							if(SampleAlreadyExist == 1)
+							{
+								memset(t_str,'\0', 20);
+								sprintf(t_str,"СКЗ A = %3.02f м/с%c", (float)(A_VALUE/100),0xbd);
+								vga_SET_POS_TEXT(2,45);
+								vga_PRINT_TEXT(t_str,20,&FONT_6x8);
+
+
+								sprintf(t_str,"СКЗ V = %3.01f мм/с", (float)(V_VALUE/100));
+								vga_SET_POS_TEXT(2,57);
+								vga_PRINT_TEXT(t_str,20,&FONT_6x8);
+							}
+
+
+
 
 
 										 vga_RECTANGLE(2,25,2+122*temp_val/100,29,drRECT_FILL);
@@ -983,10 +986,10 @@ void men_SHOW_REFRESH(void)
 
 						/////////////////////////////////////////////////////
 						
-										//Текущая емкость
-										vga_SET_POS_TEXT(50,55);						
-										sprintf(t_str,"%0.5f", (float) akbemk_count);						
-										vga_PRINT_STR(t_str,&FONT_4x7);
+//										//Текущая емкость
+//										vga_SET_POS_TEXT(50,55);						
+//										sprintf(t_str,"%0.5f", (float) akbemk_count);						
+//										vga_PRINT_STR(t_str,&FONT_4x7);
 						
 //						
 //										//Мгновенная емкость
@@ -1108,6 +1111,29 @@ void men_SHOW_REFRESH(void)
 
  vga_UPDATE();
  
+}
+
+///Читаем измеренные ускорение и скорость для отображения в режиме выборки
+void DISPLAY_A_V(void)
+{	
+		char text[20];		
+		uint16_t A = 0, V = 0;
+		FIL file;
+	
+		sprintf(path_to_file,"0:%03u.%03u/Signal %d.dat",road_pos_int,REG(ROUTE_NUM),NEl.Number);
+
+		f_mount(&fls, "0:", 1);
+		res_t = f_open(&file,path_to_file, FA_READ);  
+		if (res_t == 0) SampleAlreadyExist = 1; else SampleAlreadyExist = 0;
+		res_t = f_lseek(&file, f_size(&file)-4);		
+		res_t = f_read(&file,&A,2,&iout);		
+		res_t = f_read(&file,&V,2,&iout);			
+		f_close(&file);			
+		f_mount(0,"0:", 0);		
+		
+		A_VALUE = A;
+		V_VALUE = V;		
+	 
 }
 
 //----------------------------------------------------------------//
@@ -2058,6 +2084,8 @@ BeyondRoad = 0;
 										}
 										//*Alex	 
 										men_SHOW_REFRESH();
+										DISPLAY_A_V();
+										
 									}; 
 //							}
 						
@@ -2103,7 +2131,7 @@ void men_DW_MENU(void)
 {
  unsigned int temp_reg;
  //if (mem_TIME_PAROL!=NIL) mem_TIME_PAROL = mem_TIME_RES_PAROL;
-BeyondRoad = 0;
+ BeyondRoad = 0;
  switch (men_STATUS)
    {
     case men_MAIN:       
@@ -2123,6 +2151,7 @@ BeyondRoad = 0;
 									}
 									//*Alex
 									men_SHOW_REFRESH();
+									DISPLAY_A_V();
 								}; 
 //			}
 						 break;
@@ -2646,6 +2675,9 @@ void men_EN_MENU(void)
 	DWORD sector[2];
 	uint8_t ffarr1[50000];
 	TCHAR* ffarr2;
+	char t_str[25];
+	uint16_t A2, V2, S2;
+	 
 	
  
 	switch (men_STATUS)
@@ -2807,6 +2839,12 @@ void men_EN_MENU(void)
 								
 								crtflag = 1;
 
+								
+								
+
+								
+								
+								
 								
 					
 								//*Alex
@@ -3167,6 +3205,8 @@ void men_EN_MENU(void)
 
 	
 } //конец men_EN_MENU
+
+
 
 
 
