@@ -3,7 +3,7 @@
 <title>Static Call Graph - [.\Main_project.axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image .\Main_project.axf</H1><HR>
-<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5050106: Last Updated: Thu Jul 21 12:22:31 2016
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5050106: Last Updated: Fri Jul 22 13:08:48 2016
 <BR><P>
 <H3>Maximum Stack Usage =       2968 bytes + Unknown(Functions without stacksize, Cycles, Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
@@ -557,7 +557,7 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[6b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 </UL>
 
-<P><STRONG><a name="[bc]"></a>CAPACITY</STRONG> (Thumb, 364 bytes, Stack size 40 bytes, main_1.o(.text))
+<P><STRONG><a name="[bc]"></a>CAPACITY</STRONG> (Thumb, 336 bytes, Stack size 40 bytes, main_1.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 80<LI>Call Chain = CAPACITY &rArr; ceil &rArr; __aeabi_dadd
 </UL>
 <BR>[Calls]<UL><LI><a href="#[be]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;adc_BAT_MEASURE_NEW_VOLT
@@ -572,7 +572,6 @@ Global Symbols
 <LI><a href="#[c0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_fadd
 <LI><a href="#[9d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_f2d
 <LI><a href="#[b0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_dmul
-<LI><a href="#[9e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_cdcmple
 <LI><a href="#[c2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_d2iz
 <LI><a href="#[8a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_ddiv
 <LI><a href="#[b1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_d2f
@@ -581,7 +580,7 @@ Global Symbols
 <LI><a href="#[258]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SERVICE_ACC2
 </UL>
 
-<P><STRONG><a name="[6b]"></a>main</STRONG> (Thumb, 2204 bytes, Stack size 32 bytes, main_1.o(.text))
+<P><STRONG><a name="[6b]"></a>main</STRONG> (Thumb, 2196 bytes, Stack size 32 bytes, main_1.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 2968 + Unknown Stack Size
 <LI>Call Chain = main &rArr; men_MENU_CONTROL &rArr; men_ES_MENU &rArr; men_SHOW_MAINFORMS &rArr; men_SHOW_REFRESH &rArr; men_EN_MENU &rArr; FORMAT &rArr; rod_CreateFile_edit &rArr; f_open &rArr; dir_register &rArr; dir_find &rArr; dir_next &rArr; create_chain &rArr; put_fat &rArr; move_window &rArr; sync_window &rArr; disk_write &rArr; AT45DB_WRITE_PAGE &rArr; SD_sendCommand
 </UL>
@@ -4377,7 +4376,7 @@ Global Symbols
 <LI><a href="#[25e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;men_SHOW_REFRESH
 </UL>
 
-<P><STRONG><a name="[25e]"></a>men_SHOW_REFRESH</STRONG> (Thumb, 3152 bytes, Stack size 96 bytes, menu.o(.text))
+<P><STRONG><a name="[25e]"></a>men_SHOW_REFRESH</STRONG> (Thumb, 3274 bytes, Stack size 96 bytes, menu.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 2912 + Unknown Stack Size
 <LI>Call Chain = men_SHOW_REFRESH &rArr; men_EN_MENU &rArr; FORMAT &rArr; rod_CreateFile_edit &rArr; f_open &rArr; dir_register &rArr; dir_find &rArr; dir_next &rArr; create_chain &rArr; put_fat &rArr; move_window &rArr; sync_window &rArr; disk_write &rArr; AT45DB_WRITE_PAGE &rArr; SD_sendCommand
 </UL>
@@ -4488,7 +4487,7 @@ Global Symbols
 <LI><a href="#[263]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;men_DW_MENU
 </UL>
 
-<P><STRONG><a name="[262]"></a>men_ES_MENU</STRONG> (Thumb, 94 bytes, Stack size 8 bytes, menu.o(.text))
+<P><STRONG><a name="[262]"></a>men_ES_MENU</STRONG> (Thumb, 186 bytes, Stack size 8 bytes, menu.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 2928 + Unknown Stack Size
 <LI>Call Chain = men_ES_MENU &rArr; men_SHOW_MAINFORMS &rArr; men_SHOW_REFRESH &rArr; men_EN_MENU &rArr; FORMAT &rArr; rod_CreateFile_edit &rArr; f_open &rArr; dir_register &rArr; dir_find &rArr; dir_next &rArr; create_chain &rArr; put_fat &rArr; move_window &rArr; sync_window &rArr; disk_write &rArr; AT45DB_WRITE_PAGE &rArr; SD_sendCommand
 </UL>
@@ -4499,7 +4498,7 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[e3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;men_MENU_CONTROL
 </UL>
 
-<P><STRONG><a name="[263]"></a>men_DW_MENU</STRONG> (Thumb, 234 bytes, Stack size 8 bytes, menu.o(.text))
+<P><STRONG><a name="[263]"></a>men_DW_MENU</STRONG> (Thumb, 156 bytes, Stack size 8 bytes, menu.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 2920 + Unknown Stack Size
 <LI>Call Chain = men_DW_MENU &rArr; men_SHOW_REFRESH &rArr; men_EN_MENU &rArr; FORMAT &rArr; rod_CreateFile_edit &rArr; f_open &rArr; dir_register &rArr; dir_find &rArr; dir_next &rArr; create_chain &rArr; put_fat &rArr; move_window &rArr; sync_window &rArr; disk_write &rArr; AT45DB_WRITE_PAGE &rArr; SD_sendCommand
 </UL>
@@ -6139,7 +6138,6 @@ Global Symbols
 <BR><BR>[Stack]<UL><LI>Max Depth = 32<LI>Call Chain = __aeabi_cdcmple
 </UL>
 <BR>[Called By]<UL><LI><a href="#[eb]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;iir_CreateFilterDec
-<LI><a href="#[bc]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;CAPACITY
 <LI><a href="#[98]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;CONTROL_BAT
 </UL>
 

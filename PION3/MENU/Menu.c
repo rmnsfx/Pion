@@ -709,21 +709,18 @@ void men_SHOW_REFRESH(void)
 									 if (BeyondRoad) vga_PRINT_TEXT(t_str,15,&FONT_6x8);
 									 else vga_PRINT_TEXT(NEl.StringName_1,15,&FONT_6x8);
 
-									 //vga_SET_POS_TEXT(2,43);
-									 //vga_PRINT_TEXT(NEl.StringName_2,20,&FONT_6x8);
-									 
-									 //calc_from_dat(t_str, &Agl, &Vgl);
-									 
-								//A = calc_from_dat_A(t_str);
-								//V = calc_from_dat_V(t_str);
+
 								
 								
 						/////////////////////////////////////////////////////								
 
-//						//Текущая емкость
-//						vga_SET_POS_TEXT(5,45);						
-//						sprintf(t_str,"%0.5f", (float) akbemk_count);						
-//						vga_PRINT_STR(t_str,&FONT_4x7);
+									if (CAPACITY_SWITCH == 1)
+									{
+												//Текущая емкость
+											vga_SET_POS_TEXT(47,1);						
+											sprintf(t_str,"%0.4f", (float) akbemk_count);						
+											vga_PRINT_STR(t_str,&FONT_4x7);							
+									}
 //						
 //						//Напряжение АКБ, старого образца
 //						vga_SET_POS_TEXT(35,45);						
@@ -945,10 +942,13 @@ void men_SHOW_REFRESH(void)
 						vga_PRINT_STR("USB",&FONT_12x16);												
 						//vga_UPDATE();
 	
-//									//Текущая емкость
-//								vga_SET_POS_TEXT(5,45);						
-//								sprintf(t_str,"%0.5f", (float) akbemk_count);						
-//								vga_PRINT_STR(t_str,&FONT_4x7);
+						if (CAPACITY_SWITCH == 1)
+						{
+									//Текущая емкость
+								vga_SET_POS_TEXT(47,1);					
+								sprintf(t_str,"%0.4f", (float) akbemk_count);			
+								vga_PRINT_STR(t_str,&FONT_4x7);							
+						}
 //				
 //								//Мгновенная емкость
 //								vga_SET_POS_TEXT(45,45);						
@@ -986,10 +986,13 @@ void men_SHOW_REFRESH(void)
 
 						/////////////////////////////////////////////////////
 						
-//										//Текущая емкость
-//										vga_SET_POS_TEXT(50,55);						
-//										sprintf(t_str,"%0.5f", (float) akbemk_count);						
-//										vga_PRINT_STR(t_str,&FONT_4x7);
+						if (CAPACITY_SWITCH == 1)
+						{
+									//Текущая емкость
+								vga_SET_POS_TEXT(47,1);						
+								sprintf(t_str,"%0.4f", (float) akbemk_count);							
+								vga_PRINT_STR(t_str,&FONT_4x7);							
+						}
 						
 //						
 //										//Мгновенная емкость
@@ -1049,6 +1052,7 @@ void men_SHOW_REFRESH(void)
 						LED_CHARGE_ON();
 						CHARGE_ON();
 							
+		
 						
 						if (adc_BAT_PERCENT_edit_charge() < 100) 
 						{

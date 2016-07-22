@@ -1046,8 +1046,9 @@ float CAPACITY ()
 						
 						
 						//Проценты с учетом напряжения
-						if (akbemk_volt < 2.6) akbemk_percent = 0;
-							else akbemk_percent = (akbemk_count * 100) / 0.6;
+//						if (akbemk_volt < 2.6) akbemk_percent = 0;
+//							else akbemk_percent = (akbemk_count * 100) / 0.6;
+						akbemk_percent = (akbemk_count * 100) / 0.6;
 		
 						//Запоминаем емкость
 						BKP_WriteBackupRegister(BKP_DR10, (int) ceil(akbemk_count * 100000)); 
@@ -1125,7 +1126,7 @@ int main(void)
 						 
 						 if (GLOBAL_ERROR&0x01)   {vga_SET_POS_TEXT(5,++temp_reg*10);vga_PRINT_STR("Часы",&FONT_6x8);}
 						 if (GLOBAL_ERROR&0x02)   {vga_SET_POS_TEXT(5,++temp_reg*10);vga_PRINT_STR("Инициализация FLASH",&FONT_6x8);}
-						 if (GLOBAL_ERROR&0x04)   {vga_SET_POS_TEXT(5,++temp_reg*10);vga_PRINT_STR("Инициализация FAT16",&FONT_6x8);}
+						 if (GLOBAL_ERROR&0x04)   {vga_SET_POS_TEXT(5,++temp_reg*10);vga_PRINT_STR("Инициализация FAT",&FONT_6x8);}
 						 
 						 vga_UPDATE();
 						 //виснем!
