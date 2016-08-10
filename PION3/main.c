@@ -875,7 +875,7 @@ void CONTROL_POWER(u8 RESET)
 //				Delay(700000); 
 //				vga_CLEAR();
 //				vga_UPDATE();	
-//				pin_OFF();
+				pin_OFF();
 		 }
 	
 }
@@ -1038,17 +1038,19 @@ float CAPACITY ()
 						
 		
 						//Счетчик емкости
-//						if ( GPIO_ReadInputDataBit(GPIOA,GPIO_Pin_8) == 0 ) akbemk_count += akbemk;
-//						else akbemk_count -= akbemk;		
+//						if ( GPIO_ReadInputDataBit(GPIOA,GPIO_Pin_8) == 0 ) akbemk_count -= akbemk;
+//						else akbemk_count += akbemk;		
 												
 						if (usb_charge_state == 1) 
 						akbemk_count += akbemk;
 						
+						if (usb_charge_state == 0) 
+						akbemk_count -= akbemk;
+						
 						
 						//Проценты с учетом напряжения
-//						if (akbemk_volt < 2.6) akbemk_percent = 0;
-//							else akbemk_percent = (akbemk_count * 100) / 0.6;
-						akbemk_percent = (akbemk_count * 100) / 0.6;
+						if (akbemk_volt < 2.6) akbemk_percent = 0;
+							else akbemk_percent = (akbemk_count * 100) / 0.6;
 		
 						//Запоминаем емкость
 						BKP_WriteBackupRegister(BKP_DR10, (int) ceil(akbemk_count * 100000)); 
@@ -1126,7 +1128,7 @@ int main(void)
 						 
 						 if (GLOBAL_ERROR&0x01)   {vga_SET_POS_TEXT(5,++temp_reg*10);vga_PRINT_STR("Часы",&FONT_6x8);}
 						 if (GLOBAL_ERROR&0x02)   {vga_SET_POS_TEXT(5,++temp_reg*10);vga_PRINT_STR("Инициализация FLASH",&FONT_6x8);}
-						 if (GLOBAL_ERROR&0x04)   {vga_SET_POS_TEXT(5,++temp_reg*10);vga_PRINT_STR("Инициализация FAT",&FONT_6x8);}
+						 if (GLOBAL_ERROR&0x04)   {vga_SET_POS_TEXT(5,++temp_reg*10);vga_PRINT_STR("Инициализация FAT16",&FONT_6x8);}
 						 
 						 vga_UPDATE();
 						 //виснем!
@@ -1509,8 +1511,8 @@ int main(void)
 
 					
 						//контроль вывода
-						if (men_MENU_CONTROL()) CONTROL_POWER(1); ///Выключение в теч. 10 мин., если не нажата кнопка
-						else					CONTROL_POWER(0);
+						if (men_MENU_CONTROL()) if (REG(AUTOPOWEROFF) == 1) CONTROL_POWER(1); ///Выключение в теч. 10 мин., если не нажата кнопка
+						
 						
 						//обновить режим
 						UPDATE_MODE_REG();
@@ -1520,7 +1522,7 @@ int main(void)
 		
 	else  
 	{
-		CONTROL_POWER(0);
+		if (REG(AUTOPOWEROFF) == 1) CONTROL_POWER(1);
 	
 			if (USB_Configuration == 0) 
 				{ 			

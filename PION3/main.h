@@ -66,12 +66,9 @@ extern unsigned int usb_charge_state;
 //Выключатель usb для отладки 
 #define USB_SWITCH 1
 
-//Выключатель отображения емкости для отладки 
-#define CAPACITY_SWITCH 1
-
 
 
 //extern float  k_reg_mul;
-#define VER 340
+#define VER 342
 
 #endif

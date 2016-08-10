@@ -24,7 +24,7 @@ typedef struct {
   unsigned char Id_group;                    //идентификатор группы
   		   char Text_0[21];                  //имя параметра, группы
 		   char Text_1[21];                  //имя параметра, группы
-  		   char Caption[10];					 //сокращенное имя параметра
+  		   char Caption[21];					 //сокращенное имя параметра
   		   char MeasureText[4];  			 //еденица измерения
   //unsigned char Data_reg;                    //номер параметра
   unsigned char Options;                     //опции параметра 

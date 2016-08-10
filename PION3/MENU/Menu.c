@@ -167,9 +167,6 @@ void men_SET_CONFIG(unsigned char conf);
 	unsigned int old_state_usb = 0; 
 	unsigned int old_state_pa8 = 0;
 	unsigned char VALUE=0;
-	char path_to_file[25];
-	uint16_t A_VALUE = 0;  	
-	uint16_t V_VALUE = 0;  	
 
 
 
@@ -338,8 +335,6 @@ void men_SETUP(void)
 	}
 	
 	first_flag = 2;
-	
-	DISPLAY_A_V();
 }
 
 //----------------------------------------------------------------//
@@ -415,7 +410,7 @@ void men_SHOW_BAT_edit(unsigned char X, unsigned char Y, unsigned char VAL)
 void men_SHOW_LARGE_BAT (unsigned char VAL)
 {
 	
-if (usb_charge_state != 0)	
+//if (usb_charge_state != 0)	
 {
 	if (VALUE > 100) 
 	{
@@ -439,20 +434,20 @@ if (usb_charge_state != 0)
 	if (VALUE>80) vga_RECTANGLE(66+10,15,72+10,45,drRECT_ARC_FILL);
 	if (VALUE>99) vga_RECTANGLE(75+10,15,81+10,45,drRECT_ARC_FILL);
 }
-else
-{
-	VALUE = 100;
-	vga_RECTANGLE(17+10,11,85+10,49,drRECT_NO_FILL);
-	vga_RECTANGLE(18+10,12,84+10,48,drRECT_NO_FILL);
-	vga_RECTANGLE(84+10,22,90+10,34,drRECT_FILL);
-	if (VALUE>5) vga_RECTANGLE(21+10,15,27+10,45,drRECT_ARC_FILL);
-	if (VALUE>20) vga_RECTANGLE(30+10,15,36+10,45,drRECT_ARC_FILL);
-	if (VALUE>35) vga_RECTANGLE(39+10,15,45+10,45,drRECT_ARC_FILL);
-	if (VALUE>50) vga_RECTANGLE(48+10,15,54+10,45,drRECT_ARC_FILL);
-	if (VALUE>65) vga_RECTANGLE(57+10,15,63+10,45,drRECT_ARC_FILL);
-	if (VALUE>80) vga_RECTANGLE(66+10,15,72+10,45,drRECT_ARC_FILL);
-	if (VALUE>99) vga_RECTANGLE(75+10,15,81+10,45,drRECT_ARC_FILL);
-}	
+//else
+//{
+//	VALUE = 100;
+//	vga_RECTANGLE(17+10,11,85+10,49,drRECT_NO_FILL);
+//	vga_RECTANGLE(18+10,12,84+10,48,drRECT_NO_FILL);
+//	vga_RECTANGLE(84+10,22,90+10,34,drRECT_FILL);
+//	if (VALUE>5) vga_RECTANGLE(21+10,15,27+10,45,drRECT_ARC_FILL);
+//	if (VALUE>20) vga_RECTANGLE(30+10,15,36+10,45,drRECT_ARC_FILL);
+//	if (VALUE>35) vga_RECTANGLE(39+10,15,45+10,45,drRECT_ARC_FILL);
+//	if (VALUE>50) vga_RECTANGLE(48+10,15,54+10,45,drRECT_ARC_FILL);
+//	if (VALUE>65) vga_RECTANGLE(57+10,15,63+10,45,drRECT_ARC_FILL);
+//	if (VALUE>80) vga_RECTANGLE(66+10,15,72+10,45,drRECT_ARC_FILL);
+//	if (VALUE>99) vga_RECTANGLE(75+10,15,81+10,45,drRECT_ARC_FILL);
+//}	
 
 }
 
@@ -483,7 +478,13 @@ void men_SHOW_REFRESH(void)
 		
   					vga_CLEAR();
 
-						
+						if (REG(AKB_EMK) == 1)
+						{
+										//Текущая емкость
+										vga_SET_POS_TEXT(50, 57);						
+										sprintf(t_str,"%0.5f", (float) akbemk_count);						
+										vga_PRINT_STR(t_str,&FONT_4x7);
+						}
 	
 					/*	men_READ_PARAM(RMS_VAL); //загружаем параметр
 						temp_str = typ_SHOW_VALUE_0(&typVALUE_PARAM,1,(TBit)0);
@@ -675,12 +676,12 @@ void men_SHOW_REFRESH(void)
 							
 							
 							
-									 vga_SET_POS_TEXT(74,1);		
+									 vga_SET_POS_TEXT(82,1);		
 									 vga_PRINT_STR("ВЬ",&FONT_4x7);				
-									 vga_LINE(82,2,82,6);
-									 vga_SET_POS_TEXT(83,1);		
+									 vga_LINE(91,2,91,6);
 									 
-									 sprintf(t_str,"БОРКА %02d",REG(ROUTE_NUM)+1);									 
+									 vga_SET_POS_TEXT(92,1);											 
+									 sprintf(t_str,"БОРКА %03d",REG(ROUTE_NUM)+1);									 
 									 vga_PRINT_STR(t_str,&FONT_4x7);
 
 
@@ -699,7 +700,7 @@ void men_SHOW_REFRESH(void)
 									 if (BeyondRoad) vga_PRINT_STR("Вне маршрута",&FONT_6x8);
 									 else vga_PRINT_STR(Road_Name,&FONT_6x8);
 									 
-									 vga_SET_POS_TEXT(92,14);
+									 vga_SET_POS_TEXT(95,14);
 									 sprintf(t_str,"%3d %%",temp_val);
 									 vga_PRINT_STR(t_str,&FONT_6x8);
 								     
@@ -709,19 +710,18 @@ void men_SHOW_REFRESH(void)
 									 if (BeyondRoad) vga_PRINT_TEXT(t_str,15,&FONT_6x8);
 									 else vga_PRINT_TEXT(NEl.StringName_1,15,&FONT_6x8);
 
-
+									 //vga_SET_POS_TEXT(2,43);
+									 //vga_PRINT_TEXT(NEl.StringName_2,20,&FONT_6x8);
+									 
+									 //calc_from_dat(t_str, &Agl, &Vgl);
+									 
+								//A = calc_from_dat_A(t_str);
+								//V = calc_from_dat_V(t_str);
 								
 								
 						/////////////////////////////////////////////////////								
 
-									if (CAPACITY_SWITCH == 1)
-									{
-												//Текущая емкость
-											vga_SET_POS_TEXT(47,1);						
-											sprintf(t_str,"%0.4f", (float) akbemk_count);						
-											vga_PRINT_STR(t_str,&FONT_4x7);							
-									}
-//						
+						
 //						//Напряжение АКБ, старого образца
 //						vga_SET_POS_TEXT(35,45);						
 //						sprintf(t_str,"%d", adc_BAT_MEASURE_edit());						
@@ -752,14 +752,6 @@ void men_SHOW_REFRESH(void)
 //						vga_SET_POS_TEXT(38,45);				
 //						sprintf(t_str,"%d", usb_charge_state);
 //						vga_PRINT_STR(t_str,&FONT_4x7);
-
-//						vga_SET_POS_TEXT(20,25);				
-//						sprintf(t_str,"%d", (int)A_VALUE);
-//						vga_PRINT_STR(t_str,&FONT_6x8);
-
-
-
-
 						
 						
 						/////////////////////////////////////////////////////
@@ -787,7 +779,7 @@ void men_SHOW_REFRESH(void)
 										__disable_irq();
 										__disable_fiq();
 										
-										//Определяем путь к файлу
+										
 										///sprintf(t_str,"M:\\%03u.%03u\\Signal %d.dat",Road_Number,REG(ROUTE_NUM),NEl.Number);
 										sprintf(t_str,"M:\\%03u.%03u\\Signal %d.dat",road_pos_int,REG(ROUTE_NUM),NEl.Number);								
 																		
@@ -825,30 +817,38 @@ void men_SHOW_REFRESH(void)
 								}
 							
 								
-								///Отображение A,V в выборке							 
-							 sprintf(t_str,"M:\\%03u.%03u\\Signal %d.dat",road_indicator,REG(ROUTE_NUM),NEl.Number);	
-
+								///Отображение A,V в выборке
 								
+							 //sprintf(t_str,"M:\\%03u.%03u\\Signal %d.dat",Road_Number,REG(ROUTE_NUM),NEl.Number);	
+							 sprintf(t_str,"M:\\%03u.%03u\\Signal %d.dat",road_indicator,REG(ROUTE_NUM),NEl.Number);	
+							 
+							
+									 if (pRFile = fopen (t_str,"r"))
+										 {
+												fseek(pRFile,-4,SEEK_END);
+												fread(&A,2,1,pRFile);
+												fread(&V,2,1,pRFile);
+											 
+												memset(t_str,'\0', 20);
+												sprintf(t_str,"СКЗ A = %3.02f м/с%c",(float)A/100,0xbd);
+												vga_SET_POS_TEXT(2,45);
+												vga_PRINT_TEXT(t_str,20,&FONT_6x8);
 
-
-							if(SampleAlreadyExist == 1)
-							{
-								memset(t_str,'\0', 20);
-								sprintf(t_str,"СКЗ A = %3.02f м/с%c", (float)(A_VALUE/100),0xbd);
-								vga_SET_POS_TEXT(2,45);
-								vga_PRINT_TEXT(t_str,20,&FONT_6x8);
-
-
-								sprintf(t_str,"СКЗ V = %3.01f мм/с", (float)(V_VALUE/100));
-								vga_SET_POS_TEXT(2,57);
-								vga_PRINT_TEXT(t_str,20,&FONT_6x8);
-							}
-
-
-
-
-
-										 vga_RECTANGLE(2,25,2+122*temp_val/100,29,drRECT_FILL);
+												if ( (V/100) > 99 )
+												sprintf(t_str,"СКЗ V = %d мм/с ", (int)V/100);
+												else
+												sprintf(t_str,"СКЗ V = %3.01f мм/с", (float)V/100);
+												vga_SET_POS_TEXT(2,57);
+												vga_PRINT_TEXT(t_str,20,&FONT_6x8);
+//												memset(t_str,' ', 20);
+//												vga_SET_POS_TEXT(2,60);
+//												vga_PRINT_TEXT(t_str,20,&FONT_6x8);
+											 
+												fclose(pRFile);
+												SampleAlreadyExist = 1;
+										 }
+										 else SampleAlreadyExist = 0;
+												vga_RECTANGLE(2,25,2+122*temp_val/100,29,drRECT_FILL);
 										 
 										 if (!BeyondRoad)
 										 {
@@ -896,10 +896,10 @@ void men_SHOW_REFRESH(void)
 						 //if (measure_stat == 2)
 						 if ( (measure_stat == 2) && REG(PION_STATUS) )
 						 {
-						  vga_SET_POS_TEXT(49,0);
+						  vga_SET_POS_TEXT(53,0);
 						  vga_PRINT_STR("изм",&FONT_6x8);
 						  vga_SET_DRAW_MODE(drMODE_XOR);
-						  vga_RECTANGLE(47,0,69,8,drRECT_FILL);
+						  vga_RECTANGLE(51,0,73,8,drRECT_FILL);
 						  vga_SET_DRAW_MODE(drMODE_NORMAL);
 						  
 						  if ((REG(PION_STATUS) & ST_OVER)>0)
@@ -929,10 +929,12 @@ void men_SHOW_REFRESH(void)
 						break;
   case form_USB:	
 						
+						usb_charge_state = 2;	
+	
 						vga_CLEAR();
 						men_READ_PARAM(TIME); //загружаем время
 						temp_str = typ_SHOW_TIME_VALUE(&typVALUE_PARAM);
-						vga_SET_POS_TEXT(23,1);	
+						vga_SET_POS_TEXT(21,1);	
 						vga_PRINT_STR(temp_str,&FONT_4x7);	
 	
 						if (id_akb == 0) men_SHOW_BAT_edit(1,1, frzbat1);	
@@ -942,14 +944,14 @@ void men_SHOW_REFRESH(void)
 						vga_PRINT_STR("USB",&FONT_12x16);												
 						//vga_UPDATE();
 	
-						if (CAPACITY_SWITCH == 1)
+						if (REG(AKB_EMK) == 1)
 						{
-									//Текущая емкость
-								vga_SET_POS_TEXT(47,1);					
-								sprintf(t_str,"%0.4f", (float) akbemk_count);			
-								vga_PRINT_STR(t_str,&FONT_4x7);							
+										//Текущая емкость
+										vga_SET_POS_TEXT(50, 57);						
+										sprintf(t_str,"%0.5f", (float) akbemk_count);						
+										vga_PRINT_STR(t_str,&FONT_4x7);
 						}
-//				
+				
 //								//Мгновенная емкость
 //								vga_SET_POS_TEXT(45,45);						
 //								sprintf(t_str,"%0.5f", (float) akbtemp);						
@@ -973,28 +975,31 @@ void men_SHOW_REFRESH(void)
 						
 						
 		
-						if ( (GPIO_ReadInputDataBit(GPIOA,GPIO_Pin_8) == 0) )
+						if ( GPIO_ReadInputDataBit(GPIOA,GPIO_Pin_8) == 0 )
 						{				
 								
 							LED_CHARGE_ON();
-							usb_charge_state = 1;	
+							usb_charge_state = 0;	
 							
 						}
 						
+						
+						
 						CHARGE_ON();
 						
+						men_SHOW_LARGE_BAT(0);
 
 						/////////////////////////////////////////////////////
-						
-						if (CAPACITY_SWITCH == 1)
+						if (REG(AKB_EMK) == 1)
 						{
-									//Текущая емкость
-								vga_SET_POS_TEXT(47,1);						
-								sprintf(t_str,"%0.4f", (float) akbemk_count);							
-								vga_PRINT_STR(t_str,&FONT_4x7);							
+										//Текущая емкость
+										vga_SET_POS_TEXT(50, 57);												
+										sprintf(t_str,"%0.5f", (float) akbemk_count);						
+										vga_PRINT_STR(t_str,&FONT_4x7);
 						}
 						
-//						
+						
+						
 //										//Мгновенная емкость
 //										vga_SET_POS_TEXT(45,55);						
 //										sprintf(t_str,"%0.5f", (float) akbtemp);						
@@ -1024,7 +1029,7 @@ void men_SHOW_REFRESH(void)
 								akbemk_count = 0.6;
 								akbemk_percent = 100;	
 
-								usb_charge_state = 0;	
+								usb_charge_state = 2;	
 							
 								vga_CLEAR();
 								vga_SET_POS_TEXT(25,24);
@@ -1039,7 +1044,7 @@ void men_SHOW_REFRESH(void)
 						old_state_usb = pin_USB_5V;
 						old_state_pa8 = GPIO_ReadInputDataBit(GPIOA,GPIO_Pin_8);
 						
-						men_SHOW_LARGE_BAT(akbemk_percent);
+						
 						
 		
 	}
@@ -1052,7 +1057,6 @@ void men_SHOW_REFRESH(void)
 						LED_CHARGE_ON();
 						CHARGE_ON();
 							
-		
 						
 						if (adc_BAT_PERCENT_edit_charge() < 100) 
 						{
@@ -1115,29 +1119,6 @@ void men_SHOW_REFRESH(void)
 
  vga_UPDATE();
  
-}
-
-///Читаем измеренные ускорение и скорость для отображения в режиме выборки
-void DISPLAY_A_V(void)
-{	
-		char text[20];		
-		uint16_t A = 0, V = 0;
-		FIL file;
-	
-		sprintf(path_to_file,"0:%03u.%03u/Signal %d.dat",road_pos_int,REG(ROUTE_NUM),NEl.Number);
-
-		f_mount(&fls, "0:", 1);
-		res_t = f_open(&file,path_to_file, FA_READ);  
-		if (res_t == 0) SampleAlreadyExist = 1; else SampleAlreadyExist = 0;
-		res_t = f_lseek(&file, f_size(&file)-4);		
-		res_t = f_read(&file,&A,2,&iout);		
-		res_t = f_read(&file,&V,2,&iout);			
-		f_close(&file);			
-		f_mount(0,"0:", 0);		
-		
-		A_VALUE = A;
-		V_VALUE = V;		
-	 
 }
 
 //----------------------------------------------------------------//
@@ -2088,8 +2069,6 @@ BeyondRoad = 0;
 										}
 										//*Alex	 
 										men_SHOW_REFRESH();
-										DISPLAY_A_V();
-										
 									}; 
 //							}
 						
@@ -2135,7 +2114,7 @@ void men_DW_MENU(void)
 {
  unsigned int temp_reg;
  //if (mem_TIME_PAROL!=NIL) mem_TIME_PAROL = mem_TIME_RES_PAROL;
- BeyondRoad = 0;
+BeyondRoad = 0;
  switch (men_STATUS)
    {
     case men_MAIN:       
@@ -2155,7 +2134,6 @@ void men_DW_MENU(void)
 									}
 									//*Alex
 									men_SHOW_REFRESH();
-									DISPLAY_A_V();
 								}; 
 //			}
 						 break;
@@ -2679,9 +2657,6 @@ void men_EN_MENU(void)
 	DWORD sector[2];
 	uint8_t ffarr1[50000];
 	TCHAR* ffarr2;
-	char t_str[25];
-	uint16_t A2, V2, S2;
-	 
 	
  
 	switch (men_STATUS)
@@ -2843,12 +2818,6 @@ void men_EN_MENU(void)
 								
 								crtflag = 1;
 
-								
-								
-
-								
-								
-								
 								
 					
 								//*Alex
@@ -3209,8 +3178,6 @@ void men_EN_MENU(void)
 
 	
 } //конец men_EN_MENU
-
-
 
 
 

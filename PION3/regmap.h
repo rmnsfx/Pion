@@ -28,6 +28,8 @@
 	 #define ROUTE_NUM					 26 // Номер выборки
 	 #define LOCK_REG						 27
    #define ROAD_NUM     			 28 // Номер маршрута
-	 #define COUNT_REG     			 29 // кол-во регистров
+	 #define AKB_EMK     			 	 29 // Текущая емкость акб
+	 #define AUTOPOWEROFF    		 30 // Автоотключение
+	 #define COUNT_REG     			 31 // кол-во регистров
 
 	
