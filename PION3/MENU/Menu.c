@@ -481,9 +481,16 @@ void men_SHOW_REFRESH(void)
 						if (REG(AKB_EMK) == 1)
 						{
 										//Текущая емкость
-										vga_SET_POS_TEXT(50, 57);						
+										vga_SET_POS_TEXT(21, 1);						
 										sprintf(t_str,"%0.5f", (float) akbemk_count);						
 										vga_PRINT_STR(t_str,&FONT_4x7);
+						}
+						else
+						{
+										men_READ_PARAM(TIME); //загружаем время
+										temp_str = typ_SHOW_TIME_VALUE(&typVALUE_PARAM);
+										vga_SET_POS_TEXT(21,1);	
+										vga_PRINT_STR(temp_str,&FONT_4x7);
 						}
 	
 					/*	men_READ_PARAM(RMS_VAL); //загружаем параметр
@@ -501,10 +508,7 @@ void men_SHOW_REFRESH(void)
 							
 						men_SHOW_BAT_edit(1,1,frzbat1);
 
-						men_READ_PARAM(TIME); //загружаем время
-						temp_str = typ_SHOW_TIME_VALUE(&typVALUE_PARAM);
-						vga_SET_POS_TEXT(21,1);	
-						vga_PRINT_STR(temp_str,&FONT_4x7);	
+	
 
 					    //выборка
 						/*vga_SET_POS_TEXT(74,1);		
@@ -947,7 +951,7 @@ void men_SHOW_REFRESH(void)
 						if (REG(AKB_EMK) == 1)
 						{
 										//Текущая емкость
-										vga_SET_POS_TEXT(50, 57);						
+										vga_SET_POS_TEXT(21, 1);	
 										sprintf(t_str,"%0.5f", (float) akbemk_count);						
 										vga_PRINT_STR(t_str,&FONT_4x7);
 						}
@@ -993,7 +997,7 @@ void men_SHOW_REFRESH(void)
 						if (REG(AKB_EMK) == 1)
 						{
 										//Текущая емкость
-										vga_SET_POS_TEXT(50, 57);												
+										vga_SET_POS_TEXT(21, 1);											
 										sprintf(t_str,"%0.5f", (float) akbemk_count);						
 										vga_PRINT_STR(t_str,&FONT_4x7);
 						}
@@ -1290,7 +1294,7 @@ void men_CALLBACK()
 //men_POINTER;
  men_LEVEL--;
 	if (Items[men_POINTER].Data_reg == 0xFE) men_POINTER = 27;
-	else if (Items[men_POINTER].Data_reg == 0xF0) men_POINTER = 38;
+	else if (Items[men_POINTER].Data_reg == 0xF0) men_POINTER = 0x28;
 	else if (Items[men_POINTER].Data_reg == 0xFB) men_POINTER = 40;
 	else if (Items[men_POINTER].Data_reg == 0xFC) men_POINTER = 40;
 	else if (Items[men_POINTER].Data_reg == 0xFF) men_POINTER = 0;

@@ -165,7 +165,7 @@ void Timer_1ms_CallBack(void)
 				timer4=0;	
 			}
 				
-			POWER_OFF--;
+			if (REG(AUTOPOWEROFF) == 1) POWER_OFF--;
 				
 			 if (Sec_timer==0) {
 								Sec_timer = 1000; 
@@ -705,7 +705,7 @@ void CONTROL_BAT(unsigned char MIN_VAL_BAT)
 							men_SHOW_MAINFORMS(form_MESUARE); 		 						
 					 }
 					 
-					 if ( akbemk_percent == 0 && measure_stat == 0 && akbemk_volt <= 2.5 && message_status == 0 )   
+					 if ( akbemk_percent == 0 && measure_stat == 0 && akbemk_volt <= 2.6 && message_status == 0 )   
 					 {	
 							vga_CLEAR();					
 							vga_SET_POS_TEXT(5,20);
