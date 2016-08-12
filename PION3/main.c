@@ -1215,7 +1215,7 @@ int main(void)
   //задаем новую конфигурацию меню, если нажаты кнопки "верх","вниз"
   if ((key_CHECK_ST(key_UP))&&(key_CHECK_ST(key_DOWN))) 
    men_SET_CONFIG(0x80);
-
+	//else if (GPIO_ReadInputDataBit(GPIOB,GPIO_Pin_15) == 1) men_SET_CONFIG(0x3);
 
   k_reg = ((float)REG(K_VIBRO)/1000);
   k_reg = k_reg/(30*10); 

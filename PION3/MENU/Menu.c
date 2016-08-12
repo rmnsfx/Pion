@@ -696,23 +696,30 @@ void men_SHOW_REFRESH(void)
 									
 									 vga_RECTANGLE(2,25,2+122,29,drRECT_NO_FILL);
 									 if (temp_val==0xFF) temp_val = 0;
-									 sprintf(t_str,"Буфер     %3d %%",temp_val);
+									 //sprintf(t_str,"Буфер     %3d %%",temp_val);									 
 									 //vga_PRINT_STR("Запись    ",&FONT_6x8);
 									 //men_READ_PARAM(SAMPLING_STATUS); //загружаем параметр
 									 //temp_str = typ_SHOW_VALUE_0(&typVALUE_PARAM,0,(TBit)0);
 									 
-									 if (BeyondRoad) vga_PRINT_STR("Вне маршрута",&FONT_6x8);
+//									 if (BeyondRoad) vga_PRINT_STR("Вне маршрута",&FONT_6x8);
+//									 else vga_PRINT_STR(Road_Name,&FONT_6x8);
+									 if (BeyondRoad) vga_PRINT_STR(Road_Name,&FONT_6x8);
 									 else vga_PRINT_STR(Road_Name,&FONT_6x8);
+									 
 									 
 									 vga_SET_POS_TEXT(95,14);
 									 sprintf(t_str,"%3d %%",temp_val);
 									 vga_PRINT_STR(t_str,&FONT_6x8);
 								     
 									 vga_SET_POS_TEXT(2,33);
-									 sprintf(t_str,"точка %03d",REG(BEYOND_ROAD));
+									 sprintf(t_str,"точка %03d             ",REG(BEYOND_ROAD));
 									 
-									 if (BeyondRoad) vga_PRINT_TEXT(t_str,15,&FONT_6x8);
-									 else vga_PRINT_TEXT(NEl.StringName_1,15,&FONT_6x8);
+//									 if (BeyondRoad) vga_PRINT_TEXT(t_str,15,&FONT_6x8);
+//									 else vga_PRINT_TEXT(NEl.StringName_1,15,&FONT_6x8);
+									if (BeyondRoad) vga_PRINT_TEXT(NEl.StringName_1,15,&FONT_6x8);
+									else vga_PRINT_TEXT(NEl.StringName_1,15,&FONT_6x8);
+
+									 
 
 									 //vga_SET_POS_TEXT(2,43);
 									 //vga_PRINT_TEXT(NEl.StringName_2,20,&FONT_6x8);
@@ -854,7 +861,7 @@ void men_SHOW_REFRESH(void)
 										 else SampleAlreadyExist = 0;
 												vga_RECTANGLE(2,25,2+122*temp_val/100,29,drRECT_FILL);
 										 
-										 if (!BeyondRoad)
+										 //if (!BeyondRoad)
 										 {
 												vga_SET_POS_TEXT(109,56);
 												vga_SET_DRAW_MODE(drMODE_XOR);
@@ -2684,21 +2691,21 @@ void men_EN_MENU(void)
 								
 							  REGW(NUMFILE,0); //ставим лок-байт
 								
-								if (BeyondRoad) /// Вне маршрута
-								{
-									
-										
-									temp_reg = REG(BEYOND_ROAD);
-									
-									sprintf(FileName,"M:\\%03u.%03u\\Signal %d.dat",0,0,temp_reg);
-									
-									sprintf(savefiledir,"0:%03u.%03u",0,0);		
-									sprintf(savefilename,"0:%03u.%03u/Signal %d.dat",0,0,temp_reg);		
-									
-									temp_reg++;
-									REGW(BEYOND_ROAD,temp_reg);		
-								}
-								else 
+//								if (BeyondRoad) /// Вне маршрута
+//								{
+//									
+//										
+//									temp_reg = REG(BEYOND_ROAD);
+//									
+//									sprintf(FileName,"M:\\%03u.%03u\\Signal %d.dat",0,0,temp_reg);
+//									
+//									sprintf(savefiledir,"0:%03u.%03u",0,0);		
+//									sprintf(savefilename,"0:%03u.%03u/Signal %d.dat",0,0,temp_reg);		
+//									
+//									temp_reg++;
+//									REGW(BEYOND_ROAD,temp_reg);		
+//								}
+//								else 
 								{
 								
 									
