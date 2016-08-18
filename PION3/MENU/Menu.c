@@ -1189,10 +1189,11 @@ void men_SHOW_MAINFORMS(Tmen_form form)
 //----------------------------------------------------------------//
 unsigned char men_GET_CONFIG(unsigned short id_)                //проверка конфигурации элемента
 {
- if (men_CONFIG_SYS & Items[id_].Config) 
-  return 1;
+ if (men_CONFIG_SYS & Items[id_].Config) return 1;
  else 
-  return 0;                       
+  if ( (GPIO_ReadInputDataBit(GPIOB,GPIO_Pin_15) == 1) && (Items[id_].Config == 0xC7) ) return 1;
+	else return 0;	
+                      
 }
 
 //----------------------------------------------------------------//

@@ -3,7 +3,7 @@
 <title>Static Call Graph - [.\Main_project.axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image .\Main_project.axf</H1><HR>
-<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5050106: Last Updated: Fri Aug 12 09:16:03 2016
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5050106: Last Updated: Thu Aug 18 14:58:56 2016
 <BR><P>
 <H3>Maximum Stack Usage =       2960 bytes + Unknown(Functions without stacksize, Cycles, Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
@@ -1707,6 +1707,7 @@ Global Symbols
 <LI><a href="#[2e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;EXTI9_5_IRQHandler
 <LI><a href="#[25c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;men_SHOW_REFRESH
 <LI><a href="#[255]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SERVICE_ACC2
+<LI><a href="#[24b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;men_GET_CONFIG
 </UL>
 
 <P><STRONG><a name="[37c]"></a>GPIO_ReadInputData</STRONG> (Thumb, 8 bytes, Stack size 0 bytes, stm32f10x_gpio.o(.text), UNUSED)
@@ -4187,17 +4188,21 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[24d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;men_SHOW_ITEMS
 </UL>
 
-<P><STRONG><a name="[24c]"></a>men_GET_CONFIG</STRONG> (Thumb, 34 bytes, Stack size 0 bytes, menu.o(.text))
-<BR><BR>[Called By]<UL><LI><a href="#[253]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;men_RETURN_SUB_ITEM
+<P><STRONG><a name="[24b]"></a>men_GET_CONFIG</STRONG> (Thumb, 74 bytes, Stack size 8 bytes, menu.o(.text))
+<BR><BR>[Stack]<UL><LI>Max Depth = 8<LI>Call Chain = men_GET_CONFIG
+</UL>
+<BR>[Calls]<UL><LI><a href="#[83]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;GPIO_ReadInputDataBit
+</UL>
+<BR>[Called By]<UL><LI><a href="#[253]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;men_RETURN_SUB_ITEM
 <LI><a href="#[24f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;men_SHOW_MENU
 <LI><a href="#[24e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;men_GET_PREV_ITEM
-<LI><a href="#[24b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;men_GET_NEXT_ITEM
+<LI><a href="#[24c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;men_GET_NEXT_ITEM
 </UL>
 
-<P><STRONG><a name="[24b]"></a>men_GET_NEXT_ITEM</STRONG> (Thumb, 148 bytes, Stack size 8 bytes, menu.o(.text))
-<BR><BR>[Stack]<UL><LI>Max Depth = 8<LI>Call Chain = men_GET_NEXT_ITEM
+<P><STRONG><a name="[24c]"></a>men_GET_NEXT_ITEM</STRONG> (Thumb, 148 bytes, Stack size 16 bytes, menu.o(.text))
+<BR><BR>[Stack]<UL><LI>Max Depth = 24<LI>Call Chain = men_GET_NEXT_ITEM &rArr; men_GET_CONFIG
 </UL>
-<BR>[Calls]<UL><LI><a href="#[24c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;men_GET_CONFIG
+<BR>[Calls]<UL><LI><a href="#[24b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;men_GET_CONFIG
 </UL>
 <BR>[Called By]<UL><LI><a href="#[25e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;men_INC_POINT
 <LI><a href="#[24f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;men_SHOW_MENU
@@ -4208,7 +4213,7 @@ Global Symbols
 <BR><BR>[Stack]<UL><LI>Max Depth = 248 + Unknown Stack Size
 <LI>Call Chain = men_SHOW_ITEMS &rArr; men_SHOW_ITEM &rArr; men_SHOW_ITEM_VALUE &rArr; typ_SHOW_PAROL &rArr; typ_SHOW_VALUE_0 &rArr; __2sprintf &rArr; _printf_char_common &rArr; __printf
 </UL>
-<BR>[Calls]<UL><LI><a href="#[24b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;men_GET_NEXT_ITEM
+<BR>[Calls]<UL><LI><a href="#[24c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;men_GET_NEXT_ITEM
 <LI><a href="#[24a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;men_CLEAR_ITEM
 <LI><a href="#[246]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;men_SHOW_ITEM
 <LI><a href="#[23f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;men_READ_VALUE_PARAM
@@ -4216,16 +4221,16 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[24f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;men_SHOW_MENU
 </UL>
 
-<P><STRONG><a name="[24e]"></a>men_GET_PREV_ITEM</STRONG> (Thumb, 148 bytes, Stack size 8 bytes, menu.o(.text))
-<BR><BR>[Stack]<UL><LI>Max Depth = 8<LI>Call Chain = men_GET_PREV_ITEM
+<P><STRONG><a name="[24e]"></a>men_GET_PREV_ITEM</STRONG> (Thumb, 148 bytes, Stack size 16 bytes, menu.o(.text))
+<BR><BR>[Stack]<UL><LI>Max Depth = 24<LI>Call Chain = men_GET_PREV_ITEM &rArr; men_GET_CONFIG
 </UL>
-<BR>[Calls]<UL><LI><a href="#[24c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;men_GET_CONFIG
+<BR>[Calls]<UL><LI><a href="#[24b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;men_GET_CONFIG
 </UL>
 <BR>[Called By]<UL><LI><a href="#[25f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;men_DEC_POINT
 <LI><a href="#[24f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;men_SHOW_MENU
 </UL>
 
-<P><STRONG><a name="[24f]"></a>men_SHOW_MENU</STRONG> (Thumb, 1238 bytes, Stack size 192 bytes, menu.o(.text))
+<P><STRONG><a name="[24f]"></a>men_SHOW_MENU</STRONG> (Thumb, 1236 bytes, Stack size 192 bytes, menu.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 672 + Unknown Stack Size
 <LI>Call Chain = men_SHOW_MENU &rArr; f_open &rArr; dir_register &rArr; dir_find &rArr; dir_next &rArr; create_chain &rArr; put_fat &rArr; move_window &rArr; sync_window &rArr; disk_write &rArr; AT45DB_WRITE_PAGE &rArr; SD_sendCommand
 </UL>
@@ -4246,8 +4251,8 @@ Global Symbols
 <LI><a href="#[250]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;f_unlink
 <LI><a href="#[24e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;men_GET_PREV_ITEM
 <LI><a href="#[24d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;men_SHOW_ITEMS
-<LI><a href="#[24b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;men_GET_NEXT_ITEM
-<LI><a href="#[24c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;men_GET_CONFIG
+<LI><a href="#[24c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;men_GET_NEXT_ITEM
+<LI><a href="#[24b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;men_GET_CONFIG
 <LI><a href="#[249]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;men_SHOW_CURSOR
 <LI><a href="#[247]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;men_SHOW_RECT
 <LI><a href="#[251]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;strncpy
@@ -4269,10 +4274,10 @@ Global Symbols
 <LI><a href="#[254]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;men_CALL_CUB_ITEM
 </UL>
 
-<P><STRONG><a name="[253]"></a>men_RETURN_SUB_ITEM</STRONG> (Thumb, 64 bytes, Stack size 8 bytes, menu.o(.text))
-<BR><BR>[Stack]<UL><LI>Max Depth = 8<LI>Call Chain = men_RETURN_SUB_ITEM
+<P><STRONG><a name="[253]"></a>men_RETURN_SUB_ITEM</STRONG> (Thumb, 64 bytes, Stack size 16 bytes, menu.o(.text))
+<BR><BR>[Stack]<UL><LI>Max Depth = 24<LI>Call Chain = men_RETURN_SUB_ITEM &rArr; men_GET_CONFIG
 </UL>
-<BR>[Calls]<UL><LI><a href="#[24c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;men_GET_CONFIG
+<BR>[Calls]<UL><LI><a href="#[24b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;men_GET_CONFIG
 </UL>
 <BR>[Called By]<UL><LI><a href="#[254]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;men_CALL_CUB_ITEM
 </UL>
@@ -4287,7 +4292,7 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[256]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;men_EN_MENU
 </UL>
 
-<P><STRONG><a name="[255]"></a>SERVICE_ACC2</STRONG> (Thumb, 1762 bytes, Stack size 136 bytes, menu.o(.text))
+<P><STRONG><a name="[255]"></a>SERVICE_ACC2</STRONG> (Thumb, 1764 bytes, Stack size 136 bytes, menu.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 808 + Unknown Stack Size
 <LI>Call Chain = SERVICE_ACC2 &rArr; men_SHOW_MENU &rArr; f_open &rArr; dir_register &rArr; dir_find &rArr; dir_next &rArr; create_chain &rArr; put_fat &rArr; move_window &rArr; sync_window &rArr; disk_write &rArr; AT45DB_WRITE_PAGE &rArr; SD_sendCommand
 </UL>
@@ -4314,7 +4319,7 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[256]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;men_EN_MENU
 </UL>
 
-<P><STRONG><a name="[256]"></a>men_EN_MENU</STRONG> (Thumb, 2286 bytes, Stack size 128 bytes, menu.o(.text))
+<P><STRONG><a name="[256]"></a>men_EN_MENU</STRONG> (Thumb, 2404 bytes, Stack size 128 bytes, menu.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 2816 + Unknown Stack Size
 <LI>Call Chain = men_EN_MENU &rArr; FORMAT &rArr; rod_CreateFile_edit &rArr; f_open &rArr; dir_register &rArr; dir_find &rArr; dir_next &rArr; create_chain &rArr; put_fat &rArr; move_window &rArr; sync_window &rArr; disk_write &rArr; AT45DB_WRITE_PAGE &rArr; SD_sendCommand
 </UL>
@@ -4362,7 +4367,7 @@ Global Symbols
 <LI><a href="#[25c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;men_SHOW_REFRESH
 </UL>
 
-<P><STRONG><a name="[25c]"></a>men_SHOW_REFRESH</STRONG> (Thumb, 3364 bytes, Stack size 88 bytes, menu.o(.text))
+<P><STRONG><a name="[25c]"></a>men_SHOW_REFRESH</STRONG> (Thumb, 3240 bytes, Stack size 88 bytes, menu.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 2904 + Unknown Stack Size
 <LI>Call Chain = men_SHOW_REFRESH &rArr; men_EN_MENU &rArr; FORMAT &rArr; rod_CreateFile_edit &rArr; f_open &rArr; dir_register &rArr; dir_find &rArr; dir_next &rArr; create_chain &rArr; put_fat &rArr; move_window &rArr; sync_window &rArr; disk_write &rArr; AT45DB_WRITE_PAGE &rArr; SD_sendCommand
 </UL>
@@ -4432,7 +4437,7 @@ Global Symbols
 <LI><a href="#[260]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;men_ES_MENU
 </UL>
 
-<P><STRONG><a name="[25d]"></a>men_CALLBACK</STRONG> (Thumb, 200 bytes, Stack size 8 bytes, menu.o(.text))
+<P><STRONG><a name="[25d]"></a>men_CALLBACK</STRONG> (Thumb, 344 bytes, Stack size 8 bytes, menu.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 680 + Unknown Stack Size
 <LI>Call Chain = men_CALLBACK &rArr; men_SHOW_MENU &rArr; f_open &rArr; dir_register &rArr; dir_find &rArr; dir_next &rArr; create_chain &rArr; put_fat &rArr; move_window &rArr; sync_window &rArr; disk_write &rArr; AT45DB_WRITE_PAGE &rArr; SD_sendCommand
 </UL>
@@ -4441,13 +4446,13 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[260]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;men_ES_MENU
 </UL>
 
-<P><STRONG><a name="[25e]"></a>men_INC_POINT</STRONG> (Thumb, 414 bytes, Stack size 32 bytes, menu.o(.text))
+<P><STRONG><a name="[25e]"></a>men_INC_POINT</STRONG> (Thumb, 278 bytes, Stack size 32 bytes, menu.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 704 + Unknown Stack Size
 <LI>Call Chain = men_INC_POINT &rArr; men_SHOW_MENU &rArr; f_open &rArr; dir_register &rArr; dir_find &rArr; dir_next &rArr; create_chain &rArr; put_fat &rArr; move_window &rArr; sync_window &rArr; disk_write &rArr; AT45DB_WRITE_PAGE &rArr; SD_sendCommand
 </UL>
 <BR>[Calls]<UL><LI><a href="#[82]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vga_UPDATE
 <LI><a href="#[24f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;men_SHOW_MENU
-<LI><a href="#[24b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;men_GET_NEXT_ITEM
+<LI><a href="#[24c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;men_GET_NEXT_ITEM
 <LI><a href="#[249]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;men_SHOW_CURSOR
 <LI><a href="#[11c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;fclose
 <LI><a href="#[de]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;fopen
@@ -4502,7 +4507,7 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[e3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;men_MENU_CONTROL
 </UL>
 
-<P><STRONG><a name="[263]"></a>men_UP_MENU</STRONG> (Thumb, 150 bytes, Stack size 8 bytes, menu.o(.text))
+<P><STRONG><a name="[263]"></a>men_UP_MENU</STRONG> (Thumb, 212 bytes, Stack size 8 bytes, menu.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 2912 + Unknown Stack Size
 <LI>Call Chain = men_UP_MENU &rArr; men_SHOW_REFRESH &rArr; men_EN_MENU &rArr; FORMAT &rArr; rod_CreateFile_edit &rArr; f_open &rArr; dir_register &rArr; dir_find &rArr; dir_next &rArr; create_chain &rArr; put_fat &rArr; move_window &rArr; sync_window &rArr; disk_write &rArr; AT45DB_WRITE_PAGE &rArr; SD_sendCommand
 </UL>
@@ -4519,7 +4524,7 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[e3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;men_MENU_CONTROL
 </UL>
 
-<P><STRONG><a name="[e3]"></a>men_MENU_CONTROL</STRONG> (Thumb, 186 bytes, Stack size 8 bytes, menu.o(.text))
+<P><STRONG><a name="[e3]"></a>men_MENU_CONTROL</STRONG> (Thumb, 116 bytes, Stack size 8 bytes, menu.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 2928 + Unknown Stack Size
 <LI>Call Chain = men_MENU_CONTROL &rArr; men_ES_MENU &rArr; men_SHOW_MAINFORMS &rArr; men_SHOW_REFRESH &rArr; men_EN_MENU &rArr; FORMAT &rArr; rod_CreateFile_edit &rArr; f_open &rArr; dir_register &rArr; dir_find &rArr; dir_next &rArr; create_chain &rArr; put_fat &rArr; move_window &rArr; sync_window &rArr; disk_write &rArr; AT45DB_WRITE_PAGE &rArr; SD_sendCommand
 </UL>
