@@ -1431,12 +1431,16 @@ unsigned char digit;
   {
    	 vga_PRINT_TEXT(Items[item_num].Text_0,21,men_FONT_DEFAULT);
   } 
+	
+	
  if (Items[item_num].Typedata==11)
   {
    	 vga_PRINT_TEXT(Items[item_num].Text_0,21,men_FONT_DEFAULT);
   } 	
  else  	
   {
+	if (Items[item_num].Typedata == 26) vga_PRINT_TEXT(Items[item_num].Caption,14,men_FONT_DEFAULT);
+	else
    //выводим краткое название параметра
    vga_PRINT_TEXT(Items[item_num].Caption,9,men_FONT_DEFAULT);
    //выводим разделяющий символ
@@ -1452,10 +1456,18 @@ unsigned char digit;
 
 //   vga_PRINT_CHAR(' ',men_FONT_DEFAULT);//пробел
 	 
-	 
-		sprintf(temp,"         "); 
-		vga_PRINT_TEXT(temp,5,men_FONT_DEFAULT);	/// Выравнивание в меню "Сервис" 		
-	 
+	  if (Items[item_num].Typedata == 26) 
+		{
+			sprintf(temp,""); 
+			vga_PRINT_TEXT(temp,0,men_FONT_DEFAULT);	/// Выравнивание в меню "Сервис" 		
+		}
+		else 
+		{
+			sprintf(temp,"         "); 
+			vga_PRINT_TEXT(temp,5,men_FONT_DEFAULT);	/// Выравнивание в меню "Сервис" 		
+		}
+		
+		
    vga_PRINT_TEXT(men_SHOW_ITEM_VALUE(item_num),0,men_FONT_DEFAULT);
    if (Items[item_num].MeasureText[0]!=0) {
 										   vga_SET_POS_TEXT(men_X0+17*men_WIDTH_SYMBOL,men_Y0 + men_OFFSET + (unsigned short)str_num * men_HEIGHT_STR);
