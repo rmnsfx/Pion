@@ -77,7 +77,7 @@
         <tvExpOptDlg>0</tvExpOptDlg>
         <IsCurrentTarget>1</IsCurrentTarget>
       </OPTFL>
-      <CpuCode>18</CpuCode>
+      <CpuCode>255</CpuCode>
       <Books>
         <Book>
           <Number>0</Number>
@@ -138,6 +138,11 @@
       <TargetDriverDllRegistry>
         <SetRegEntry>
           <Number>0</Number>
+          <Key>DLGUARM</Key>
+          <Name></Name>
+        </SetRegEntry>
+        <SetRegEntry>
+          <Number>0</Number>
           <Key>ARMRTXEVENTFLAGS</Key>
           <Name>-L70 -Z4 -C0 -M0 -T1</Name>
         </SetRegEntry>
@@ -177,22 +182,12 @@
         <Ww>
           <count>0</count>
           <WinNumber>1</WinNumber>
-          <ItemText>ext_adc_SIM,0x0A</ItemText>
+          <ItemText>Items[id_].Config</ItemText>
         </Ww>
         <Ww>
           <count>1</count>
           <WinNumber>1</WinNumber>
-          <ItemText>ext_adc_SIM</ItemText>
-        </Ww>
-        <Ww>
-          <count>2</count>
-          <WinNumber>1</WinNumber>
-          <ItemText>savefilenameTCHAR</ItemText>
-        </Ww>
-        <Ww>
-          <count>3</count>
-          <WinNumber>1</WinNumber>
-          <ItemText>savefilenameTCHAR</ItemText>
+          <ItemText>men_CONFIG_SYS</ItemText>
         </Ww>
       </WatchWindow1>
       <MemoryWindow1>

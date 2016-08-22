@@ -3,7 +3,7 @@
 <title>Static Call Graph - [.\Main_project.axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image .\Main_project.axf</H1><HR>
-<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5050106: Last Updated: Fri Aug 19 11:14:28 2016
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5050106: Last Updated: Mon Aug 22 11:18:03 2016
 <BR><P>
 <H3>Maximum Stack Usage =       2960 bytes + Unknown(Functions without stacksize, Cycles, Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
@@ -4188,7 +4188,7 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[24d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;men_SHOW_ITEMS
 </UL>
 
-<P><STRONG><a name="[24b]"></a>men_GET_CONFIG</STRONG> (Thumb, 74 bytes, Stack size 8 bytes, menu.o(.text))
+<P><STRONG><a name="[24b]"></a>men_GET_CONFIG</STRONG> (Thumb, 110 bytes, Stack size 8 bytes, menu.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 8<LI>Call Chain = men_GET_CONFIG
 </UL>
 <BR>[Calls]<UL><LI><a href="#[83]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;GPIO_ReadInputDataBit
@@ -4319,7 +4319,7 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[256]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;men_EN_MENU
 </UL>
 
-<P><STRONG><a name="[256]"></a>men_EN_MENU</STRONG> (Thumb, 2464 bytes, Stack size 128 bytes, menu.o(.text))
+<P><STRONG><a name="[256]"></a>men_EN_MENU</STRONG> (Thumb, 2468 bytes, Stack size 128 bytes, menu.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 2816 + Unknown Stack Size
 <LI>Call Chain = men_EN_MENU &rArr; FORMAT &rArr; rod_CreateFile_edit &rArr; f_open &rArr; dir_register &rArr; dir_find &rArr; dir_next &rArr; create_chain &rArr; put_fat &rArr; move_window &rArr; sync_window &rArr; disk_write &rArr; AT45DB_WRITE_PAGE &rArr; SD_sendCommand
 </UL>
@@ -4367,7 +4367,7 @@ Global Symbols
 <LI><a href="#[25c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;men_SHOW_REFRESH
 </UL>
 
-<P><STRONG><a name="[25c]"></a>men_SHOW_REFRESH</STRONG> (Thumb, 3248 bytes, Stack size 88 bytes, menu.o(.text))
+<P><STRONG><a name="[25c]"></a>men_SHOW_REFRESH</STRONG> (Thumb, 3246 bytes, Stack size 88 bytes, menu.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 2904 + Unknown Stack Size
 <LI>Call Chain = men_SHOW_REFRESH &rArr; men_EN_MENU &rArr; FORMAT &rArr; rod_CreateFile_edit &rArr; f_open &rArr; dir_register &rArr; dir_find &rArr; dir_next &rArr; create_chain &rArr; put_fat &rArr; move_window &rArr; sync_window &rArr; disk_write &rArr; AT45DB_WRITE_PAGE &rArr; SD_sendCommand
 </UL>
@@ -4437,7 +4437,7 @@ Global Symbols
 <LI><a href="#[260]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;men_ES_MENU
 </UL>
 
-<P><STRONG><a name="[25d]"></a>men_CALLBACK</STRONG> (Thumb, 358 bytes, Stack size 8 bytes, menu.o(.text))
+<P><STRONG><a name="[25d]"></a>men_CALLBACK</STRONG> (Thumb, 356 bytes, Stack size 8 bytes, menu.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 680 + Unknown Stack Size
 <LI>Call Chain = men_CALLBACK &rArr; men_SHOW_MENU &rArr; f_open &rArr; dir_register &rArr; dir_find &rArr; dir_next &rArr; create_chain &rArr; put_fat &rArr; move_window &rArr; sync_window &rArr; disk_write &rArr; AT45DB_WRITE_PAGE &rArr; SD_sendCommand
 </UL>

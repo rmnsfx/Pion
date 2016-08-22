@@ -1189,10 +1189,16 @@ void men_SHOW_MAINFORMS(Tmen_form form)
 //----------------------------------------------------------------//
 unsigned char men_GET_CONFIG(unsigned short id_)                //проверка конфигурации элемента
 {
- if (men_CONFIG_SYS & Items[id_].Config) return 1;
+ if (men_CONFIG_SYS & Items[id_].Config) 
+ {
+	 if ( (GPIO_ReadInputDataBit(GPIOB,GPIO_Pin_15) == 0) && (Items[id_].Config == 0xC7) ) return 0;
+	 else return 1;
+ }
  else 
-  if ( (GPIO_ReadInputDataBit(GPIOB,GPIO_Pin_15) == 1) && (Items[id_].Config == 0xC7) ) return 1;
-	else return 0;	
+ {
+	 if ( (GPIO_ReadInputDataBit(GPIOB,GPIO_Pin_15) == 1) && (Items[id_].Config == 0xC7) ) return 1;
+	 else return 0;	
+ }
                       
 }
 
@@ -1217,6 +1223,9 @@ unsigned char id;
 	//	road_pos_tmp++;		
 		return point;
 	}
+	
+	
+	
 		//*Alex
  while (point<(MAX_ITEMS-1))
   {
@@ -1244,6 +1253,10 @@ unsigned char id;
 	//	if (road_pos_tmp > 0) road_pos_tmp--;
 		return point;	
 	}		
+	
+	
+	
+	
 		//*Alex
  while (point>0)
   {

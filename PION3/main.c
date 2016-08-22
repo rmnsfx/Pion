@@ -1002,18 +1002,18 @@ void MESUARE_PROCESS(void)
 
 void JumpToApplication(uint32_t addr)
 {
-  typedef  void (*pFunction)(void);
-  pFunction Jump_To_Application;
-  uint32_t JumpAddress;
-  //if(addr>=0x08005000)
-  //{
-    JumpAddress = *(uint32_t*) (addr + 4);
-    Jump_To_Application = (pFunction) JumpAddress;
-    /* Initialize user application's Stack Pointer */
-    __set_MSP(*(vu32*) addr);
-		NVIC_SetVectorTable(NVIC_VectTab_FLASH, addr-0x8000000);
-    Jump_To_Application();
- // }
+			typedef  void (*pFunction)(void);
+			pFunction Jump_To_Application;
+			uint32_t JumpAddress;
+			//if(addr>=0x08005000)
+			//{
+				JumpAddress = *(uint32_t*) (addr + 4);
+				Jump_To_Application = (pFunction) JumpAddress;
+				/* Initialize user application's Stack Pointer */
+				__set_MSP(*(vu32*) addr);
+				NVIC_SetVectorTable(NVIC_VectTab_FLASH, addr-0x8000000);
+				Jump_To_Application();
+		 // }
 }
 
 //—читаем емкость нового аккума (јмпер/часы).
