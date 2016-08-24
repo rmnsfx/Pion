@@ -610,16 +610,6 @@ TStatus FORMAT(void)
 	vga_SET_DRAW_MODE(drMODE_NORMAL);
 	vga_RECTANGLE(1,30,vga_GET_WIDTH_DISPLAY-3,33,drRECT_FILL);
 	vga_UPDATE();	
-			
-//			if (res == 16000)
-//			{
-//						vga_SET_POS_TEXT(105,1);
-//						sprintf(str_out, "Ok");		 								
-//						vga_PRINT_STR(str_out,&FONT_6x8);
-//						vga_UPDATE();	
-//			}
-	
-						
 
 	Delay(1400000);
 	
@@ -680,11 +670,6 @@ void CONTROL_BAT(unsigned char MIN_VAL_BAT)
 {
 
 	char t_str[20];
-	
-	
-	//измерение заряда бата
-	//REGW(BAT,adc_BAT_PERCENT_edit()); //записываем в регистр, измеренное значение
-	//if (REG(BAT)<=MIN_VAL_BAT)   //если заряд меньше ?		
 	
 	
 	if (id_akb == 0) //Новый АКБ
@@ -828,17 +813,12 @@ void CONTROL_RTC(void)
 
 void START_MESUARE(void)
 {
-  //ext_adc_SAMPLING(ext_adc_SIM,ext_SAMPLING_SIZE); //сбросить выборку
-	
-	
+  
 	//питание аналоговой части
 	pin_3VA(ON);
   
   ext_adc_START();	//старт внешнего АЦП
-	  
-
-  //reg_WRITE(PION_STATUS,reg_READ(PION_STATUS)|ST_MESUARE);	  //установить бит в регистре
-  //DELAY_MESUARE = 0;//2000;//1500; //задержка в мс
+	
   REGW(SAMPLING_STATUS,0); //присваиваем состояние ожидания
   REGW( PION_STATUS,REG(PION_STATUS)|ST_MESUARE );	  //установить бит в регистре				    		    
   ext_adc_SAMPLING(ext_adc_SIM,ext_SAMPLING_SIZE);  //задаем параметры выборки
@@ -871,10 +851,6 @@ void CONTROL_POWER(u8 RESET)
 			
 		 if (POWER_OFF <= 0) 	
 		 {
-//				ShowPowerOffForm();
-//				Delay(700000); 
-//				vga_CLEAR();
-//				vga_UPDATE();	
 				pin_OFF();
 		 }
 	
@@ -1130,10 +1106,7 @@ int main(void)
 						 if (GLOBAL_ERROR&0x02)   {vga_SET_POS_TEXT(5,++temp_reg*10);vga_PRINT_STR("Инициализация FLASH",&FONT_6x8);}
 						 if (GLOBAL_ERROR&0x04)   {vga_SET_POS_TEXT(5,++temp_reg*10);vga_PRINT_STR("Инициализация FAT16",&FONT_6x8);}
 						 
-						 vga_UPDATE();
-						 //виснем!
-						 //while (1) {}
-						 //CONTROL_BAT(0);
+						 vga_UPDATE();						 
 						 
 						 Delay(700000); 
 						 ShowPowerOffForm();
@@ -1182,10 +1155,8 @@ int main(void)
 				pin_OFF();
 			}
 		}
-		
-	 //записать калибровочный параметр
-	 //REGW(K_VIBRO,BKP_ReadBackupRegister(BKP_DR2));
-	 //NVIC_SystemReset();
+	
+
 	}
    else
     {
@@ -1200,9 +1171,9 @@ int main(void)
 	vga_UPDATE();		
 	for(i=0;i<0x2FFFFF;i++){__NOP();}
 	}	
-//REGW(ROUTE_NUM,88);
+
   ext_adc_SETUP(20);//16 - 62.5 кГц//20 - 50кГц
-  //ext_adc_START();
+  
   	
 
 	
