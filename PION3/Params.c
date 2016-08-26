@@ -35,6 +35,6 @@ const TPARAMS PARAMS[COUNT_REG]={
      0  	, 0xFFFF   ,  1   ,   1   ,//  																																	 		 
 		 0  	,      1   ,  0   ,   1   ,//  																																	 29
 		 0  	,      1   ,  0   ,   1   ,//  																																	 30
-		 0  	, 0xFFFF   ,  1   ,   1   ,//  																																	 
+		 0  	, 0xFFFF   ,  1   ,   1   ,//  																																	 31
 };
 

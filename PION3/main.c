@@ -674,7 +674,7 @@ void CONTROL_BAT(unsigned char MIN_VAL_BAT)
 	
 	if (id_akb == 0) //Новый АКБ
 	{
-					 if (akbemk_percent <= 10 && akbemk_percent > 1 && message_status == 0 && measure_stat == 0)   //если заряд меньше 10		
+					 if (akbemk_percent <= 10 && akbemk_percent > 1 && message_status == 0 && measure_stat == 0)   //если заряд меньше 10%		
 					 {								 
 							vga_CLEAR();					
 							vga_SET_POS_TEXT(5,20);
@@ -1025,7 +1025,7 @@ float CAPACITY ()
 						
 						
 						//Проценты с учетом напряжения
-						if (akbemk_volt < 2.6) akbemk_percent = 0;
+						if (akbemk_volt <= 2.6) akbemk_percent = 0;
 							else akbemk_percent = (akbemk_count * 100) / 0.6;
 		
 						//Запоминаем емкость
@@ -1194,34 +1194,35 @@ int main(void)
 
   //загружаем мотосекунды
   Moto_Sec = BKP_ReadBackupRegister(BKP_DR3);
-						
-	if (id_akb == 0)
-	{
-		frzbat1 = akbemk_percent; /// Индикация батарейки при первом включении
-		frzbat2 = akbemk_percent;
-	}
-	else
-	{
-		frzbat1 = adc_BAT_PERCENT_edit(); /// Индикация батарейки при первом включении
-		frzbat2 = adc_BAT_PERCENT_edit();
-	}
+	
+	
 		
 	/// Вспоминаем номер маршрута для отображения A и V	
 	road_indicator = BKP_ReadBackupRegister(BKP_DR12); 
-
 	
 	///Получаем идентификатор АКБ
 	id_akb = GPIO_ReadInputDataBit(GPIOB,GPIO_Pin_15);
 	
 	///Устанавливаем емкость после первоначальной прошивки
 	if (BKP_ReadBackupRegister(BKP_DR10) == 0) BKP_WriteBackupRegister(BKP_DR10, (int) ceil(0.6 * 100000)); 
-	
-	
-	
+		
 	///Вспоминаем емкость АКБ	
 	akbemk_count = (float) BKP_ReadBackupRegister(BKP_DR10) / 100000;
 	
+	///Расчитываем проценты (akbemk_percent)
+	CAPACITY();	
 	
+	/// Индикация батарейки при первом включении
+	if (id_akb == 0)
+	{
+		frzbat1 = akbemk_percent; 
+		frzbat2 = akbemk_percent;
+	}
+	else
+	{
+		frzbat1 = adc_BAT_PERCENT_edit(); 
+		frzbat2 = adc_BAT_PERCENT_edit();
+	}	
 
 	
 	while (1) //начало основного цикла
@@ -1255,7 +1256,7 @@ int main(void)
 
 		
 	//Считаем емкость АКБ
-	 CAPACITY();	
+	CAPACITY();	
 
 
 	if (USB_SWITCH == 1)
@@ -1387,10 +1388,11 @@ int main(void)
 			}		
 				
 				///Обновляем индикацию АКБ				
+			
 				if (id_akb == 0 && measure_stat == 0) 
 				{
-						frzbat1 = akbemk_percent; 
-						frzbat2 = akbemk_percent;
+//						frzbat1 = akbemk_percent; 
+//						frzbat2 = akbemk_percent;
 				}
 				else
 				{
@@ -1420,6 +1422,7 @@ int main(void)
 						LED_CHARGE_OFF();
 						CHARGE_OFF();
 
+						if (measure_stat == 0) CONTROL_BAT(0); ///Проверка АКБ на разряд (вне режима измерения)
 		
 						//Alex
 						if ((measure_stat == 0)&&key_CHECK_EV(key_EVENT_PRESSED_MESUARE)) measure_stat = 1; 
@@ -1433,8 +1436,7 @@ int main(void)
 										{											
 												SET_CLOCK_SPEED(CLK_72MHz);
 												START_MESUARE();																												
-										}
-							
+										}							
 						}
 						
 						if ((measure_stat == 2)&&key_CHECK_EV(key_EVENT_PRESSED_MESUARE)) measure_stat = 3;
@@ -1456,8 +1458,6 @@ int main(void)
 						}
 
 					 
-						if (measure_stat == 0) CONTROL_BAT(0); ///Проверка АКБ на разряд только вне режима измерения
-					 
 					 
 						//расчет скз или выборка
 						if ((REG(PION_STATUS)&ST_MESUARE)>0)
@@ -1475,7 +1475,6 @@ int main(void)
 								REGW(PION_STATUS,REG(PION_STATUS)|ST_OVER);	  //установить бит перегрузка в регистре
 						else
 								REGW(PION_STATUS,REG(PION_STATUS)&(~ST_OVER)); //сбросить бит перегрузка в регистре
-
 							
 						ext_adc_OVER = 0;										 //сбрасываем признак перегрузка канала
 					

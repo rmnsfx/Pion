@@ -452,6 +452,16 @@ void men_SHOW_REFRESH(void)
 										vga_SET_POS_TEXT(21, 1);						
 										sprintf(t_str,"%0.5f", (float) akbemk_count);						
 										vga_PRINT_STR(t_str,&FONT_4x7);
+							
+										//Ќапр€жение
+										vga_SET_POS_TEXT(52, 1);						
+										sprintf(t_str,"%0.1f", (float) akbemk_volt);						
+										vga_PRINT_STR(t_str,&FONT_4x7);							
+							
+										
+										vga_SET_POS_TEXT(67, 1);						
+										sprintf(t_str,"%d", (int) frzbat1);						
+										vga_PRINT_STR(t_str,&FONT_4x7);
 						}
 						else
 						{
@@ -694,6 +704,8 @@ void men_SHOW_REFRESH(void)
 //						vga_SET_POS_TEXT(38,45);				
 //						sprintf(t_str,"%d", usb_charge_state);
 //						vga_PRINT_STR(t_str,&FONT_4x7);
+
+
 						
 						
 						/////////////////////////////////////////////////////
@@ -880,6 +892,7 @@ void men_SHOW_REFRESH(void)
 										vga_SET_POS_TEXT(21, 1);	
 										sprintf(t_str,"%0.5f", (float) akbemk_count);						
 										vga_PRINT_STR(t_str,&FONT_4x7);
+							
 						}
 				
 //								//ћгновенна€ емкость
@@ -926,6 +939,16 @@ void men_SHOW_REFRESH(void)
 										vga_SET_POS_TEXT(21, 1);											
 										sprintf(t_str,"%0.5f", (float) akbemk_count);						
 										vga_PRINT_STR(t_str,&FONT_4x7);
+							
+										//Ќапр€жение
+										vga_SET_POS_TEXT(52, 1);						
+										sprintf(t_str,"%0.1f", (float) akbemk_volt);						
+										vga_PRINT_STR(t_str,&FONT_4x7);							
+							
+										
+										vga_SET_POS_TEXT(67, 1);						
+										sprintf(t_str,"%d", (int) frzbat1);						
+										vga_PRINT_STR(t_str,&FONT_4x7);
 						}
 						
 						
@@ -968,13 +991,14 @@ void men_SHOW_REFRESH(void)
 													
 								while (pin_USB_5V) {}
 								
+									
 						}
 						
 						//«апоминаем состо€ние usb и pa8
 						old_state_usb = pin_USB_5V;
 						old_state_pa8 = GPIO_ReadInputDataBit(GPIOA,GPIO_Pin_8);
 						
-						
+						frzbat1 = akbemk_percent;
 						
 		
 	}
@@ -1116,28 +1140,28 @@ unsigned char men_GET_CONFIG(unsigned short id_)                //проверка конфи
  {	 
 	 if (Items[id_].Config == 0x80) return 1;	
 	 
-	 if (reg == 0x1) 
+	 if (reg == 0x1) //ускорение
 	 {
 		 if (Items[id_].Config == 0x81) return 1;	
 		 if (Items[id_].Config == 0x82) return 0;
 		 if (Items[id_].Config == 0x84) return 0;
 	 }
 	 
-	 if (reg == 0x2) 
+	 if (reg == 0x2) //скорость
 	 {
 		 if (Items[id_].Config == 0x81) return 0;	
 		 if (Items[id_].Config == 0x82) return 1;
 		 if (Items[id_].Config == 0x84) return 0;
 	 }
 	 
-	 if (reg == 0x4) 
+	 if (reg == 0x4) //перемещение
 	 {
 		 if (Items[id_].Config == 0x81) return 0;	
 		 if (Items[id_].Config == 0x82) return 0;
 		 if (Items[id_].Config == 0x84) return 1;
 	 }
 	 
-	 if (reg == 0x8) 
+	 if (reg == 0x8) //выборка
 	 {
 		 if (Items[id_].Config == 0x87) return 0;			 
 		 if (Items[id_].Config == 0x78) return 1;	
@@ -1180,19 +1204,20 @@ unsigned short men_GET_NEXT_ITEM(unsigned short point)    //возвращает номер сле
 		return point;
 	}
 	
-	
-	
-		//*Alex
- while (point<(MAX_ITEMS-1))
+	//*Alex
+	while (point<(MAX_ITEMS-1))
   {
-  point++;
-  //if (Items[point-1].Id_group == Items[point].Id_group) 
+		point++;
+		//if (Items[point-1].Id_group == Items[point].Id_group) 
 		//if (Items[point].Data_reg == 0xFF) return point--;
-  if (id == Items[point].Id_group)
-    if (men_GET_CONFIG(point)) return point;else;  
+		
+		if (id == Items[point].Id_group)			
+    if (men_GET_CONFIG(point)) return point; 
     //else return NIL;
   }
- return NIL;
+	
+	return NIL;
+	
 }
 
 
@@ -2938,9 +2963,10 @@ void men_EN_MENU(void)
 
              //вход в режим редактировани€
 					   if (Items[men_POINTER].Typedata<0x80)//если параметр
-					    {  
-						 men_STATUS = men_ONE_ITEM;
-						 men_READ_VALUE_PARAM(men_POINTER);
+					   {  
+							men_STATUS = men_ONE_ITEM;
+							men_READ_VALUE_PARAM(men_POINTER);
+								
 						 if (((Items[men_POINTER].Options&O_RW)>0)&&(Items[men_POINTER].LevelAcces<=men_LEVEL_ACCES))
 						  {
 						   men_STATUS = men_EDIT_ITEM;//режим редактировани€
@@ -2955,6 +2981,8 @@ void men_EN_MENU(void)
 						 vga_UPDATE();
 						 break;
 						}
+						 
+						
 					   //изменение значени€ регистра непосредственно из меню,
  					   if ((Items[men_POINTER].Typedata>=0x80)&&(Items[men_POINTER].Typedata<0xFD))
 					    {  
