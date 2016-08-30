@@ -55,6 +55,7 @@ extern int id_akb;
 float CAPACITY ();
 
 extern float akbemk_count;
+extern float akbemk;
 extern float akbtemp;
 extern float akbtimer1;
 extern float akbemk_volt;
@@ -69,6 +70,6 @@ extern unsigned int usb_charge_state;
 
 
 //extern float  k_reg_mul;
-#define VER 347
+#define VER 348
 
 #endif

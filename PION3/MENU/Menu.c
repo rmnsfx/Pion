@@ -949,6 +949,10 @@ void men_SHOW_REFRESH(void)
 										vga_SET_POS_TEXT(67, 1);						
 										sprintf(t_str,"%d", (int) frzbat1);						
 										vga_PRINT_STR(t_str,&FONT_4x7);
+							
+										vga_SET_POS_TEXT(78, 1);						
+										sprintf(t_str,"%f", (float) akbemk);						
+										vga_PRINT_STR(t_str,&FONT_4x7);
 						}
 						
 						

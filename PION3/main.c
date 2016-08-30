@@ -674,7 +674,7 @@ void CONTROL_BAT(unsigned char MIN_VAL_BAT)
 	
 	if (id_akb == 0) //Новый АКБ
 	{
-					 if (akbemk_percent <= 10 && akbemk_percent > 1 && message_status == 0 && measure_stat == 0)   //если заряд меньше 10%		
+					 if (akbemk_percent < 10 && akbemk_percent > 1 && message_status == 0 && measure_stat == 0)   //если заряд меньше 10%		
 					 {								 
 							vga_CLEAR();					
 							vga_SET_POS_TEXT(5,20);
@@ -687,10 +687,10 @@ void CONTROL_BAT(unsigned char MIN_VAL_BAT)
 							 
 							Delay (2500000);							
 						 
-							men_SHOW_MAINFORMS(form_MESUARE); 		 						
+							//men_SHOW_MAINFORMS(form_MESUARE); 		 						
 					 }
 					 
-					 if ( akbemk_percent == 0 && measure_stat == 0 && akbemk_volt <= 2.6 && message_status == 0 )   
+					 if ( akbemk_percent <= 1 & measure_stat == 0 & akbemk_volt <= 2.6 )   
 					 {	
 							vga_CLEAR();					
 							vga_SET_POS_TEXT(5,20);
@@ -699,12 +699,20 @@ void CONTROL_BAT(unsigned char MIN_VAL_BAT)
 							vga_PRINT_STR("разряжен.",&FONT_6x8);		
 						
 							vga_UPDATE();						
-							 
+						 
 							Delay(2500000);
 							
+							ShowPowerOffForm();
+						 
 							vga_CLEAR();
 							vga_UPDATE();
-							//pin_OFF(); //отключаем			
+							pin_OFF(); //отключаем			
+						 
+							//Обнуляем счетчики, для случая если АКБ будет заряжен не полностью
+						  akbemk_count = 0.01;
+							frzbat1 = 0;
+							akbemk_percent = 0.01;
+							BKP_WriteBackupRegister(BKP_DR10, (int) ceil(0.01 * 100000)); 
 
 							message_status = 1;						 						 
 					 }
