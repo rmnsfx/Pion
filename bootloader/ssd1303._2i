@@ -4,4 +4,4 @@
 -I C:\Keil_v5\ARM\CMSIS\Include
 -I C:\Keil_v5\ARM\PACK\Keil\STM32F1xx_DFP\2.0.0\Device\Include
 -D__UVISION_VERSION="514" -DSTM32F10X_HD
--o .\ssd1303.o --omf_browse .\ssd1303.crf --depend .\ssd1303.d --feedback ".\Main_project.fed" "OLED\ssd1303.c"
+-o .\ssd1303.o --depend .\ssd1303.d --feedback ".\Main_project.fed" "OLED\ssd1303.c"

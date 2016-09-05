@@ -1,4 +1,4 @@
-;#<FEEDBACK># ARM Linker, 5050106: Last Updated: Fri Sep 02 14:40:01 2016
+;#<FEEDBACK># ARM Linker, 5050106: Last Updated: Thu Sep 01 13:18:13 2016
 ;VERSION 0.2
 ;FILE _fs_fclose.o
 ;FILE _fs_fcreate.o
@@ -19,9 +19,6 @@ _frename <= USED 0
 adc_BAT_MEASURE <= USED 0
 adc_BAT_PERCENT <= USED 0
 adc_POWER <= USED 0
-;FILE ccsbcs.o
-ff_convert <= USED 0
-ff_wtoupper <= USED 0
 ;FILE core_cm3.o
 __REV16 <= USED 0
 __REVSH <= USED 0
@@ -37,44 +34,11 @@ ext_adc_SETUP <= USED 0
 ext_adc_START <= USED 0
 ext_adc_STOP <= USED 0
 ext_adc_WAIT <= USED 0
-;FILE ff.o
-clust2sect <= USED 0
-f_chdir <= USED 0
-f_chdrive <= USED 0
-f_chmod <= USED 0
-f_close <= USED 0
-f_getcwd <= USED 0
-f_getfree <= USED 0
-f_gets <= USED 0
-f_lseek <= USED 0
-f_mkdir <= USED 0
-f_mkfs <= USED 0
-f_mount <= USED 0
-f_open <= USED 0
-f_opendir <= USED 0
-f_printf <= USED 0
-f_putc <= USED 0
-f_puts <= USED 0
-f_read <= USED 0
-f_readdir <= USED 0
-f_rename <= USED 0
-f_stat <= USED 0
-f_sync <= USED 0
-f_truncate <= USED 0
-f_unlink <= USED 0
-f_utime <= USED 0
-f_write <= USED 0
-gen_numname <= USED 0
-get_fat <= USED 0
-put_fat <= USED 0
 ;FILE flash.o
-mmc_format <= USED 0
-mmc_init <= USED 0
 mmc_read_config <= USED 0
 ;FILE flash_at45db.o
 AT45DB_CHIP_ERASE <= USED 0
 AT45DB_CHIP_SET <= USED 0
-AT45DB_INIT <= USED 0
 AT45DB_PAGE_ERASE <= USED 0
 AT45DB_PAGE_SET <= USED 0
 AT45DB_READ_DATA <= USED 0
@@ -94,7 +58,6 @@ fanalyse <= USED 0
 fat_ffind <= USED 0
 fat_format <= USED 0
 fat_free <= USED 0
-fat_init <= USED 0
 fat_rename <= USED 0
 ;FILE fs_fcheck.o
 fcheck <= USED 0
@@ -108,10 +71,7 @@ fformat <= USED 0
 ;FILE fs_ffree.o
 ffree <= USED 0
 ;FILE fs_finit.o
-finit <= USED 0
 ;FILE fs_flashprg.o
-fs_Init <= USED 0
-fs_spi_Init <= USED 0
 ;FILE fs_frename.o
 frename <= USED 0
 ;FILE fs_lib.o
@@ -138,9 +98,7 @@ key_RES_EVENT <= USED 0
 CONTROL_BAT <= USED 0
 CONTROL_CHARGE <= USED 0
 CONTROL_POWER <= USED 0
-FAT_Init <= USED 0
 FIL <= USED 0
-FORMAT <= USED 0
 InitAll <= USED 0
 MESUARE_PROCESS <= USED 0
 NVIC_Configuration <= USED 0
@@ -151,7 +109,6 @@ UPDATE_MODE_REG <= USED 0
 ;FILE menu.o
 men_CALLBACK <= USED 0
 men_CALL_CUB_ITEM <= USED 0
-men_CHECK_EVENT <= USED 0
 men_CLEAR_ITEM <= USED 0
 men_DEC_POINT <= USED 0
 men_DW_MENU <= USED 0
@@ -175,7 +132,6 @@ men_SHOW_ITEMS <= USED 0
 men_SHOW_ITEM_VALUE <= USED 0
 men_SHOW_MAINFORMS <= USED 0
 men_SHOW_MENU <= USED 0
-men_SHOW_MESSAGE <= USED 0
 men_SHOW_ONEITEM <= USED 0
 men_SHOW_RECT <= USED 0
 men_SHOW_REFRESH <= USED 0
@@ -211,16 +167,9 @@ _sys_tmpnam <= USED 0
 rod_CreateFile <= USED 0
 rod_GET_NameElement <= USED 0
 rod_INIT <= USED 0
-;FILE spi_sd.o
-disk_ioctl <= USED 0
-disk_read <= USED 0
-disk_status <= USED 0
-disk_timerproc <= USED 0
-disk_write <= USED 0
-get_fattime <= USED 0
 ;FILE spi_stm32f103.o
 spi_hi_speed <= USED 0
-spi_init_1 <= USED 0
+spi_init <= USED 0
 spi_send <= USED 0
 spi_ss <= USED 0
 ;FILE ssd1303.o
@@ -335,6 +284,8 @@ PWR_WakeUpPinCmd <= USED 0
 RCC_ADCCLKConfig <= USED 0
 RCC_AHBPeriphClockCmd <= USED 0
 RCC_APB1PeriphClockCmd <= USED 0
+RCC_APB1PeriphResetCmd <= USED 0
+RCC_APB2PeriphResetCmd <= USED 0
 RCC_AdjustHSICalibrationValue <= USED 0
 RCC_BackupResetCmd <= USED 0
 RCC_ClearFlag <= USED 0
@@ -381,15 +332,18 @@ I2S_Init <= USED 0
 I2S_StructInit <= USED 0
 SPI_BiDirectionalLineConfig <= USED 0
 SPI_CalculateCRC <= USED 0
+SPI_Cmd <= USED 0
 SPI_DataSizeConfig <= USED 0
 SPI_GetCRC <= USED 0
 SPI_GetCRCPolynomial <= USED 0
 SPI_I2S_ClearFlag <= USED 0
 SPI_I2S_ClearITPendingBit <= USED 0
 SPI_I2S_DMACmd <= USED 0
+SPI_I2S_DeInit <= USED 0
 SPI_I2S_GetFlagStatus <= USED 0
 SPI_I2S_GetITStatus <= USED 0
 SPI_I2S_ITConfig <= USED 0
+SPI_Init <= USED 0
 SPI_NSSInternalSoftwareConfig <= USED 0
 SPI_SSOutputCmd <= USED 0
 SPI_StructInit <= USED 0
@@ -553,11 +507,8 @@ USB_EndPoint8 <= USED 0
 USB_EndPoint9 <= USED 0
 ;FILE vga_lib.o
 vga_CIRCLE <= USED 0
-vga_DRAW_PIXEL <= USED 0
 vga_FILL_STR <= USED 0
 vga_GET_DRAW_MODE <= USED 0
-vga_LINE <= USED 0
-vga_RECTANGLE <= USED 0
 ;FILE wav.o
 dat_CreateFile <= USED 0
 wav_CreateFile <= USED 0

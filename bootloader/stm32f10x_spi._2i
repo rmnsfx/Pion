@@ -4,4 +4,4 @@
 -I C:\Keil_v5\ARM\CMSIS\Include
 -I C:\Keil_v5\ARM\PACK\Keil\STM32F1xx_DFP\2.0.0\Device\Include
 -D__UVISION_VERSION="514" -DSTM32F10X_HD
--o .\stm32f10x_spi.o --omf_browse .\stm32f10x_spi.crf --depend .\stm32f10x_spi.d --feedback ".\Main_project.fed" "DRIVER\src\stm32f10x_spi.c"
+-o .\stm32f10x_spi.o --depend .\stm32f10x_spi.d --feedback ".\Main_project.fed" "DRIVER\src\stm32f10x_spi.c"

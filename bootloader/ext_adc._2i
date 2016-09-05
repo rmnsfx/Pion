@@ -4,4 +4,4 @@
 -I C:\Keil_v5\ARM\CMSIS\Include
 -I C:\Keil_v5\ARM\PACK\Keil\STM32F1xx_DFP\2.0.0\Device\Include
 -D__UVISION_VERSION="514" -DSTM32F10X_HD
--o .\ext_adc.o --omf_browse .\ext_adc.crf --depend .\ext_adc.d --feedback ".\Main_project.fed" "EXT_ADC.c"
+-o .\ext_adc.o --depend .\ext_adc.d --feedback ".\Main_project.fed" "EXT_ADC.c"

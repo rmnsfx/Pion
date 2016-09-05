@@ -4,4 +4,4 @@
 -I C:\Keil_v5\ARM\CMSIS\Include
 -I C:\Keil_v5\ARM\PACK\Keil\STM32F1xx_DFP\2.0.0\Device\Include
 -D__UVISION_VERSION="514" -DSTM32F10X_HD
--o .\keyboard.o --omf_browse .\keyboard.crf --depend .\keyboard.d --feedback ".\Main_project.fed" "Keyboard.c"
+-o .\keyboard.o --depend .\keyboard.d --feedback ".\Main_project.fed" "Keyboard.c"

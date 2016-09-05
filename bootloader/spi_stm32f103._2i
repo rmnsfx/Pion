@@ -4,4 +4,4 @@
 -I C:\Keil_v5\ARM\CMSIS\Include
 -I C:\Keil_v5\ARM\PACK\Keil\STM32F1xx_DFP\2.0.0\Device\Include
 -D__UVISION_VERSION="514" -DSTM32F10X_HD
--o .\spi_stm32f103.o --omf_browse .\spi_stm32f103.crf --depend .\spi_stm32f103.d --feedback ".\Main_project.fed" "FAT\SPI_STM32F103.c"
+-o .\spi_stm32f103.o --depend .\spi_stm32f103.d --feedback ".\Main_project.fed" "FAT\SPI_STM32F103.c"

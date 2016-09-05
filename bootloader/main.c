@@ -565,7 +565,7 @@ TStatus FAT_Init(void)
   res = finit();
 	
 	if (res != 0) 
-	while(i++ < 10)
+	while(i++ < 5)
 	{		
 		res = finit();		
 		fat_init();
@@ -914,10 +914,8 @@ int main(void)
 	
 	vga_INIT();
 	
-	//FAT_Init();
+	FAT_Init();
 	
-	
-	disk_initialize ( 0 );
 	
 	
 	

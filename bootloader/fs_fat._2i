@@ -4,4 +4,4 @@
 -I C:\Keil_v5\ARM\CMSIS\Include
 -I C:\Keil_v5\ARM\PACK\Keil\STM32F1xx_DFP\2.0.0\Device\Include
 -D__UVISION_VERSION="514" -DSTM32F10X_HD
--o .\fs_fat.o --omf_browse .\fs_fat.crf --depend .\fs_fat.d --feedback ".\Main_project.fed" "FAT\fs_fat.c"
+-o .\fs_fat.o --depend .\fs_fat.d --feedback ".\Main_project.fed" "FAT\fs_fat.c"
