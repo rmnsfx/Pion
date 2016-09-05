@@ -60,6 +60,7 @@ extern float akbtemp;
 extern float akbtimer1;
 extern float akbemk_volt;
 extern float akbemk_percent;
+extern float akbemk_menu;
 
 extern unsigned int usb_charge_state;
 
@@ -70,6 +71,6 @@ extern unsigned int usb_charge_state;
 
 
 //extern float  k_reg_mul;
-#define VER 348
+#define VER 349
 
 #endif

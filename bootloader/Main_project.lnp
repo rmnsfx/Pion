@@ -73,6 +73,9 @@
 ".\types.o"
 ".\items.o"
 ".\menu.o"
+".\ccsbcs.o"
+".\ff.o"
+".\spi_sd.o"
 
 --feedback ".\Main_project.fed" --feedback_image=none
 --strict --scatter ".\Main_project.sct"

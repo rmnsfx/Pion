@@ -30,7 +30,7 @@
 
 /*--------------------------- spi_init --------------------------------------*/
 
-void spi_init (void) {
+void spi_init_1 (void) {
   /* Initialize and enable the SSP Interface module. */
 
   /* Enable clock for SPI, GPIOB and AFIO. */

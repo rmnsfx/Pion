@@ -365,12 +365,13 @@ void men_SHOW_BAT(unsigned char X, unsigned char Y, unsigned char VAL)
 
 void men_SHOW_BAT_edit(unsigned char X, unsigned char Y, unsigned char VAL)
 {
- //if (VAL>100) return;
+ 
+ //if (VAL<0) return; 
 
  vga_RECTANGLE(X,Y,X+13,Y+6,drRECT_NO_FILL);
  vga_LINE(X+14,Y+2,X+14,Y+4);
  
-  
+ 
  if (VAL>=10) vga_RECTANGLE(X+2,Y+2,X+2,Y+4,drRECT_FILL);
  if (VAL>=20) vga_RECTANGLE(X+2,Y+2,X+3,Y+4,drRECT_FILL);
  if (VAL>=30) vga_RECTANGLE(X+2,Y+2,X+5,Y+4,drRECT_FILL); 
@@ -472,15 +473,18 @@ void men_SHOW_REFRESH(void)
 						}
 	
 					  
-						///Рисуем батарейку						
+						///Обновляем значение переменной по таймеру для индикации заряда					
 						if (timer2 == 0 && measure_stat == 0) 
 						{
 							if (id_akb == 0) frzbat1 = akbemk_percent;
-								else frzbat1 = adc_BAT_PERCENT_edit();
+							else frzbat1 = adc_BAT_PERCENT_edit();
 						}
 							
-						men_SHOW_BAT_edit(1,1,frzbat1);
+						///Рисуем батарейку		
+						if (frzbat1 >= 0) men_SHOW_BAT_edit(1,1,frzbat1);
+						else men_SHOW_BAT_edit(1,1,0);
 
+										
 	
 						//выводи частоту
 						vga_SET_POS_TEXT(1,vga_GET_HEIGHT_DISPLAY-7);
@@ -856,12 +860,12 @@ void men_SHOW_REFRESH(void)
 						  
 						  if ((REG(PION_STATUS) & ST_OVER)>0)
 						   {
-						    //выводим индикатор перегруз
-							vga_SET_POS_TEXT(vga_GET_WIDTH_DISPLAY-25,14);
-						    vga_PRINT_STR("*",&FONT_6x8);
-							vga_SET_DRAW_MODE(drMODE_XOR);
-						    vga_RECTANGLE(vga_GET_WIDTH_DISPLAY-25,14,vga_GET_WIDTH_DISPLAY-19,20,drRECT_ARC_FILL);
-						    vga_SET_DRAW_MODE(drMODE_NORMAL);
+									//выводим индикатор перегруз
+									vga_SET_POS_TEXT(vga_GET_WIDTH_DISPLAY-25,14);
+									vga_PRINT_STR("*",&FONT_6x8);
+									vga_SET_DRAW_MODE(drMODE_XOR);
+									vga_RECTANGLE(vga_GET_WIDTH_DISPLAY-25,14,vga_GET_WIDTH_DISPLAY-19,20,drRECT_ARC_FILL);
+									vga_SET_DRAW_MODE(drMODE_NORMAL);
 						   }
 						  
 						 }
@@ -950,9 +954,9 @@ void men_SHOW_REFRESH(void)
 										sprintf(t_str,"%d", (int) frzbat1);						
 										vga_PRINT_STR(t_str,&FONT_4x7);
 							
-										vga_SET_POS_TEXT(78, 1);						
-										sprintf(t_str,"%f", (float) akbemk);						
-										vga_PRINT_STR(t_str,&FONT_4x7);
+//										vga_SET_POS_TEXT(78, 1);						
+//										sprintf(t_str,"%f", (float) akbemk);						
+//										vga_PRINT_STR(t_str,&FONT_4x7);
 						}
 						
 						
@@ -982,8 +986,8 @@ void men_SHOW_REFRESH(void)
 						{							
 								LED_CHARGE_OFF();	
 							
-								BKP_WriteBackupRegister(BKP_DR10, (int) ceil(0.6 * 100000)); 
-								akbemk_count = 0.6;
+								BKP_WriteBackupRegister(BKP_DR10, (int) ceil(akbemk_menu * 100000)); 
+								akbemk_count = akbemk_menu;
 								akbemk_percent = 100;	
 
 								usb_charge_state = 2;	
@@ -1424,7 +1428,7 @@ void men_SHOW_ITEM(unsigned short item_num,unsigned char str_num)
  } 	
  else  	
  {
-		if (Items[item_num].Typedata == 26) vga_PRINT_TEXT(Items[item_num].Caption,14,men_FONT_DEFAULT);
+		if (Items[item_num].Typedata == 26 || Items[item_num].Typedata == 27) vga_PRINT_TEXT(Items[item_num].Caption,14,men_FONT_DEFAULT);
 		else
 		//выводим краткое название параметра
 		vga_PRINT_TEXT(Items[item_num].Caption,9,men_FONT_DEFAULT);
@@ -1441,7 +1445,7 @@ void men_SHOW_ITEM(unsigned short item_num,unsigned char str_num)
 
 
 	 
-		if (Items[item_num].Typedata == 26) 
+		if (Items[item_num].Typedata == 26 || Items[item_num].Typedata == 27) 
 		{
 			sprintf(temp,""); 
 			vga_PRINT_TEXT(temp,0,men_FONT_DEFAULT);	/// Выравнивание в меню "Сервис" 		
@@ -2299,7 +2303,7 @@ void SERVICE_ACC2( )
 
 											if ( GPIO_ReadInputDataBit(GPIOA,GPIO_Pin_8) == 1 & old_pa8 == 0 & pin_USB_5V & old_usb )
 											{	
-													BKP_WriteBackupRegister(BKP_DR10, (int) ceil(0.6 * 100000)); 
+													BKP_WriteBackupRegister(BKP_DR10, (int) ceil(akbemk_menu * 100000)); 
 													akbemk_count = 0.6;
 													akbemk_percent = 100;	
 

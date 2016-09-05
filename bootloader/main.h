@@ -30,6 +30,6 @@ extern void 	SET_CLOCK_SPEED(unsigned char CLOCK);
 extern TStatus  FORMAT(void);
 extern float  k_reg;
 //extern float  k_reg_mul;
-#define VER 270
+#define VER 290
 
 #endif

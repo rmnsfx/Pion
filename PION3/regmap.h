@@ -30,6 +30,7 @@
    #define ROAD_NUM     			 28 // Номер маршрута
 	 #define AKB_EMK     			 	 29 // Текущая емкость акб
 	 #define AUTOPOWEROFF    		 30 // Автоотключение
-	 #define COUNT_REG     			 31 // кол-во регистров
+	 #define AKB_EMK_COUNT   		 31 // Изменение емкости
+	 #define COUNT_REG     			 32 // кол-во регистров
 
 	

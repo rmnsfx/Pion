@@ -94,17 +94,34 @@
 
  u8				buf[10];			
 
+ //IDubleChFrame  DUB[1000];
+
+
  
+//BYTE  Memory[MSC_MemorySize];  /* MSC RAM */
+
+
+//BYTE Memory[MSC_MemorySize];                  // MSC Memory in RAM
+
+ //BYTE Memory[RAM_SIZE];     
+
+
+
+//#define MEM2 (BYTE *)0x20000000
+
+//BYTE MEM[MSC_ImageSize];
+
+//калбак функция
 
 void Timer_1ms_CallBack(void)
 {
-
+// pin_DEBUG(HIGTH);
  GLOBAL_TIMER_1ms++;
  
  key_1ms();
  men_1ms();
 
-
+ //if (DELAY_MESUARE>0) DELAY_MESUARE--;
  if (POWER_OFF>0) POWER_OFF--;
  if (Sec_timer==0) {
  					Sec_timer = 1000; 
@@ -112,7 +129,18 @@ void Timer_1ms_CallBack(void)
 				   }
 					else Sec_timer--;
 
+ /*pin_KEY(HIGTH);
+ pin_KEY(LOW);
+ pin_KEY(HIGTH); */
+ //pin_DEBUG(LOW);
+
 }
+/*
+void msDELAY(unsigned int msTIME)
+{
+  SET_SYS_TIMER(0);
+  while (GET_SYS_TIMER
+} */
 
 /* Private functions ---------------------------------------------------------*/
 
@@ -316,8 +344,7 @@ void GPIO_SETUP()
    GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;
    GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
    //GPIO_SetBits(GPIOD,GPIO_Pin_2);
-   //pin_3VA(OFF);
-	 pin_3VA(1);
+   pin_3VA(OFF);
    GPIO_Init(GPIOD, &GPIO_InitStructure);
 
 //**добавлено для кового варианта*******
@@ -402,40 +429,183 @@ U16 TINGULAR(U16 max,U16 Freq)
 
 
 //процедура форматирования дискаа
+//TStatus FORMAT(void)
+//{
+//  FILE * pFile;
+//  unsigned char temp_data[512];
+
+//  memset(temp_data,0,512);
+
+//  //форматирование
+//  mmc_format();//очистка флэш, создание таблицы FAT
+
+//  if (finit()!=0)
+//	return _ERR;   //ошибка, форматирование не помогло
+//  else	    
+//	{   
+//	 //создаем нужные нам директории и файлы
+//	 //создаем файл уставок размером 1 сектор, пустой
+//	 /*pFile = fopen ("M:\\Setings.000","w");
+//	 if (pFile==0) return _ERR;
+//     else
+//      if (fwrite(&temp_data,1,512,pFile)!=512)
+//	  										  {
+//											   fclose(pFile);
+//											   return _ERR;
+//											  }
+//	 fclose(pFile);*/
+
+// 	 rod_CreateFile();
+//	 //pFile = fopen ("M:\\DIR\\","w");
+//     //fclose(pFile);
+//	 return _OK;
+//	}
+//}
+
 TStatus FORMAT(void)
 {
   FILE * pFile;
   unsigned char temp_data[512];
+	s8 i;
+	char str_out[5];
+	int i2=0;
+	long res = 0;
 
-  memset(temp_data,0,512);
-
+	finit();
+	Delay(100000);
+	fat_init();
+	
+		
+	vga_CLEAR();
+	men_SHOW_MESSAGE("Форматирование...","",0);
+	
+	
+	/// Прогресс-бар
+	vga_SET_DRAW_MODE(drMODE_NORMAL);
+	vga_RECTANGLE(1,30,vga_GET_WIDTH_DISPLAY-3,33,drRECT_NO_FILL);
+	vga_UPDATE();	
+	vga_SET_DRAW_MODE(drMODE_NORMAL);
+	vga_RECTANGLE(1,30,20,33,drRECT_FILL);
+	vga_UPDATE();	
+	
+	memset(temp_data,0,512);
+	
   //форматирование
   mmc_format();//очистка флэш, создание таблицы FAT
 
-  if (finit()!=0)
-	return _ERR;   //ошибка, форматирование не помогло
-  else	    
-	{   
-	
- 	 rod_CreateFile();
 
-	 return _OK;
-	}
+	vga_SET_DRAW_MODE(drMODE_NORMAL);
+	vga_RECTANGLE(1,30,vga_GET_WIDTH_DISPLAY-3,33,drRECT_NO_FILL);
+	vga_UPDATE();		
+	vga_SET_DRAW_MODE(drMODE_NORMAL);
+	vga_RECTANGLE(1,30,60,33,drRECT_FILL);
+	vga_UPDATE();	
+	
+	
+// 	REGW(NUMFILE,1);
+//	REGW(NUMFILE_CURENT,0);
+//	REGW(ROUTE_NUM,0);
+//	REGW(BEYOND_ROAD,1);
+
+
+	vga_SET_DRAW_MODE(drMODE_NORMAL);
+	vga_RECTANGLE(1,30,vga_GET_WIDTH_DISPLAY-3,33,drRECT_NO_FILL);
+	vga_UPDATE();	
+	vga_SET_DRAW_MODE(drMODE_NORMAL);
+	vga_RECTANGLE(1,30,100,33,drRECT_FILL);
+	vga_UPDATE();	
+
+	
+	//res = rod_CreateFile_edit();	
+
+	
+	vga_CLEAR();
+	men_SHOW_MESSAGE("Форматирование...","",0);
+	vga_SET_DRAW_MODE(drMODE_NORMAL);
+	vga_RECTANGLE(1,30,vga_GET_WIDTH_DISPLAY-3,33,drRECT_NO_FILL);
+	vga_UPDATE();	
+	vga_SET_DRAW_MODE(drMODE_NORMAL);
+	vga_RECTANGLE(1,30,vga_GET_WIDTH_DISPLAY-3,33,drRECT_FILL);
+	vga_UPDATE();	
+
+	Delay(1400000);
+	
+	vga_CLEAR();
+	vga_SET_POS_TEXT(1,1);
+	sprintf(str_out,"Форматирование");		 								
+	vga_PRINT_STR(str_out,&FONT_6x8);
+	//vga_UPDATE();						
+	vga_SET_POS_TEXT(1,12);
+	sprintf(str_out,"завершено.");		 								
+	vga_PRINT_STR(str_out,&FONT_6x8);
+	vga_UPDATE();	
+
+	Delay(1500000);
+
+	vga_CLEAR();
+  vga_SET_POS_TEXT(28,25);  
+	vga_PRINT_STR("ВЫКЛЮЧЕНИЕ",&FONT_7x10_bold);
+	vga_UPDATE();
+	
+	Delay(1500000);
+		
+	pin_OFF();
+	
+	return _OK;
+	
+	
 }
 
 TStatus FAT_Init(void)
 {
   u32 res;
+	unsigned int i = 0;
   
   //тест FAT
   res = finit();
-
-  if (res==1)
-    //ошибка Flash
-	return _ERR;
+	
+	if (res != 0) 
+	while(i++ < 10)
+	{		
+		res = finit();		
+		fat_init();
+		if (res == 0) break;
+		Delay(100000);
+	}
+		
+		
+  //ошибка Flash
+  if (res==1)	return _ERR;
   else
   	if (res>1) 
-	  return FORMAT();	 //пытаемся отформатировать
+		{
+			 vga_CLEAR();		
+			 vga_SET_POS_TEXT(1,1);
+			 vga_PRINT_STR("Ошибка FAT.",&FONT_6x8);
+			 vga_SET_POS_TEXT(1,25);
+			 vga_PRINT_STR("Форматировать...?",&FONT_6x8);
+			 vga_UPDATE();
+					
+			while(1)	
+			if (key_CHECK_EV(key_EVENT_PRESSED_ENTER)) 
+			{ 
+				vga_CLEAR();
+				vga_UPDATE();
+				return FORMAT();				   				
+			}
+			else
+			{
+					if (key_CHECK_EV(key_EVENT_PRESSED_ESC_MENU)) 
+					{			
+						vga_CLEAR();
+						vga_SET_POS_TEXT(28,25);  
+						vga_PRINT_STR("ВЫКЛЮЧЕНИЕ",&FONT_7x10_bold);
+						vga_UPDATE();
+						pin_OFF();
+					}
+			}			
+		}
+	  //return FORMAT();	 //пытаемся отформатировать
 
   return _OK;	 
 }
@@ -452,6 +622,89 @@ void CONTROL_BAT(unsigned char MIN_VAL_BAT)
  
 }
 
+void UPDATE_MODE_REG()
+{
+unsigned int 		temp_reg;
+static unsigned int old_mode_reg = 0;
+
+	temp_reg = REG(CHANEL_MESUARE);
+
+ 	switch (temp_reg)
+						 {
+						  case 0x01: temp_reg = (temp_reg<<8)|REG(FILTER_A);	   //ускорение
+						  			 break;
+						  case 0x02: temp_reg = (temp_reg<<8)|REG(FILTER_V);	   //скорость
+						  			 break;
+						  case 0x04: temp_reg = (temp_reg<<8)|REG(FILTER_S);	   //перемещение
+						  			 break;
+						  case 0x08: temp_reg = (temp_reg<<8);
+						  			 break;
+						  default  : temp_reg = 0;
+						 }
+  if (old_mode_reg!=temp_reg)
+   {
+    REGW(MODE_REG,temp_reg);
+	old_mode_reg = temp_reg;
+	//очистить регистры
+	REGWDEF(RMS_VAL);
+	REGWDEF(PIK_VAL);
+	REGWDEF(PIK_PIK_VAL);
+	REGWDEF(PIK_FACTOR_VAL);
+
+   }
+  
+}
+
+/*
+void CONTROL_RTC(void)
+{
+//событие 1 секунда
+  if (rtc_CHECK_EVENT_1S())
+	 {
+	  rtc_COPY_RTC_TO_BUFER();
+	  REGW(YEAR,rtc_READ(rtc_YEAR));
+	  REGW(DATA,rtc_READ(rtc_MON)*100+rtc_READ(rtc_DAY));
+	  REGW(TIME,rtc_READ(rtc_HOUR)*100+rtc_READ(rtc_MIN));
+	  REGW(SECOND,rtc_READ(rtc_SEC));
+	 }     
+}	*/
+
+void START_MESUARE(void)
+{
+  //ext_adc_SAMPLING(ext_adc_SIM,ext_SAMPLING_SIZE); //сбросить выборку
+	  	  
+  //питание аналоговой части
+  pin_3VA(ON);
+  ext_adc_START();	//старт внешнего АЦП
+	  
+
+  //reg_WRITE(PION_STATUS,reg_READ(PION_STATUS)|ST_MESUARE);	  //установить бит в регистре
+  //DELAY_MESUARE = 0;//2000;//1500; //задержка в мс
+  REGW(SAMPLING_STATUS,0); //присваиваем состояние ожидания
+  REGW(PION_STATUS,REG(PION_STATUS)|ST_MESUARE);	  //установить бит в регистре				    
+  ext_adc_SAMPLING(ext_adc_SIM,ext_SAMPLING_SIZE);  //задаем параметры выборки
+  
+}
+
+void STOP_MESUARE(void)
+{
+ 
+ pin_3VA(OFF);
+ ext_adc_STOP();	//стоп внешнего АЦП
+
+ REGW(PION_STATUS,REG(PION_STATUS)&(~ST_MESUARE));  //сбросить бит в регистре
+ if (REG(SAMPLING_STATUS)==0) REGWDEF(SAMPLING_STATUS); //присваиваем состояние ожидания
+
+ //DELAY_MESUARE = -1;
+
+ 
+}
+
+void CONTROL_CHARGE()
+{
+ //если зарядка то отключаем
+ //if (pin_CHARGE==0) pin_OFF();
+}
 
 void CONTROL_POWER(u8 RESET)
 {
@@ -461,7 +714,122 @@ void CONTROL_POWER(u8 RESET)
   if (POWER_OFF==0) 	pin_OFF(); //отключаем	
 }
 
+void MESUARE_PROCESS(void)
+{
+  //unsigned int temp_reg;
+  float		   reg_1;
+  float		   reg_2;
+  float		   rms_reg;
+ 
+  	  //расчет RMS
+		  k_reg = ((float)REG(K_VIBRO)/1000);  //коэффициент
+			
+		  //rms_reg = iir_RETURN_RMS(&DETECTOR)*((float)REG(K_VIBRO)/1000);
 
+      	  switch (REG(MODE_REG))
+		   {
+		    //ускорение
+		    case 0x0101: //канал ускорения
+						 k_reg = k_reg/3;//30
+						 break; 
+			case 0x0102: //канал ускорения
+						 k_reg = k_reg/3;//30
+						 break;
+			case 0x0104: //канал ускорения
+						 k_reg = k_reg/3;//30
+						 break; 
+			case 0x0108: //канал ускорения
+						 k_reg = k_reg/3;//30
+						 break;
+			case 0x0110: //канал ускорения
+						 k_reg = k_reg/3;//30
+						 break;
+			//скорость
+			case 0x0201: k_reg = k_reg*114/3;	//канал скорости, 2-1000Гц	  //114
+						 //temp_reg = sqrt(rms_reg*rms_reg-3*3); //вычитаем шум 0,3мм/с
+						 //temp_reg = rms_reg;
+						 break;
+			case 0x0202: k_reg = k_reg*20.916/3;	//канал скорости, 10-1000Гц // 14,925
+						 break;
+			case 0x0204: k_reg = k_reg*20.916/3;	//канал скорости, 10-2000Гц
+						 break;
+			case 0x0208: k_reg = k_reg*20.916/3;	//канал скорости, 10-5000Гц
+						 break;
+		    //перемещение
+			case 0x0401: k_reg = k_reg*395.570/300;	//канал перемещения, 10-300Гц //208.986
+						 break;
+			default: 	 //temp_reg = 0; 
+						 break;		
+		   }
+		  //расчет СКЗ
+		  rms_reg = iir_RETURN_RMS(&DETECTOR)*k_reg;  
+		  if (REG(MODE_REG)==0x0201) rms_reg = sqrt(rms_reg*rms_reg-20*20); //вычитаем шум для диапазон 2-1000 Гц	  //шум = 0.20 мм/с
+
+		  REGW(RMS_VAL,rms_reg);						 	//заносим результат измерения в регистр
+		  //расчет пик
+		  reg_1 = iir_RETURN_MAX_PIK(&DETECTOR);
+		  reg_2 = iir_RETURN_MIN_PIK(&DETECTOR)*(-1);
+		  if (reg_1<reg_2) reg_1 = reg_2; 
+		  reg_1 = reg_1*k_reg;
+
+			if (REG(MODE_REG)==0x0101) 
+		   if (reg_1>4) reg_1-=4; else reg_1=0;	
+			if (REG(MODE_REG)==0x0102) 
+		   if (reg_1>4) reg_1-=4; else reg_1=0;			
+			if (REG(MODE_REG)==0x0104) 
+		   if (reg_1>7) reg_1-=7; else reg_1=0;	
+			if (REG(MODE_REG)==0x0108) 
+		   if (reg_1>14) reg_1-=14; else reg_1=0;	
+			
+			if (REG(MODE_REG)==0x0201) 
+		   if (reg_1>70) reg_1-=70; else reg_1=0;	
+			if (REG(MODE_REG)==0x0202) 
+		   if (reg_1>8) reg_1-=8; else reg_1=0;	
+			if (REG(MODE_REG)==0x0204) 
+		   if (reg_1>8) reg_1-=8; else reg_1=0;	
+			if (REG(MODE_REG)==0x0208) 
+		   if (reg_1>10) reg_1-=10; else reg_1=0;
+			
+		  if (REG(MODE_REG)==0x0401) 
+		   if (reg_1>5) reg_1-=5; else reg_1=0;			//вычитаем амплитудный шум = 2 мкм
+		  
+			
+		  REGW(PIK_VAL,reg_1);						   	//заносим результат измерения в регистр
+
+		  //расчет пик-фактора
+		  if (rms_reg>5) reg_1 = reg_1/rms_reg;
+		  else			  reg_1 = 0;
+		  REGW(PIK_FACTOR_VAL,reg_1*100);
+
+		  //расчет пик-пик
+		  reg_1 = iir_RETURN_PIK_PIK(&DETECTOR)*k_reg;
+		  if (reg_1<0) reg_1 = 0;
+			
+			if (REG(MODE_REG)==0x0101) 
+		   if (reg_1>8) reg_1-=8;else reg_1=0;	
+			if (REG(MODE_REG)==0x0102) 
+		   if (reg_1>8) reg_1-=8;else reg_1=0;	
+			if (REG(MODE_REG)==0x0104) 
+		   if (reg_1>14) reg_1-=14;else reg_1=0;	
+			if (REG(MODE_REG)==0x0108) 
+		   if (reg_1>30) reg_1-=30;else reg_1=0;	
+			
+			if (REG(MODE_REG)==0x0201) 
+		   if (reg_1>130) reg_1-=130;else reg_1=0;	
+			if (REG(MODE_REG)==0x0202) 
+		   if (reg_1>20) reg_1-=20;else reg_1=0;	
+			if (REG(MODE_REG)==0x0204) 
+		   if (reg_1>20) reg_1-=20;else reg_1=0;	
+			if (REG(MODE_REG)==0x0208) 
+		   if (reg_1>20) reg_1-=20;else reg_1=0;
+			
+		  if (REG(MODE_REG)==0x0401) 
+		   if (reg_1>10) reg_1-=10;else reg_1=0;			//вычитаем амплитудный шум = 4 мкм
+			
+		  REGW(PIK_PIK_VAL,reg_1);					  	//заносим результат измерения в регистр
+	  	  
+	  	  
+}
 
 
 void JumpToApplication(uint32_t addr)
@@ -469,14 +837,15 @@ void JumpToApplication(uint32_t addr)
   typedef  void (*pFunction)(void);
   pFunction Jump_To_Application;
   uint32_t JumpAddress;
-
+  //if(addr>=0x08005000)
+  //{
     JumpAddress = *(uint32_t*) (addr + 4);
     Jump_To_Application = (pFunction) JumpAddress;
     /* Initialize user application's Stack Pointer */
     __set_MSP(*(vu32*) addr);
 		NVIC_SetVectorTable(NVIC_VectTab_FLASH, addr-0x8000000);
     Jump_To_Application();
-
+ // }
 }
 
 
@@ -484,16 +853,24 @@ int main(void)
 
 {
 	FILE  		*pRFile = 0;
+  //unsigned char data;
   uint32_t bt[5];
 	uint8_t bf[2];
-
+  //volatile int   x1,y1,y2;
+  //DWORD n;
+//void (*JumptoApp)(void);
+//JumpToApplication(0x8020000);
+//JumptoApp=(void(*)(void))0x08020004;   //?????? ???? ?????????
+//JumptoApp();
 	unsigned int j,carry_flag,a;
 	uint16_t crc = 0xffff;
 	char FileName[15];
+  //unsigned int temp_reg;
 	uint32_t chsumm;
   
   unsigned int i = 0;
   unsigned char num;
+  //FILE * pFile;
   uint32_t mask;
 	uint8_t first;
 	uint8_t second;
@@ -503,6 +880,9 @@ int main(void)
 	int aa;
 	
 	int *var = (int*)0x8010000;
+	//int x4 __attribute__((at(0x8010000))) = 123;
+	
+	
 	
 	
 	
@@ -511,11 +891,14 @@ int main(void)
   Delay(100000);
 
   GPIO_SETUP();
+  //CONTROL_CHARGE();
   Delay(100000);
   Delay(100000);
   Delay(100000);
   
-
+  //???????? ???????
+ // CONTROL_CHARGE();
+   //?????? 13?
   pin_13V(HIGTH);
   Delay(100000);
   Delay(100000);
@@ -524,43 +907,63 @@ int main(void)
 
   
   SystemInit();
-  SET_CLOCK_SPEED(CLK_72MHz);   
+  SET_CLOCK_SPEED(CLK_72MHz); 
+  //????????????? ??????????? ??? ? ???????? ?????? ????-----------------------------//
   adc_SETUP();
+  //if (adc_BAT_PERCENT()<=5)  pin_OFF(); //?????????	???? <5%
 	
-	vga_INIT();	
+	vga_INIT();
 	
-	FAT_Init();
+	//FAT_Init();
 	
-
-
-
-	if (key_CHECK_EV(key_EVENT_PRESSED_MESUARE))
-	{
-			vga_SET_POS_TEXT(1,1);
-			vga_PRINT_STR("Bootloader v 2.7",&FONT_6x8);	
-			vga_UPDATE();
-
-			while (!pin_USB_5V);		
-				
-			USB_Init();
-			USB_CONNECT = pin_USB_5V;
-			USB_Connect(USB_CONNECT);	
+	
+	disk_initialize ( 0 );
+	
+	
+	
 			
-			while (pin_USB_5V);			
+			
+	
+/*	vga_SET_POS_TEXT(1,1);
+	vga_PRINT_STR("Bootloader v 2.0",&FONT_6x8);	
+	vga_UPDATE();
+
+while (!pin_USB_5V);		
+	USB_Init();
+	USB_CONNECT = pin_USB_5V;
+	USB_Connect(USB_CONNECT);	
+	//FORMAT();*/
+
+
+if (key_CHECK_EV(key_EVENT_PRESSED_MESUARE))
+	{
+	vga_SET_POS_TEXT(1,1);
+	vga_PRINT_STR("Bootloader v 2.9",&FONT_6x8);	
+	vga_UPDATE();
+
+  while (!pin_USB_5V);		
+		
+	USB_Init();
+	USB_CONNECT = pin_USB_5V;
+	USB_Connect(USB_CONNECT);	
+	
+	while (pin_USB_5V);		
+		
 	}
 	else
 	{
 
 		
 		if ((pRFile = fopen ("M:\\prog1.bin","rb")) != NULL)
-		{			
-			 fclose(pRFile);
+		{
+			fclose(pRFile);
 			
 			 vga_SET_POS_TEXT(1,1);
-			 vga_PRINT_STR("Подождите.",&FONT_6x8);	
+			 vga_PRINT_STR("Подождите...",&FONT_6x8);	
 			 vga_SET_POS_TEXT(1,25);
-			 vga_PRINT_STR("Идет обновление ПО.",&FONT_6x8);			
+			 vga_PRINT_STR("идет обновление ПО.",&FONT_6x8);			
 			 vga_UPDATE();
+			// checksum
 			
 			for (num = 1; num < 3; num++)
 			{
@@ -590,9 +993,9 @@ int main(void)
 
 								vga_CLEAR();
 								vga_SET_POS_TEXT(1,25);
-								vga_PRINT_STR("Файлы ПО повреждены",&FONT_6x8);
+								vga_PRINT_STR("Файлы ПО повреждены.",&FONT_6x8);
 								vga_SET_POS_TEXT(1,34);
-								vga_PRINT_STR("Нажмите ENTER",&FONT_6x8);
+								vga_PRINT_STR("Нажмите ENTER.",&FONT_6x8);
 								vga_UPDATE();								
 								goto JumpToApplication;
 
@@ -601,18 +1004,22 @@ int main(void)
 					}
 
 			}
+//vga_SET_POS_TEXT(1,34);	vga_PRINT_STR("1111111",&FONT_6x8);	vga_UPDATE();	
+		//fclose(pRFile);	
 
+	//???????	
 			FLASH_Unlock();
-			
 			for(i = 0;  i<191; i++)
 			{
-				FLASH_ErasePage(0x8010000+i*0x800);
+			//sprintf(FileName, "%s%d", "prog", i);
+				//vga_SET_POS_TEXT(1,44);
+				//vga_PRINT_STR(FileName,&FONT_6x8);	vga_UPDATE();	
+			FLASH_ErasePage(0x8010000+i*0x800);
 			}
-			
 			FLASH_Lock();
-			
+			//vga_SET_POS_TEXT(1,44);	vga_PRINT_STR("222222222",&FONT_6x8);	vga_UPDATE();	
 			i=0;
-
+	//???????
 			FLASH_Unlock();
 			for (num = 1; num < 10; num++)
 			{
@@ -626,22 +1033,30 @@ int main(void)
 								i++;
 							}
 							fclose(pRFile);
+							//unlink(FileName);
+							//remove(FileName);
 					}
 
 			}
 		
 			
-						
+			
+			
+			
+			
 			FLASH_Lock();
 			vga_CLEAR();
 			vga_SET_POS_TEXT(1,25);
-			vga_PRINT_STR("ПО успешно обновлено",&FONT_6x8);
+			vga_PRINT_STR("ПО успешно обновлено!",&FONT_6x8);
 			vga_SET_POS_TEXT(1,34);
-			vga_PRINT_STR("Нажмите ENTER",&FONT_6x8);
+			vga_PRINT_STR("Нажмите ENTER.",&FONT_6x8);
 			vga_UPDATE();	
 			
 
 			
+			
+			
+
 			
 			JumpToApplication:		
 			for (num = 1; num < 10; num++)
@@ -652,23 +1067,27 @@ int main(void)
 			while (!key_CHECK_EV(key_EVENT_PRESSED_ENTER));
 			JumpToApplication(0x8010000);			
 	}
-		
-	
 	vga_SET_POS_TEXT(1,1);
 	vga_PRINT_STR("*",&FONT_6x8);		
 	vga_UPDATE();
 
+///	pin_CHARGE_OFF;
 		
 		if (*var == 0xffffffff) 
-		{		
+		{									
+					
 				while (1)
 				{
 						if (key_CHECK_EV(key_EVENT_PRESSED_ESC_MENU))
 						POWER_OFF();
-				}							
+				}			
+				
 		}
 		
 	
+	
+
+		
 		
 			for (num = 1; num < 10; num++)
 			{

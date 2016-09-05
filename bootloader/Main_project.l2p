@@ -73,6 +73,9 @@
 ".\types.o"
 ".\items.o"
 ".\menu.o"
+".\ccsbcs.o"
+".\ff.o"
+".\spi_sd.o"
 --strict --scatter ".\Main_project.sct"
 --summary_stderr --info summarysizes --map --xref --callgraph --symbols
 --info sizes --info totals --info unused --info veneers

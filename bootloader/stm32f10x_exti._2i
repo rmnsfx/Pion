@@ -1,6 +1,7 @@
--c --cpu Cortex-M3 -g -W -O0 -Otime --apcs=interwork -I.\CMSIS -I.\DRIVER\inc -I.\DRIVER\src -I..\bootloader -I.\USB -I.\FAT -I.\OLED -I.\MENU
+-c --cpu Cortex-M3 -g -W -O0 --apcs=interwork -I.\CMSIS -I.\DRIVER\inc -I.\DRIVER\src -I..\bootloader -I.\USB -I.\FAT -I.\OLED -I.\MENU
 -I C:\Users\SavchenkoRS\Desktop\SVN\bootloader\RTE
--I C:\Keil_v5\ARM\PACK\Keil\STM32F1xx_DFP\1.1.0\Device\Include
+-I C:\Keil_v5\ARM\PACK\Keil\STM32F1xx_DFP\2.0.0
 -I C:\Keil_v5\ARM\CMSIS\Include
+-I C:\Keil_v5\ARM\PACK\Keil\STM32F1xx_DFP\2.0.0\Device\Include
 -D__UVISION_VERSION="514" -DSTM32F10X_HD
--o .\stm32f10x_exti.o --depend .\stm32f10x_exti.d --feedback ".\Main_project.fed" "DRIVER\src\stm32f10x_exti.c"
+-o .\stm32f10x_exti.o --omf_browse .\stm32f10x_exti.crf --depend .\stm32f10x_exti.d --feedback ".\Main_project.fed" "DRIVER\src\stm32f10x_exti.c"

@@ -312,7 +312,7 @@ extern U32  fs_get_time (void);
 extern U32  fs_get_date (void);
 
 /* SPI.c module */
-extern void spi_init (void);
+extern void spi_init_1 (void);
 extern U8   spi_send (U8 outb);
 extern void spi_ss (U32 ss);
 extern void spi_hi_speed (BOOL on);
