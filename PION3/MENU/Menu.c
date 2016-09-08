@@ -405,7 +405,7 @@ void men_SHOW_LARGE_BAT (unsigned char VAL)
 	
 	vga_RECTANGLE(17+10,11,85+10,49,drRECT_NO_FILL);
 	vga_RECTANGLE(18+10,12,84+10,48,drRECT_NO_FILL);
-	vga_RECTANGLE(84+10,22,90+10,34,drRECT_FILL);
+	vga_RECTANGLE(84+10,20,90+10,40,drRECT_FILL);
 	
 	
 	if (VALUE>5) vga_RECTANGLE(21+10,15,27+10,45,drRECT_ARC_FILL);
@@ -459,9 +459,19 @@ void men_SHOW_REFRESH(void)
 										sprintf(t_str,"%0.1f", (float) akbemk_volt);						
 										vga_PRINT_STR(t_str,&FONT_4x7);							
 							
-										
+										//Проценты для отображения батарейки
 										vga_SET_POS_TEXT(67, 1);						
-										sprintf(t_str,"%d", (int) frzbat1);						
+										sprintf(t_str,"%d", (int) akbemk_percent);						
+										vga_PRINT_STR(t_str,&FONT_4x7);
+							
+										//Ток
+										vga_SET_POS_TEXT(21, 7);						
+										sprintf(t_str,"%0.5f", (float) akbtemp);						
+										vga_PRINT_STR(t_str,&FONT_4x7);
+							
+										//Содержимое BKP регистра
+										vga_SET_POS_TEXT(55, 7);						
+										sprintf(t_str,"%d", BKP_ReadBackupRegister(BKP_DR10));						
 										vga_PRINT_STR(t_str,&FONT_4x7);
 						}
 						else
@@ -898,18 +908,6 @@ void men_SHOW_REFRESH(void)
 										vga_PRINT_STR(t_str,&FONT_4x7);
 							
 						}
-				
-//								//Мгновенная емкость
-//								vga_SET_POS_TEXT(45,45);						
-//								sprintf(t_str,"%0.5f", (float) akbtemp);						
-//								vga_PRINT_STR(t_str,&FONT_4x7);
-//								
-//								vga_SET_POS_TEXT(85,45);				
-//								sprintf(t_str,"%d", (int) ceil(akbemk_count * 100 / 0.6));
-//								vga_PRINT_STR(t_str,&FONT_4x7);
-//								vga_UPDATE();
-
-	
 						
 						break;
 	
@@ -918,19 +916,14 @@ void men_SHOW_REFRESH(void)
 	
 	
 	if (id_akb == 0) //Новый АКБ					
-	{
+	{					
 						
-						
-		
+						//Проверяем бит зарядки от контроллера заряда АКБ
 						if ( GPIO_ReadInputDataBit(GPIOA,GPIO_Pin_8) == 0 )
-						{				
-								
+						{												
 							LED_CHARGE_ON();
-							usb_charge_state = 0;	
-							
-						}
-						
-						
+							usb_charge_state = 1;								
+						}					
 						
 						CHARGE_ON();
 						
@@ -954,31 +947,15 @@ void men_SHOW_REFRESH(void)
 										sprintf(t_str,"%d", (int) frzbat1);						
 										vga_PRINT_STR(t_str,&FONT_4x7);
 							
-//										vga_SET_POS_TEXT(78, 1);						
-//										sprintf(t_str,"%f", (float) akbemk);						
+										vga_SET_POS_TEXT(80, 1);						
+										sprintf(t_str,"%f", (float) akbtemp);						
+										vga_PRINT_STR(t_str,&FONT_4x7);
+							
+//										vga_SET_POS_TEXT(5, 1);						
+//										sprintf(t_str,"%d", usb_charge_state);						
 //										vga_PRINT_STR(t_str,&FONT_4x7);
 						}
 						
-						
-						
-//										//Мгновенная емкость
-//										vga_SET_POS_TEXT(45,55);						
-//										sprintf(t_str,"%0.5f", (float) akbtemp);						
-//										vga_PRINT_STR(t_str,&FONT_4x7);
-//											
-//																
-//										//PA8
-//										vga_SET_POS_TEXT(85,55);				
-//										sprintf(t_str,"%d", GPIO_ReadInputDataBit(GPIOA,GPIO_Pin_8));
-//										vga_PRINT_STR(t_str,&FONT_4x7);
-//								
-//										
-//										//Проценты
-//										vga_SET_POS_TEXT(100,55);				
-//										sprintf(t_str,"%d", (int) ceil(akbemk_count * 100 / 0.6));
-//										vga_PRINT_STR(t_str,&FONT_4x7);
-//										vga_UPDATE();
-
 								
 						//////////////////////////////////////////////////////		
 								
@@ -986,7 +963,7 @@ void men_SHOW_REFRESH(void)
 						{							
 								LED_CHARGE_OFF();	
 							
-								BKP_WriteBackupRegister(BKP_DR10, (int) ceil(akbemk_menu * 100000)); 
+								BKP_WriteBackupRegister(BKP_DR10, (int) ceil(akbemk_menu / 0.00001831082)); 
 								akbemk_count = akbemk_menu;
 								akbemk_percent = 100;	
 
@@ -997,8 +974,7 @@ void men_SHOW_REFRESH(void)
 								vga_PRINT_STR("ЗАРЯД ЗАКОНЧЕН",&FONT_6x8);																												
 								vga_UPDATE();
 													
-								while (pin_USB_5V) {}
-								
+								while (pin_USB_5V) {}						
 									
 						}
 						
@@ -1241,10 +1217,7 @@ unsigned char id;
 	{	
 	//	if (road_pos_tmp > 0) road_pos_tmp--;
 		return point;	
-	}		
-	
-	
-	
+	}			
 	
 		//*Alex
  while (point>0)
@@ -1304,7 +1277,8 @@ void men_CALLBACK()
 //men_POINTER;
  men_LEVEL--;
 	if (Items[men_POINTER].Data_reg == 0xFE) men_POINTER = 27;
-	else if (Items[men_POINTER].Data_reg == 0xF0) men_POINTER = 0x28;
+//	else if (Items[men_POINTER].Data_reg == 0xF0) men_POINTER = 0x28;
+	else if (Items[men_POINTER].Data_reg == 0xF0) men_POINTER = 0x25;
 	else if (Items[men_POINTER].Data_reg == 0xFB) men_POINTER = 40;
 	else if (Items[men_POINTER].Data_reg == 0xFC) men_POINTER = 40;
 	else if (Items[men_POINTER].Data_reg == 0xFF) men_POINTER = 0;
@@ -2253,7 +2227,7 @@ void SERVICE_ACC2( )
 							{	
 								IWDG_ReloadCounter();			
 								
-								CAPACITY();
+								//CAPACITY();
 								
 								CHARGE_ON();
 								

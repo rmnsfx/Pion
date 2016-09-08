@@ -260,9 +260,10 @@ void GPIO_SETUP()
    GPIO_Init(GPIOA, &GPIO_InitStructure);
    //настраиваем вход DISCHARGE
    GPIO_InitStructure.GPIO_Pin = GPIO_Pin_3;
-   GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;
+	 GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AIN;
+   //GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;
    GPIO_Init(GPIOA, &GPIO_InitStructure);
-//	 DISCHARGE_OFF();
+
    //настраиваем выход SPI MCS
    GPIO_InitStructure.GPIO_Pin = GPIO_Pin_4;
    GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;
@@ -443,6 +444,15 @@ void GPIO_SETUP()
 	 //************
 	 
 	// RCC_APB1PeriphResetCmd(RCC_APB1Periph_BKP,ENABLE);
+	
+	//Если старый аккум., настраиваем на выход
+	if ( GPIO_ReadInputDataBit(GPIOB,GPIO_Pin_15) == 1) 
+	{		
+		GPIO_InitStructure.GPIO_Pin = GPIO_Pin_3;		
+		GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;
+		GPIO_Init(GPIOA, &GPIO_InitStructure);		
+	}
+	
 }
 
 void ShowPowerOffForm ( void )
@@ -675,7 +685,7 @@ void CONTROL_BAT(unsigned char MIN_VAL_BAT)
 	
 	if (id_akb == 0) //Новый АКБ
 	{
-					 if (akbemk_percent < 10 & akbemk_percent > 2 & message_status == 0 & measure_stat == 0)   //если заряд меньше 10%		
+					 if (akbemk_percent < 10 && akbemk_percent > 2 && message_status == 0 && measure_stat == 0)   //если заряд меньше 10%		
 					 {								 
 							vga_CLEAR();					
 							vga_SET_POS_TEXT(5,20);
@@ -686,14 +696,13 @@ void CONTROL_BAT(unsigned char MIN_VAL_BAT)
 							
 							message_status = 1; ///Флаг однократного показа 
 							 
-							Delay (2500000);							
-						 
-							//men_SHOW_MAINFORMS(form_MESUARE); 		 						
+							Delay (2500000);													 
+								 						
 					 }
 					 
 					 
 					 
-					 if ( akbemk_percent <= 1 & measure_stat == 0 & akbemk_volt <= 2.6 )   
+					 if ( measure_stat == 0 && akbemk_volt <= 2.6 )   
 					 {	
 							vga_CLEAR();					
 							vga_SET_POS_TEXT(5,20);
@@ -710,14 +719,7 @@ void CONTROL_BAT(unsigned char MIN_VAL_BAT)
 							vga_UPDATE();
 						
 							Delay(2500000);						
-							
-							//Обнуляем счетчики, для случая если АКБ будет заряжен не полностью
-						  akbemk_count = 0.001;
-							frzbat1 = 0;
-							akbemk_percent = 0;
-							BKP_WriteBackupRegister(BKP_DR10, (int) ceil(0.001 * 100000)); 
 
-							Delay(100000);		
 
 							message_status = 1;						 						 
 							
@@ -1022,7 +1024,7 @@ float CAPACITY ()
 						//Мгновенное напряжение, Вольт.
 						akbemk_volt = (float) adc_BAT_MEASURE_NEW_VOLT() / 4096 * 3.3 * 2.11;		
 				
-						//Время цикла, от изм. до изм., сек.
+						//Время цикла, от измер. до измер., сек.
 						akbtimer1 = (GLOBAL_TIMER_1ms - akbtimer2) / 1000;
 						akbtimer2 = GLOBAL_TIMER_1ms;
 						
@@ -1030,16 +1032,14 @@ float CAPACITY ()
 						akbemk = akbtemp * akbtimer1 / 3600;		
 						
 		
-						//Счетчик емкости
-//						if ( GPIO_ReadInputDataBit(GPIOA,GPIO_Pin_8) == 0 ) akbemk_count -= akbemk;
-//						else akbemk_count += akbemk;		
-												
-						if (usb_charge_state == 1) 
-						akbemk_count += akbemk;
+						//Счетчик емкости, заряд
+						if (usb_charge_state == 1) akbemk_count += akbemk;
 						
-						if (usb_charge_state == 0) 
-						akbemk_count -= akbemk;
-						
+						//Счетчик емкости, работа
+						if (usb_charge_state == 0) akbemk_count -= akbemk;
+		
+						if (akbemk_count <= 0) akbemk_count = 0;
+
 						//Читаем значение емкости из регистра меню
 						if (REG(AKB_EMK_COUNT) == 0) akbemk_menu = 0.6;
 						else akbemk_menu = 1.2;
@@ -1048,8 +1048,16 @@ float CAPACITY ()
 						if (akbemk_volt <= 2.6) akbemk_percent = 0;
 							else akbemk_percent = (akbemk_count * 100) / (float) akbemk_menu;
 		
-						//Запоминаем емкость
-						BKP_WriteBackupRegister(BKP_DR10, (int) ceil(akbemk_count * 100000)); 						
+		
+						//Разрешить запись в область BKP 
+						//PWR->CR |=  PWR_CR_DBP;
+		
+						//Запоминаем емкость, масштабируем для записи в BKP через коэф. преобразования (1,2 / 65535 = 0.00001831082)
+						BKP_WriteBackupRegister(BKP_DR10, (int) ceil(akbemk_count / 0.00001831082)); 						
+									
+
+						//Запретить запись в BKP
+						//PWR->CR &= ~PWR_CR_DBP;
 
 						return akbemk_count;
 }
@@ -1193,8 +1201,6 @@ int main(void)
 
   ext_adc_SETUP(20);//16 - 62.5 кГц//20 - 50кГц
   
-  	
-
 	
 	men_SETUP();
   	
@@ -1222,26 +1228,20 @@ int main(void)
 	///Получаем идентификатор АКБ
 	id_akb = GPIO_ReadInputDataBit(GPIOB,GPIO_Pin_15);
 	
-	///Устанавливаем емкость после первоначальной прошивки
-	if (BKP_ReadBackupRegister(BKP_DR10) == 0) BKP_WriteBackupRegister(BKP_DR10, (int) ceil(akbemk_menu * 100000)); 
 		
 	///Вспоминаем емкость АКБ	
-	akbemk_count = (float) BKP_ReadBackupRegister(BKP_DR10) / 100000;
+	akbemk_count = (float) BKP_ReadBackupRegister(BKP_DR10) * 0.00001831082;
 	
-	///Расчитываем проценты (akbemk_percent)
-	CAPACITY();	
+	//Читаем значение емкости из регистра меню
+	if (REG(AKB_EMK_COUNT) == 0) akbemk_menu = 0.6;
+	else akbemk_menu = 1.2;
+	
+	///Расчитываем проценты для индикации батарейки
+	akbemk_percent = (akbemk_count * 100) / (float) akbemk_menu;	
 	
 	/// Индикация батарейки при первом включении
-	if (id_akb == 0)
-	{
-		frzbat1 = akbemk_percent; 
-		frzbat2 = akbemk_percent;
-	}
-	else
-	{
-		frzbat1 = adc_BAT_PERCENT_edit(); 
-		frzbat2 = adc_BAT_PERCENT_edit();
-	}	
+	if (id_akb == 0) frzbat1 = akbemk_percent; 			
+	else frzbat1 = adc_BAT_PERCENT_edit(); 			
 
 	
 	

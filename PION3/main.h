@@ -71,6 +71,6 @@ extern unsigned int usb_charge_state;
 
 
 //extern float  k_reg_mul;
-#define VER 349
+#define VER 352
 
 #endif

@@ -255,7 +255,7 @@ unsigned int adc_BAT_MEASURE(void)
 */
 
 
-//Новый аккум., напр., PA3
+//Новый аккум., ток, PA3
 unsigned int adc_BAT_MEASURE_NEW_AMPER (void)
 {
   unsigned long SUM = 0;
