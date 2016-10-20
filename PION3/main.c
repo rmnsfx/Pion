@@ -116,7 +116,7 @@ float akbemk_percent = 0;
 float akbemk_volt = 0;
 int akbstatus = -1;
 float akbemk_menu = 0;
-
+FATINFO sdinfo;
 
 
 
@@ -160,12 +160,7 @@ void Timer_1ms_CallBack(void)
 			men_1ms();			
 			key_1ms();
 
-			if(timer4 == 5)
-			{
-				
-				timer4=0;	
-			}
-				
+							
 			if (REG(AUTOPOWEROFF) == 1) POWER_OFF--;
 				
 			 if (Sec_timer==0) {
@@ -186,7 +181,13 @@ void Timer_1ms_CallBack(void)
 			
 			if (timer2 == 30) timer2 = 0; ///30 секунд
 			if (timer3 == 900000) timer3 = 0; ///15 мин.
-			timer4++;
+			
+			if(timer4 == 5)
+			{
+				disk_timerproc();
+				timer4=0;	
+			}
+			else timer4++;
 									
 			
 			
@@ -445,13 +446,13 @@ void GPIO_SETUP()
 	 
 	// RCC_APB1PeriphResetCmd(RCC_APB1Periph_BKP,ENABLE);
 	
-	//Если старый аккум., настраиваем на выход
-	if ( GPIO_ReadInputDataBit(GPIOB,GPIO_Pin_15) == 1) 
-	{		
-		GPIO_InitStructure.GPIO_Pin = GPIO_Pin_3;		
-		GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;
-		GPIO_Init(GPIOA, &GPIO_InitStructure);		
-	}
+//	//Если старый аккум., настраиваем на выход
+//	if ( GPIO_ReadInputDataBit(GPIOB,GPIO_Pin_15) == 1) 
+//	{		
+//		GPIO_InitStructure.GPIO_Pin = GPIO_Pin_3;		
+//		GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;
+//		GPIO_Init(GPIOA, &GPIO_InitStructure);		
+//	}
 	
 }
 
@@ -657,22 +658,52 @@ TStatus FORMAT(void)
 	
 }
 
+void SPI_SETUP(void)
+{
+  RCC->APB2ENR |=  RCC_APB2ENR_AFIOEN;//???????? ???????????? ?????????????? ???????
+  RCC->APB2ENR |=  RCC_APB2ENR_IOPAEN;//???????? ???????????? ????? ?
+	//RCC_APB2PeriphClockCmd(RCC_APB2Periph_SPI1, ENABLE);
+ 
+  //????? ?????????? SS: ????? ???????????, ?????? ??????????,50MHz
+  GPIOA->CRL   |=  GPIO_CRL_MODE4;    //
+  GPIOA->CRL   &= ~GPIO_CRL_CNF4;     //
+  GPIOA->BSRR   =  GPIO_BSRR_BS4;     //
+ 
+  //????? SCK: ????? ???????????, ?????????????? ???????, 50MHz
+  GPIOA->CRL   |=  GPIO_CRL_MODE5;    //
+  GPIOA->CRL   &= ~GPIO_CRL_CNF5;     //
+  GPIOA->CRL   |=  GPIO_CRL_CNF5_1;   //
+ 
+  //????? MISO: ???? ???????? ? ????????????? ??????????, ???????? ? ?????
+  GPIOA->CRL   &= ~GPIO_CRL_MODE6;    //
+  GPIOA->CRL   &= ~GPIO_CRL_CNF6;     //
+  GPIOA->CRL   |=  GPIO_CRL_CNF6_1;   //
+  GPIOA->BSRR   =  GPIO_BSRR_BS6;     //
+ 
+  //????? MOSI: ????? ???????????, ?????????????? ???????, 50MHz
+  GPIOA->CRL   |=  GPIO_CRL_MODE7;    //
+  GPIOA->CRL   &= ~GPIO_CRL_CNF7;     //
+  GPIOA->CRL   |=  GPIO_CRL_CNF7_1;   //
+
+
+
+	RCC->APB2ENR |= RCC_APB2ENR_SPI1EN;
+	SPI1->CR2     = 0x0000;
+	SPI1->CR1     = SPI_CR1_MSTR;       //?????????? ?????? ???? ????????,???????
+  //SPI1->CR1    |= SPI_CR1_BR;         //??? ?????? ??????? ????????? ????????
+	SPI1->CR1    |= SPI_CR1_BR_1;
+  SPI1->CR1    |= SPI_CR1_SSI;
+  SPI1->CR1    |= SPI_CR1_SSM;
+	SPI1->CR1    |= SPI_CR1_SPE; 
+}
+
 TStatus FAT_Init(void)
 {
   u32 res;
   
-  //тест FAT
-  res = finit();
-
-  if (res==1)
-    //ошибка Flash
-	return _ERR;
-  else
-  	if (res>1) 
-		{
-			
-			return FORMAT();	 //пытаемся отформатировать
-		}	  
+	SPI_SETUP();	
+	res = disk_initialize(0);
+	res = finit(); 
 
   return _OK;	 
 }
@@ -1020,6 +1051,7 @@ float CAPACITY ()
 						akbtemp = (float) 1.65 - akbtemp;
 						//akbtemp = (float) sqrt(akbtemp*akbtemp) / (float)(60 * 0.082);
 						akbtemp = (float) akbtemp / (float)(60 * 0.082) * 1.03; //Коэф. усиления операц. и сопротивление шунта. + поправочный.
+						//akbtemp = (float) akbtemp * 1.3;//Еще один поправочный, для соответствия со счетчиком
 		
 						//Мгновенное напряжение, Вольт.
 						akbemk_volt = (float) adc_BAT_MEASURE_NEW_VOLT() / 4096 * 3.3 * 2.11;		
@@ -1038,7 +1070,7 @@ float CAPACITY ()
 						//Счетчик емкости, работа
 						if (usb_charge_state == 0) akbemk_count -= akbemk;
 		
-						if (akbemk_count <= 0) akbemk_count = 0;
+						//if (akbemk_count <= 0) akbemk_count = 0;
 
 						//Читаем значение емкости из регистра меню
 						if (REG(AKB_EMK_COUNT) == 0) akbemk_menu = 0.6;
@@ -1104,7 +1136,7 @@ int main(void)
   adc_SETUP();
   
 
-  USB_Init();                                        // USB Initialization
+  
   vga_INIT();
 	
 	
@@ -1116,88 +1148,94 @@ int main(void)
   //минимальная диагностика----------------------------------------------------------//
   if (rtc_SETUP()==_ERR) GLOBAL_ERROR|=0x01;	//тест часов
   if (FAT_Init() ==_ERR) GLOBAL_ERROR|=0x04;;	//тест фат
+	
+	sdinfo = get_mmc();
+	
+	USB_Init();                                        // USB Initialization
+	
   if (reg_SETUP()==_ERR) GLOBAL_ERROR|=0x02;	//начальная инициализация регистров
   GLOBAL_ERROR = 0;
   
-	
+	MakeTIK();
+	vga_UPDATE();	
 
 	
 	
-	if (GLOBAL_ERROR>0) 	 //если есть ошибка
-			{	   
-						 temp_reg = 0;
-						 //выводим сообщение об ошибке 
-						 vga_PRINT_STR("ERROR:",&FONT_6x8);
-						 
-						 if (GLOBAL_ERROR&0x01)   {vga_SET_POS_TEXT(5,++temp_reg*10);vga_PRINT_STR("Часы",&FONT_6x8);}
-						 if (GLOBAL_ERROR&0x02)   {vga_SET_POS_TEXT(5,++temp_reg*10);vga_PRINT_STR("Инициализация FLASH",&FONT_6x8);}
-						 if (GLOBAL_ERROR&0x04)   {vga_SET_POS_TEXT(5,++temp_reg*10);vga_PRINT_STR("Инициализация FAT16",&FONT_6x8);}
-						 
-						 vga_UPDATE();						 
-						 
-						 Delay(700000); 
-						 ShowPowerOffForm();
-						 Delay(700000); 						 
-						 pin_OFF();
-			}
+//	if (GLOBAL_ERROR>0) 	 //если есть ошибка
+//	{	   
+//						 temp_reg = 0;
+//						 //выводим сообщение об ошибке 
+//						 vga_PRINT_STR("ERROR:",&FONT_6x8);
+//						 
+//						 if (GLOBAL_ERROR&0x01)   {vga_SET_POS_TEXT(5,++temp_reg*10);vga_PRINT_STR("Часы",&FONT_6x8);}
+//						 if (GLOBAL_ERROR&0x02)   {vga_SET_POS_TEXT(5,++temp_reg*10);vga_PRINT_STR("Инициализация FLASH",&FONT_6x8);}
+//						 if (GLOBAL_ERROR&0x04)   {vga_SET_POS_TEXT(5,++temp_reg*10);vga_PRINT_STR("Инициализация FAT16",&FONT_6x8);}
+//						 
+//						 vga_UPDATE();						 
+//						 
+//						 Delay(700000); 
+//						 ShowPowerOffForm();
+//						 Delay(700000); 						 
+//						 pin_OFF();
+//	}
 
-		
-					
+//		
+//					
 
 						
-   if (REG(NUMFILE)==0) //установлен лок байт
-    {
-	 //форматируем
-	 vga_SET_POS_TEXT(1,1);
-	 vga_PRINT_STR("Ошибка записи FAT16",&FONT_6x8);
-	 vga_SET_POS_TEXT(1,25);
-	 vga_PRINT_STR("Форматировать...?",&FONT_6x8);
-	 vga_UPDATE();
-	 //сохринить калибровочный параметр
-	 //BKP_WriteBackupRegister(BKP_DR2, REG(K_VIBRO));
-		IWDG_ReloadCounter();
-		SET_CLOCK_SPEED(CLK_8MHz);
-			
-		while(1)	
-		if (key_CHECK_EV(key_EVENT_PRESSED_ENTER)) 
-		{ 
-			vga_CLEAR();
-			vga_UPDATE();
-			FORMAT();				   //нужно ли форматировать!!!!!!!! плохо это!!!!
-			
-			ShowPowerOffForm();
-			Delay(700000); 
-			vga_CLEAR();
-			vga_UPDATE();	
-			pin_OFF();
-		}
-		else
-		{
-			if (key_CHECK_EV(key_EVENT_PRESSED_ESC_MENU)) 
-			{
-				ShowPowerOffForm();
-				Delay(700000); 
-				vga_CLEAR();
-				vga_UPDATE();	
-				pin_OFF();
-			}
-		}
-	
+//   if (REG(NUMFILE)==0) //установлен лок байт
+//    {
+//	 //форматируем
+//	 vga_SET_POS_TEXT(1,1);
+//	 vga_PRINT_STR("Ошибка записи FAT16",&FONT_6x8);
+//	 vga_SET_POS_TEXT(1,25);
+//	 vga_PRINT_STR("Форматировать...?",&FONT_6x8);
+//	 vga_UPDATE();
+//	 //сохринить калибровочный параметр
+//	 //BKP_WriteBackupRegister(BKP_DR2, REG(K_VIBRO));
+//		IWDG_ReloadCounter();
+//		SET_CLOCK_SPEED(CLK_8MHz);
+//			
+//		while(1)	
+//		if (key_CHECK_EV(key_EVENT_PRESSED_ENTER)) 
+//		{ 
+//			vga_CLEAR();
+//			vga_UPDATE();
+//			FORMAT();				   //нужно ли форматировать!!!!!!!! плохо это!!!!
+//			
+//			ShowPowerOffForm();
+//			Delay(700000); 
+//			vga_CLEAR();
+//			vga_UPDATE();	
+//			pin_OFF();
+//		}
+//		else
+//		{
+//			if (key_CHECK_EV(key_EVENT_PRESSED_ESC_MENU)) 
+//			{
+//				ShowPowerOffForm();
+//				Delay(700000); 
+//				vga_CLEAR();
+//				vga_UPDATE();	
+//				pin_OFF();
+//			}
+//		}
+//	
 
-	}
-   else
-    {
-	  REGW(NUMFILE_CURENT,REG(NUMFILE));
-	}
+//	}
+//   else
+//    {
+//	  REGW(NUMFILE_CURENT,REG(NUMFILE));
+//	}
   
 	
 	//---------------------------------------------------------------------------------//
-	if (REG(LOCK_REG) != 100)
-	{
-	MakeTIK();
-	vga_UPDATE();		
-	for(i=0;i<0x2FFFFF;i++){__NOP();}
-	}	
+//	if (REG(LOCK_REG) != 100)
+//	{
+//	MakeTIK();
+//	vga_UPDATE();		
+//	for(i=0;i<0x2FFFFF;i++){__NOP();}
+//	}	
 
   ext_adc_SETUP(20);//16 - 62.5 кГц//20 - 50кГц
   
@@ -1218,8 +1256,7 @@ int main(void)
 
 
   //загружаем мотосекунды
-  Moto_Sec = BKP_ReadBackupRegister(BKP_DR3);
-	
+  Moto_Sec = BKP_ReadBackupRegister(BKP_DR3);	
 	
 		
 	/// Вспоминаем номер маршрута для отображения A и V	
@@ -1243,6 +1280,16 @@ int main(void)
 	if (id_akb == 0) frzbat1 = akbemk_percent; 			
 	else frzbat1 = adc_BAT_PERCENT_edit(); 			
 
+
+	
+	///Если старый аккум., PA3 настраиваем на выход
+	if ( GPIO_ReadInputDataBit(GPIOB,GPIO_Pin_15) == 1) 
+	{		
+		GPIO_InitStructure.GPIO_Pin = GPIO_Pin_3;		
+		GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;
+		GPIO_ResetBits(GPIOA,GPIO_Pin_3);	 
+		GPIO_Init(GPIOA, &GPIO_InitStructure);		
+	}
 	
 	
 	
@@ -1276,7 +1323,7 @@ int main(void)
   IWDG_Enable();
 
 		
-	//Считаем емкость АКБ
+	///Считаем емкость АКБ
 	CAPACITY();	
 
 
@@ -1300,15 +1347,15 @@ int main(void)
 					rod_DEINIT();	
 					Delay(200000);				   //антидребезговая задержка								
 					
-					//жесткий костыль ))
-					if (REG(LOCK_REG) == 100) REGW(LOCK_REG,99);
-					else 
-					{
-						REGW(LOCK_REG,100);
-						__enable_irq();
-						__enable_fiq();
-						NVIC_SystemReset();
-					}			
+//					//жесткий костыль ))
+//					if (REG(LOCK_REG) == 100) REGW(LOCK_REG,99);
+//					else 
+//					{
+//						REGW(LOCK_REG,100);
+//						__enable_irq();
+//						__enable_fiq();
+//						NVIC_SystemReset();
+//					}			
 				 
 				 
 				 SET_CLOCK_SPEED(CLK_72MHz);								
@@ -1443,7 +1490,7 @@ int main(void)
 						LED_CHARGE_OFF();
 						CHARGE_OFF();
 
-						if (measure_stat == 0) CONTROL_BAT(0); ///Проверка АКБ на разряд (вне режима измерения)
+						if (measure_stat == 0) CONTROL_BAT(0); ///Проверка АКБ на разряд (вне режима измерения)						
 		
 						//Alex
 						if ((measure_stat == 0)&&key_CHECK_EV(key_EVENT_PRESSED_MESUARE)) measure_stat = 1; 
@@ -1465,8 +1512,7 @@ int main(void)
 						
 						//ловим событие отжатия кн. "измерение"
 						if (measure_stat == 0)
-						{						
-											
+						{										
 								STOP_MESUARE();
 
 								if (ext_adc_GET_STATUS()==ext_adc_STATUS_STOP)
@@ -1475,10 +1521,7 @@ int main(void)
 								}
 
 								SET_CLOCK_SPEED(CLK_8MHz);							
-							
-						}
-
-					 
+						}				 
 					 
 						//расчет скз или выборка
 						if ((REG(PION_STATUS)&ST_MESUARE)>0)

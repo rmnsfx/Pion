@@ -484,7 +484,8 @@ void men_SHOW_REFRESH(void)
 	
 					  
 						///Обновляем значение переменной по таймеру для индикации заряда					
-						if (timer2 == 0 && measure_stat == 0) 
+						//if (timer2 == 0 && measure_stat == 0) 
+						if (timer2 == 0) 
 						{
 							if (id_akb == 0) frzbat1 = akbemk_percent;
 							else frzbat1 = adc_BAT_PERCENT_edit();
@@ -492,14 +493,12 @@ void men_SHOW_REFRESH(void)
 							
 						///Рисуем батарейку		
 						if (frzbat1 >= 0) men_SHOW_BAT_edit(1,1,frzbat1);
-						else men_SHOW_BAT_edit(1,1,0);
-
-										
+						else men_SHOW_BAT_edit(1,1,0);										
 	
 						//выводи частоту
 						vga_SET_POS_TEXT(1,vga_GET_HEIGHT_DISPLAY-7);
 						switch (REG(CHANEL_MESUARE))
-						 {
+						{
 						  case 0x01: temp_reg = REG(FILTER_A);	   //ускорение
 						  			 if (temp_reg==0x01)  vga_PRINT_STR("5-1000 Гц",&FONT_4x7);
 									 if (temp_reg==0x02)  vga_PRINT_STR("10-1000 Гц",&FONT_4x7);

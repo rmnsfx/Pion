@@ -3,11 +3,13 @@
 .\wav.o: .\FAT\RTL.h
 .\wav.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdio.h
 .\wav.o: wav.h
+.\wav.o: .\FAT\File_Config.h
 .\wav.o: .\fatfs\ff.h
 .\wav.o: .\fatfs\integer.h
 .\wav.o: .\fatfs\ffconf.h
 .\wav.o: .\fatfs\diskio.h
 .\wav.o: main.h
+.\wav.o: .\FAT\File_Config.h
 .\wav.o: .\DRIVER\inc\stm32f10x_iwdg.h
 .\wav.o: ..\PION3\stm32f10x.h
 .\wav.o: .\CMSIS\core_cm3.h

@@ -14,7 +14,7 @@
         <TargetCommonOption>
           <Device>STM32F103RE</Device>
           <Vendor>STMicroelectronics</Vendor>
-          <PackID>Keil.STM32F1xx_DFP.2.0.0</PackID>
+          <PackID>Keil.STM32F1xx_DFP.2.1.0</PackID>
           <PackURL>http://www.keil.com/pack/</PackURL>
           <Cpu>IROM(0x08000000,0x80000) IRAM(0x20000000,0x10000) CPUTYPE("Cortex-M3") CLOCK(12000000) ELITTLE</Cpu>
           <FlashUtilSpec></FlashUtilSpec>
@@ -439,11 +439,6 @@
               <FilePath>.\Flash.c</FilePath>
             </File>
             <File>
-              <FileName>FM25V10.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\FM25V10.c</FilePath>
-            </File>
-            <File>
               <FileName>EXT_ADC.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\EXT_ADC.c</FilePath>
@@ -467,11 +462,6 @@
               <FileName>RealTime.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\RealTime.c</FilePath>
-            </File>
-            <File>
-              <FileName>FLASH_AT45DB.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\FLASH_AT45DB.c</FilePath>
             </File>
             <File>
               <FileName>Road.c</FileName>
@@ -829,11 +819,6 @@
           <GroupName>fatfs</GroupName>
           <Files>
             <File>
-              <FileName>diskio.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\fatfs\diskio.c</FilePath>
-            </File>
-            <File>
               <FileName>ff.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\fatfs\ff.c</FilePath>
@@ -842,6 +827,11 @@
               <FileName>ccsbcs.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\fatfs\option\ccsbcs.c</FilePath>
+            </File>
+            <File>
+              <FileName>mmc_32f1.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\fatfs\mmc_32f1.c</FilePath>
             </File>
           </Files>
         </Group>

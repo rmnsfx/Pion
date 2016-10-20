@@ -1,5 +1,6 @@
 
 #include "stdio.h"
+#include "File_Config.h"
 
 #ifndef _main_h
 #define _main_h
@@ -64,6 +65,8 @@ extern float akbemk_menu;
 
 extern unsigned int usb_charge_state;
 
+extern FATINFO sdinfo;
+
 
 //Выключатель usb для отладки 
 #define USB_SWITCH 1
@@ -71,6 +74,6 @@ extern unsigned int usb_charge_state;
 
 
 //extern float  k_reg_mul;
-#define VER 352
+#define VER 355
 
 #endif

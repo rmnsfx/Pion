@@ -30,9 +30,12 @@
 .\main_1.o: .\USB\usbhw.h
 .\main_1.o: .\USB\usbcore.h
 .\main_1.o: .\USB\mscuser.h
+.\main_1.o: ..\PION3\main.h
+.\main_1.o: .\FAT\File_Config.h
 .\main_1.o: .\USB\memory.h
 .\main_1.o: FileIO.h
 .\main_1.o: wav.h
+.\main_1.o: .\FAT\File_Config.h
 .\main_1.o: IIR.h
 .\main_1.o: ADC.h
 .\main_1.o: Pin.h
@@ -40,6 +43,7 @@
 .\main_1.o: ..\PION3\Pin.h
 .\main_1.o: FM25V10.h
 .\main_1.o: main.h
+.\main_1.o: .\FAT\File_Config.h
 .\main_1.o: FLASH_AT45DB.h
 .\main_1.o: EXT_ADC.h
 .\main_1.o: .\OLED\vga_lib.h
@@ -54,6 +58,7 @@
 .\main_1.o: .\fatfs\diskio.h
 .\main_1.o: Reg.h
 .\main_1.o: main.h
+.\main_1.o: .\FAT\File_Config.h
 .\main_1.o: regmap.h
 .\main_1.o: params.h
 .\main_1.o: RealTime.h

@@ -27,8 +27,8 @@ typedef struct
 //#define _reg_READ(adr,b,c)  	AT45DB_READ_DATA(FILEDATA_OFFSET,adr + reg_OFFSET,(unsigned char *)b,c)
 //#define _reg_WRITE(adr,b,c)		AT45DB_WRITE_DATA(FILEDATA_OFFSET,adr + reg_OFFSET,(unsigned char *)b,c)
 
-#define _reg_READ(adr,b,c)  	AT45DB_READ_DATA(0,adr + reg_OFFSET,(unsigned char *)b,c)
-#define _reg_WRITE(adr,b,c)		AT45DB_WRITE_DATA(0,adr + reg_OFFSET,(unsigned char *)b,c)
+#define _reg_READ(adr,b,c)  	//AT45DB_READ_DATA(0,adr + reg_OFFSET,(unsigned char *)b,c)
+#define _reg_WRITE(adr,b,c)		//AT45DB_WRITE_DATA(0,adr + reg_OFFSET,(unsigned char *)b,c)
 	
 
 TStatus 	   reg_SETUP(void);											  //инициализация уставок

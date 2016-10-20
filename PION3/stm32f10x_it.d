@@ -20,3 +20,5 @@
 .\stm32f10x_it.o: Pin.h
 .\stm32f10x_it.o: main.h
 .\stm32f10x_it.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdio.h
+.\stm32f10x_it.o: .\FAT\File_Config.h
+.\stm32f10x_it.o: .\FAT\RTL.h

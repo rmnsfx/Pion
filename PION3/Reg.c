@@ -101,22 +101,22 @@ TStatus reg_LOAD()
  TStatus		result = _OK;
 
  for (i=0;i<COUNT_REG;i++)
-  if (PARAMS[i].CopyFlash==1)
-   {
-    adr = reg_OFFSET_DATA + i*reg_SIZE_REG;
-    _reg_READ(adr,&DATA_REG.Data[i],reg_SIZE_REG);
+ if (PARAMS[i].CopyFlash==1)
+ {
+		adr = reg_OFFSET_DATA + i*reg_SIZE_REG;
+		_reg_READ(adr,&DATA_REG.Data[i],reg_SIZE_REG);
 
-	if ((DATA_REG.Data[i]>PARAMS[i].Max)||(DATA_REG.Data[i]<PARAMS[i].Min))
-	 {	  
-	  _reg_WRITE(adr,&PARAMS[i].Def,reg_SIZE_REG);
-	  _reg_READ(adr,&temp_data, reg_SIZE_REG);
+		if ((DATA_REG.Data[i] > PARAMS[i].Max)||(DATA_REG.Data[i] < PARAMS[i].Min))
+		{	  
+				_reg_WRITE(adr,&PARAMS[i].Def,reg_SIZE_REG);
+				_reg_READ(adr,&temp_data, reg_SIZE_REG);
 
-	  if (PARAMS[i].Def!=temp_data) result = _ERR; else result = _OK;
-	 }
+				if (PARAMS[i].Def != temp_data) result = _ERR; 
+				else result = _OK;
+		}
 	 	
-   }
-
- return	result; 
+	}
+	return	result; 
 }
 
 

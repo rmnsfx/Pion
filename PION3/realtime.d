@@ -20,6 +20,8 @@
 .\realtime.o: .\DRIVER\inc\misc.h
 .\realtime.o: main.h
 .\realtime.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdio.h
+.\realtime.o: .\FAT\File_Config.h
+.\realtime.o: .\FAT\RTL.h
 .\realtime.o: RealTime.h
 .\realtime.o: .\OLED\vga_lib.h
 .\realtime.o: .\OLED\font.h

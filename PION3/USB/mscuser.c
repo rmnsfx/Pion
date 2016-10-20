@@ -45,6 +45,9 @@ BYTE  BulkLen;                 /* Bulk In/Out Length */
 MSC_CBW CBW;                   /* Command Block Wrapper */
 MSC_CSW CSW;                   /* Command Status Wrapper */
 
+unsigned int MSC_MemorySize; 
+unsigned int MSC_BlockSize;
+unsigned int MSC_BlockCount;
 
 /*
  *  MSC Mass Storage Reset Request Callback
@@ -53,7 +56,8 @@ MSC_CSW CSW;                   /* Command Status Wrapper */
  *    Return Value:    TRUE - Success, FALSE - Error
  */
 
-BOOL MSC_Reset (void) {
+BOOL MSC_Reset (void) 
+{
 
   //GPIOB->ODR &= ~(LED_RD | LED_WR);     /* Turn Off R/W LED */
   BulkStage = MSC_BS_CBW;
@@ -68,7 +72,8 @@ BOOL MSC_Reset (void) {
  *    Return Value:    TRUE - Success, FALSE - Error
  */
 
-BOOL MSC_GetMaxLUN (void) {
+BOOL MSC_GetMaxLUN (void) 
+{
 
   EP0Buf[0] = 0;               /* No LUN associated with this device */
   return (TRUE);
@@ -82,39 +87,49 @@ BOOL MSC_GetMaxLUN (void) {
  *    Return Value:    None
  */
 
-void MSC_MemoryRead (void) {
+void MSC_MemoryRead (void) 
+{	
   DWORD n;
 
-   //GPIO_ResetBits(GPIOC,GPIO_Pin_12);
+	MSC_MemorySize  = sdinfo.DskSize*512;
 
-  if (Length > MSC_MAX_PACKET) {
+  if (Length > MSC_MAX_PACKET) 
+	{
     n = MSC_MAX_PACKET;
-  } else {
+  } 
+	else 
+	{
     n = Length;
   }
 
-  if ((Offset + n) > MSC_MemorySize) {
+  if ((Offset + n) > MSC_MemorySize) 
+	{
     n = MSC_MemorySize - Offset;
     BulkStage = MSC_BS_DATA_IN_LAST_STALL;
   }
+	
+	
   fat_read_data(Offset,&BulkBuf[0],n);
   //USB_WriteEP(MSC_EP_IN, &Memory[Offset], n);
-  USB_WriteEP(MSC_EP_IN, &BulkBuf[0], n);
+  
+	USB_WriteEP(MSC_EP_IN, &BulkBuf[0], n);
+	
   Offset += n;
   Length -= n;
 
   CSW.dDataResidue -= n;
 
-  if (Length == 0) {
+  if (Length == 0) 
+	{
     BulkStage = MSC_BS_DATA_IN_LAST;
   }
 
-  if (BulkStage != MSC_BS_DATA_IN) {
+  if (BulkStage != MSC_BS_DATA_IN) 
+	{
     //GPIOB->ODR &= ~LED_RD;      /* Turn Off Read LED */
     CSW.bStatus = CSW_CMD_PASSED;
   }
-
-  //GPIO_SetBits(GPIOC,GPIO_Pin_12);
+  
 }
 
 
@@ -125,10 +140,10 @@ void MSC_MemoryRead (void) {
  *    Return Value:    None
  */
  
-void MSC_MemoryWrite (void) {
-  //DWORD n;
-
-  //GPIO_ResetBits(GPIOC,GPIO_Pin_12);
+void MSC_MemoryWrite (void) 
+{
+	
+	MSC_MemorySize  = sdinfo.DskSize*512;
 
   if ((Offset + BulkLen) > MSC_MemorySize) {
     BulkLen = MSC_MemorySize - Offset;
@@ -157,13 +172,13 @@ void MSC_MemoryWrite (void) {
 
   CSW.dDataResidue -= BulkLen;
 
-  if ((Length == 0) || (BulkStage == MSC_BS_CSW)) {
+  if ((Length == 0) || (BulkStage == MSC_BS_CSW)) 
+	{
     //GPIOB->ODR &= ~LED_WR;      
     CSW.bStatus = CSW_CMD_PASSED;
     MSC_SetCSW();
   }
-
-  //GPIO_SetBits(GPIOC,GPIO_Pin_12);
+  
 }	
 
 
@@ -174,7 +189,8 @@ void MSC_MemoryWrite (void) {
  *    Return Value:    None
  */
 
-void MSC_MemoryVerify (void) {
+void MSC_MemoryVerify (void) 
+{
   //DWORD n;
 
   /*if ((Offset + BulkLen) > MSC_MemorySize) {
@@ -208,7 +224,9 @@ void MSC_MemoryVerify (void) {
  *    Return Value:    TRUE - Success, FALSE - Error
  */
 
-BOOL MSC_RWSetup (void) {
+BOOL MSC_RWSetup (void) 
+{
+
   DWORD n;
 
   /* Logical Block Address of First Block */
@@ -243,14 +261,17 @@ BOOL MSC_RWSetup (void) {
  *    Return Value:    TRUE - Success, FALSE - Error
  */
 
-BOOL DataInFormat (void) {
+BOOL DataInFormat (void) 
+{
 
-  if (CBW.dDataLength == 0) {
+  if (CBW.dDataLength == 0) 
+	{
     CSW.bStatus = CSW_PHASE_ERROR;
     MSC_SetCSW();
     return (FALSE);
   }
-  if ((CBW.bmFlags & 0x80) == 0) {
+  if ((CBW.bmFlags & 0x80) == 0) 
+	{
     USB_SetStallEP(MSC_EP_OUT);
     CSW.bStatus = CSW_PHASE_ERROR;
     MSC_SetCSW();
@@ -266,9 +287,11 @@ BOOL DataInFormat (void) {
  *    Return Value:    TRUE - Success, FALSE - Error
  */
 
-void DataInTransfer (void) {
+void DataInTransfer (void) 
+{
 
-  if (BulkLen > CBW.dDataLength) {
+  if (BulkLen > CBW.dDataLength) 
+	{
     BulkLen = CBW.dDataLength;
   }
 
@@ -286,12 +309,17 @@ void DataInTransfer (void) {
  *    Return Value:    None
  */
 
-void MSC_TestUnitReady (void) {
+void MSC_TestUnitReady (void) 
+{
 
-  if (CBW.dDataLength != 0) {
-    if ((CBW.bmFlags & 0x80) != 0) {
+  if (CBW.dDataLength != 0) 
+	{
+    if ((CBW.bmFlags & 0x80) != 0) 
+		{
       USB_SetStallEP(MSC_EP_IN);
-    } else {
+    } 
+		else 
+		{
       USB_SetStallEP(MSC_EP_OUT);
     }
   }
@@ -307,7 +335,8 @@ void MSC_TestUnitReady (void) {
  *    Return Value:    None
  */
 
-void MSC_RequestSense (void) {
+void MSC_RequestSense (void) 
+{
 
   if (!DataInFormat()) return;
 
@@ -341,7 +370,8 @@ void MSC_RequestSense (void) {
  *    Return Value:    None
  */
 
-void MSC_Inquiry (void) {
+void MSC_Inquiry (void) 
+{
 
   if (!DataInFormat()) return;
 
@@ -396,7 +426,8 @@ void MSC_Inquiry (void) {
  *    Return Value:    None
  */
 
-void MSC_ModeSense6 (void) {
+void MSC_ModeSense6 (void) 
+{
 
   if (!DataInFormat()) return;
 
@@ -416,7 +447,8 @@ void MSC_ModeSense6 (void) {
  *    Return Value:    None
  */
 
-void MSC_ModeSense10 (void) {
+void MSC_ModeSense10 (void) 
+{
 
   if (!DataInFormat()) return;
 
@@ -440,8 +472,12 @@ void MSC_ModeSense10 (void) {
  *    Return Value:    None
  */
 
-void MSC_ReadCapacity (void) {
+void MSC_ReadCapacity (void) 
+{
 
+	MSC_BlockCount = sdinfo.DskSize;
+	MSC_BlockSize = sdinfo.BytesPerSec;
+	
   if (!DataInFormat()) return;
 
   /* Last Logical Block */
@@ -467,8 +503,12 @@ void MSC_ReadCapacity (void) {
  *    Return Value:    None
  */
 
-void MSC_ReadFormatCapacity (void) {
+void MSC_ReadFormatCapacity (void) 
+{
 
+	MSC_BlockCount = sdinfo.DskSize;
+	MSC_BlockSize = sdinfo.BytesPerSec;
+	
   if (!DataInFormat()) return;
 
   BulkBuf[ 0] = 0x00;
@@ -499,7 +539,8 @@ void MSC_ReadFormatCapacity (void) {
  *    Return Value:    None
  */
 
-void MSC_GetCBW (void) {
+void MSC_GetCBW (void) 
+{
   DWORD n;
 
   for (n = 0; n < BulkLen; n++) {
@@ -601,7 +642,8 @@ fail: CSW.bStatus = CSW_CMD_FAILED;
  *    Return Value:    None
  */
 
-void MSC_SetCSW (void) {
+void MSC_SetCSW (void) 
+{
 
   CSW.dSignature = MSC_CSW_Signature;
   USB_WriteEP(MSC_EP_IN, (BYTE *)&CSW, sizeof(CSW));
@@ -615,7 +657,8 @@ void MSC_SetCSW (void) {
  *    Return Value:    None
  */
 
-void MSC_BulkIn (void) {
+void MSC_BulkIn (void) 
+{
 
   switch (BulkStage) {
     case MSC_BS_DATA_IN:
@@ -645,7 +688,8 @@ void MSC_BulkIn (void) {
  *    Return Value:    None
  */
 
-void MSC_BulkOut (void) {
+void MSC_BulkOut (void) 
+{
 
   BulkLen = USB_ReadEP(MSC_EP_OUT, BulkBuf);
   switch (BulkStage) {

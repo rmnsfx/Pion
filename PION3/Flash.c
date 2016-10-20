@@ -23,49 +23,53 @@
 
 BOOL mmc_init (void)
 {
-	u8 i = 0;
-//	while ((AT45DB_INIT() != 0) || (i < 10)) i++;
-	while (i++ < 10)
-		if (AT45DB_INIT() == 0) break;
-	
- //AT45DB_INIT();
- return (__TRUE);
+//	u8 i = 0;
+////	while ((AT45DB_INIT() != 0) || (i < 10)) i++;
+//	while (i++ < 10)
+//		if (AT45DB_INIT() == 0) break;
+//	
+// //AT45DB_INIT();
+// return (__TRUE);
 }
 
 BOOL mmc_write_sect (U32 sect, U8 *buf, U32 cnt)
 {
- if (sect<MSC_BlockCount)
-  {
-   //memcpy(&Memory[sect*512],buf,cnt*512);
-		GPIO_SetBits(GPIOA,GPIO_Pin_12);
-										
-		__disable_irq();
-		__disable_fiq();
-   AT45DB_WRITE_PAGE(sect+DISK_OFFSET,buf);
-		__enable_irq();
-		__enable_fiq();
-		GPIO_ResetBits(GPIOA,GPIO_Pin_12);										
-   //fram_WRITE(sect*MSC_BlockSize + MSC_Offset,buf,cnt*MSC_BlockSize);
+// if (sect < MSC_BlockCount)
+//  {
+//   //memcpy(&Memory[sect*512],buf,cnt*512);
+//		GPIO_SetBits(GPIOA,GPIO_Pin_12);
+//										
+//		__disable_irq();
+//		__disable_fiq();
+//   AT45DB_WRITE_PAGE(sect+DISK_OFFSET,buf);
+//		__enable_irq();
+//		__enable_fiq();
+//		GPIO_ResetBits(GPIOA,GPIO_Pin_12);										
+//   //fram_WRITE(sect*MSC_BlockSize + MSC_Offset,buf,cnt*MSC_BlockSize);
+		
+	 disk_write(0, buf, sect, 1);
    return (__TRUE);
-  }
- else 
-  return (__FALSE);
+//  }
+// else 
+//  return (__FALSE);
 }
 
 BOOL mmc_read_sect (U32 sect, U8 *buf, U32 cnt)
 {
- if (sect<MSC_BlockCount)
-  {
-		__disable_irq();
-		__disable_fiq();
-   AT45DB_READ_PAGE(sect+DISK_OFFSET,buf);
-		__enable_irq();
-		__enable_fiq();
-   //fram_READ(sect*MSC_BlockSize + MSC_Offset,buf,cnt*MSC_BlockSize);
+ //if (sect<MSC_BlockCount)
+//  {
+//		__disable_irq();
+//		__disable_fiq();
+//   AT45DB_READ_PAGE(sect+DISK_OFFSET,buf);
+//		__enable_irq();
+//		__enable_fiq();
+//   //fram_READ(sect*MSC_BlockSize + MSC_Offset,buf,cnt*MSC_BlockSize);
+		
+		disk_read(0, buf, sect, 1);
    return (__TRUE);
-  }
- else
-  return (__FALSE);///memset(buf,0,cnt*512);
+//  }
+// else
+//  return (__FALSE);///memset(buf,0,cnt*512);
 
 }
 
@@ -79,59 +83,59 @@ BOOL mmc_format(void)
  U32 i;
 
 
- //AT45DB_CHIP_ERASE();
- //AT45DB_CHIP_SET(0);
- //AT45DB_PAGE_ERASE(0); 
+// //AT45DB_CHIP_ERASE();
+// //AT45DB_CHIP_SET(0);
+// //AT45DB_PAGE_ERASE(0); 
 
- //*(unsigned short *)(DiskImage+19) = ClusterPerDisk;  //число кластеров в диске
- //*(unsigned short *)(DiskImage+22) = ClusterPerFat;  //дисло сектаров на фат
-	 //*(uint32_t *)(DiskImage+32) = 3839480;  //дисло сектаров на фат	
- 
-IWDG_ReloadCounter();
-	
-__disable_irq();
-__disable_fiq();
-	
-IWDG_ReloadCounter();
-	
-	AT45DB_WRITE_PAGE(DISK_OFFSET,&DiskImage[0]);				 //пишем бутрекорд
- 	
-__enable_irq();
-__enable_fiq(); 
+// //*(unsigned short *)(DiskImage+19) = ClusterPerDisk;  //число кластеров в диске
+// //*(unsigned short *)(DiskImage+22) = ClusterPerFat;  //дисло сектаров на фат
+//	 //*(uint32_t *)(DiskImage+32) = 3839480;  //дисло сектаров на фат	
+// 
+//IWDG_ReloadCounter();
+//	
+//__disable_irq();
+//__disable_fiq();
+//	
+//IWDG_ReloadCounter();
+//	
+//	AT45DB_WRITE_PAGE(DISK_OFFSET,&DiskImage[0]);				 //пишем бутрекорд
+// 	
+//__enable_irq();
+//__enable_fiq(); 
 
-IWDG_ReloadCounter();
+//IWDG_ReloadCounter();
 
- i = 1000;
-	
- while (i--)
- {
-	 
-	 IWDG_ReloadCounter();
-	 
-__disable_irq();
-__disable_fiq();
-	 
-	 IWDG_ReloadCounter();
-	 
-		AT45DB_WRITE_PAGE(FAT_OFFSET+i,&DiskImage[512]);	  //стераем таблицу фат
-__enable_irq();
-__enable_fiq(); 
-	 
-//	vga_CLEAR();
-//  vga_SET_POS_TEXT(1,1);
-//  vga_PRINT_STR("Форматирование...",&FONT_6x8);
-//												
-//  vga_SET_POS_TEXT(1,20);
-//								sprintf(str_out,"%.1f%%", (1000 - i)/10.0);		 								
-//								vga_PRINT_STR(str_out,&FONT_6x8);
-//								
-//								vga_UPDATE();			
-	 
-	 
-	IWDG_ReloadCounter();
-	 
- }
-	
+// i = 1000;
+//	
+// while (i--)
+// {
+//	 
+//	 IWDG_ReloadCounter();
+//	 
+//__disable_irq();
+//__disable_fiq();
+//	 
+//	 IWDG_ReloadCounter();
+//	 
+//		AT45DB_WRITE_PAGE(FAT_OFFSET+i,&DiskImage[512]);	  //стераем таблицу фат
+//__enable_irq();
+//__enable_fiq(); 
+//	 
+////	vga_CLEAR();
+////  vga_SET_POS_TEXT(1,1);
+////  vga_PRINT_STR("Форматирование...",&FONT_6x8);
+////												
+////  vga_SET_POS_TEXT(1,20);
+////								sprintf(str_out,"%.1f%%", (1000 - i)/10.0);		 								
+////								vga_PRINT_STR(str_out,&FONT_6x8);
+////								
+////								vga_UPDATE();			
+//	 
+//	 
+//	IWDG_ReloadCounter();
+//	 
+// }
+//	
 		 
  
 __disable_irq();

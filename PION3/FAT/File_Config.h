@@ -332,3 +332,6 @@ __weak void _mutex_acquire (int *mutex);
 __weak void _mutex_release (int *mutex);
 __weak int  _stream_list_lock;
 #endif
+
+
+extern FATINFO get_mmc(void);
