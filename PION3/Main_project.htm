@@ -3,7 +3,7 @@
 <title>Static Call Graph - [.\Main_project.axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image .\Main_project.axf</H1><HR>
-<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5050106: Last Updated: Thu Oct 20 17:00:52 2016
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5050106: Last Updated: Fri Oct 21 13:15:25 2016
 <BR><P>
 <H3>Maximum Stack Usage =       3020 bytes + Unknown(Functions without stacksize, Cycles, Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
@@ -943,10 +943,11 @@ Global Symbols
 
 <P><STRONG><a name="[341]"></a>mmc_init</STRONG> (Thumb, 2 bytes, Stack size 0 bytes, flash.o(.text), UNUSED)
 
-<P><STRONG><a name="[105]"></a>mmc_write_sect</STRONG> (Thumb, 24 bytes, Stack size 16 bytes, flash.o(.text))
+<P><STRONG><a name="[105]"></a>mmc_write_sect</STRONG> (Thumb, 38 bytes, Stack size 16 bytes, flash.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 76<LI>Call Chain = mmc_write_sect &rArr; disk_write &rArr; send_cmd &rArr;  send_cmd (Cycle)
 </UL>
 <BR>[Calls]<UL><LI><a href="#[106]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;disk_write
+<LI><a href="#[9b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;disk_initialize
 </UL>
 <BR>[Called By]<UL><LI><a href="#[1dc]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;wipe_disk
 <LI><a href="#[1c8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;cache_fat
@@ -4828,6 +4829,7 @@ Global Symbols
 <LI><a href="#[294]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;deselect
 </UL>
 <BR>[Called By]<UL><LI><a href="#[109]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;f_mkfs
+<LI><a href="#[105]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;mmc_write_sect
 <LI><a href="#[99]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;FAT_Init
 <LI><a href="#[280]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;find_volume
 </UL>

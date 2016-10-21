@@ -34,24 +34,18 @@ BOOL mmc_init (void)
 
 BOOL mmc_write_sect (U32 sect, U8 *buf, U32 cnt)
 {
-// if (sect < MSC_BlockCount)
-//  {
-//   //memcpy(&Memory[sect*512],buf,cnt*512);
-//		GPIO_SetBits(GPIOA,GPIO_Pin_12);
-//										
-//		__disable_irq();
-//		__disable_fiq();
-//   AT45DB_WRITE_PAGE(sect+DISK_OFFSET,buf);
-//		__enable_irq();
-//		__enable_fiq();
-//		GPIO_ResetBits(GPIOA,GPIO_Pin_12);										
-//   //fram_WRITE(sect*MSC_BlockSize + MSC_Offset,buf,cnt*MSC_BlockSize);
-		
-	 disk_write(0, buf, sect, 1);
+	disk_initialize(0);	
+	 						
+	__disable_irq();
+	__disable_fiq();
+	
+	disk_write(0, buf, sect, 1);
+	
+	__enable_irq();
+	__enable_fiq();
+
+
    return (__TRUE);
-//  }
-// else 
-//  return (__FALSE);
 }
 
 BOOL mmc_read_sect (U32 sect, U8 *buf, U32 cnt)
@@ -60,17 +54,14 @@ BOOL mmc_read_sect (U32 sect, U8 *buf, U32 cnt)
 //  {
 //		__disable_irq();
 //		__disable_fiq();
-//   AT45DB_READ_PAGE(sect+DISK_OFFSET,buf);
+
 //		__enable_irq();
 //		__enable_fiq();
-//   //fram_READ(sect*MSC_BlockSize + MSC_Offset,buf,cnt*MSC_BlockSize);
-		
-		disk_read(0, buf, sect, 1);
-   return (__TRUE);
-//  }
-// else
-//  return (__FALSE);///memset(buf,0,cnt*512);
 
+		
+	 disk_read(0, buf, sect, 1);
+	
+   return (__TRUE);
 }
 
 BOOL mmc_read_config (MMCFG *cfg)
