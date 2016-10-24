@@ -34,12 +34,14 @@ BOOL mmc_init (void)
 
 BOOL mmc_write_sect (U32 sect, U8 *buf, U32 cnt)
 {
-	disk_initialize(0);	
+	U8 res;
+	
+	if (disk_status(0) != 0) disk_initialize(0);	
 	 						
 	__disable_irq();
 	__disable_fiq();
 	
-	disk_write(0, buf, sect, 1);
+	res = disk_write(0, buf, sect, 1);
 	
 	__enable_irq();
 	__enable_fiq();
@@ -50,16 +52,18 @@ BOOL mmc_write_sect (U32 sect, U8 *buf, U32 cnt)
 
 BOOL mmc_read_sect (U32 sect, U8 *buf, U32 cnt)
 {
- //if (sect<MSC_BlockCount)
-//  {
-//		__disable_irq();
-//		__disable_fiq();
-
-//		__enable_irq();
-//		__enable_fiq();
-
+	U8 res;
 		
-	 disk_read(0, buf, sect, 1);
+	if (disk_status(0) != 0) disk_initialize(0);	
+	
+		__disable_irq();
+		__disable_fiq();
+
+	res = disk_read(0, buf, sect, 1);
+	
+		__enable_irq();
+		__enable_fiq();
+
 	
    return (__TRUE);
 }
@@ -73,61 +77,7 @@ BOOL mmc_format(void)
 {
  U32 i;
 
-
-// //AT45DB_CHIP_ERASE();
-// //AT45DB_CHIP_SET(0);
-// //AT45DB_PAGE_ERASE(0); 
-
-// //*(unsigned short *)(DiskImage+19) = ClusterPerDisk;  //число кластеров в диске
-// //*(unsigned short *)(DiskImage+22) = ClusterPerFat;  //дисло сектаров на фат
-//	 //*(uint32_t *)(DiskImage+32) = 3839480;  //дисло сектаров на фат	
-// 
-//IWDG_ReloadCounter();
-//	
-//__disable_irq();
-//__disable_fiq();
-//	
-//IWDG_ReloadCounter();
-//	
-//	AT45DB_WRITE_PAGE(DISK_OFFSET,&DiskImage[0]);				 //пишем бутрекорд
-// 	
-//__enable_irq();
-//__enable_fiq(); 
-
-//IWDG_ReloadCounter();
-
-// i = 1000;
-//	
-// while (i--)
-// {
-//	 
-//	 IWDG_ReloadCounter();
-//	 
-//__disable_irq();
-//__disable_fiq();
-//	 
-//	 IWDG_ReloadCounter();
-//	 
-//		AT45DB_WRITE_PAGE(FAT_OFFSET+i,&DiskImage[512]);	  //стераем таблицу фат
-//__enable_irq();
-//__enable_fiq(); 
-//	 
-////	vga_CLEAR();
-////  vga_SET_POS_TEXT(1,1);
-////  vga_PRINT_STR("Форматирование...",&FONT_6x8);
-////												
-////  vga_SET_POS_TEXT(1,20);
-////								sprintf(str_out,"%.1f%%", (1000 - i)/10.0);		 								
-////								vga_PRINT_STR(str_out,&FONT_6x8);
-////								
-////								vga_UPDATE();			
-//	 
-//	 
-//	IWDG_ReloadCounter();
-//	 
-// }
-//	
-		 
+ 
  
 __disable_irq();
 __disable_fiq(); 
@@ -141,30 +91,7 @@ __disable_fiq();
 __enable_irq();
 __enable_fiq(); 
  
-/*	vga_CLEAR();
-  vga_SET_POS_TEXT(1,1);
-  vga_PRINT_STR("Done",&FONT_6x8);
-												
-								
-								vga_UPDATE();*/			
- /*if (ClusterPerFat>0)
-  {
-   //FAT12
-   //DiskImage[512+0]=0xF8;	   //первые 2 кластера всегда заняты
-   //DiskImage[512+1]=0xFF;	   //первые 2 кластера всегда заняты
-   //DiskImage[512+2]=0xFF;	   //первые 2 кластера всегда заняты
-   //FAT16
-   DiskImage[512+0]=0xF8;	   //первые 2 кластера всегда заняты
-   DiskImage[512+1]=0xFF;	   //первые 2 кластера всегда заняты
-   DiskImage[512+2]=0xFF;	   //первые 2 кластера всегда заняты
-   DiskImage[512+3]=0xFF;	    //первые 2 кластера всегда заняты
 
-   
-   AT45DB_WRITE_PAGE(FAT_OFFSET,&DiskImage[512]);
-  }*/
- //корневая директория
- //AT45DB_WRITE_PAGE(473,&BlockName[0]);
-//	write_label("TTTT",3);
  
  return (__TRUE);
 }

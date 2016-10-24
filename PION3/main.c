@@ -1361,6 +1361,12 @@ int main(void)
 				 SET_CLOCK_SPEED(CLK_72MHz);								
 			
 				 usb_transit = 0;	
+				
+				f_mount(&fls, "0:", 1);
+				f_open(&FileTmp,"test.txt", FA_CREATE_ALWAYS | FA_WRITE);
+				f_putc('9',&FileTmp);
+				f_close(&FileTmp);
+				f_mount(0,"0:", 0);
 								 
 			}
 			else 			   

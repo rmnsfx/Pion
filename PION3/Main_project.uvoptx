@@ -143,6 +143,10 @@
       <TargetDriverDllRegistry>
         <SetRegEntry>
           <Number>0</Number>
+          <Key>DLGUARM</Key>
+        </SetRegEntry>
+        <SetRegEntry>
+          <Number>0</Number>
           <Key>ARMRTXEVENTFLAGS</Key>
           <Name>-L70 -Z4 -C0 -M0 -T1</Name>
         </SetRegEntry>
@@ -183,7 +187,7 @@
           <Type>0</Type>
           <LineNumber>1273</LineNumber>
           <EnabledFlag>1</EnabledFlag>
-          <Address>134348854</Address>
+          <Address>134348942</Address>
           <ByteObject>0</ByteObject>
           <HtxType>0</HtxType>
           <ManyObjects>0</ManyObjects>
@@ -199,7 +203,7 @@
           <Type>0</Type>
           <LineNumber>1272</LineNumber>
           <EnabledFlag>1</EnabledFlag>
-          <Address>134348852</Address>
+          <Address>134348940</Address>
           <ByteObject>0</ByteObject>
           <HtxType>0</HtxType>
           <ManyObjects>0</ManyObjects>
@@ -215,7 +219,7 @@
           <Type>0</Type>
           <LineNumber>1251</LineNumber>
           <EnabledFlag>1</EnabledFlag>
-          <Address>134341032</Address>
+          <Address>134341120</Address>
           <ByteObject>0</ByteObject>
           <HtxType>0</HtxType>
           <ManyObjects>0</ManyObjects>
@@ -242,6 +246,11 @@
           <count>2</count>
           <WinNumber>1</WinNumber>
           <ItemText>ca.buf</ItemText>
+        </Ww>
+        <Ww>
+          <count>3</count>
+          <WinNumber>1</WinNumber>
+          <ItemText>buf</ItemText>
         </Ww>
       </WatchWindow1>
       <MemoryWindow1>
