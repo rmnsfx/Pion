@@ -385,19 +385,19 @@ void MSC_Inquiry (void)
   BulkBuf[ 6] = 0x00;
   BulkBuf[ 7] = 0x00;
 
-  BulkBuf[ 8] = 'M';           /* Vendor Identification */
-  BulkBuf[ 9] = 'i';
-  BulkBuf[10] = 'c';
-  BulkBuf[11] = 'r';
-  BulkBuf[12] = 'o';
-  BulkBuf[13] = 'd';
-  BulkBuf[14] = 'r';
-  BulkBuf[15] = 'i';
-  BulkBuf[16] = 'v';           /* Product Identification */
-  BulkBuf[17] = 'e';
+  BulkBuf[ 8] = 'T';           /* Vendor Identification */
+  BulkBuf[ 9] = 'I';
+  BulkBuf[10] = 'K';
+  BulkBuf[11] = ' ';
+  BulkBuf[12] = 'P';
+  BulkBuf[13] = 'I';
+  BulkBuf[14] = 'O';
+  BulkBuf[15] = 'N';
+/*  BulkBuf[16] = ' ';           /* Product Identification 
+  BulkBuf[17] = ' ';
   BulkBuf[18] = ' ';
-  BulkBuf[19] = '*';
-  /*BulkBuf[20] = ' ';
+  BulkBuf[19] = ' ';
+  BulkBuf[20] = ' ';
   BulkBuf[21] = 'M';
   BulkBuf[22] = '3';
   BulkBuf[23] = '2';
@@ -415,7 +415,7 @@ void MSC_Inquiry (void)
   BulkBuf[34] = '0';
   BulkBuf[35] = ' ';*/
 
-  BulkLen = 20;//36;
+  BulkLen = 16;//20;//36;
   DataInTransfer();
 }
 

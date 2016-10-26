@@ -129,7 +129,7 @@ UINT Timer1, Timer2;	/* 1kHz decrement timer stopped at zero (disk_timerproc()) 
 static
 BYTE CardType;			/* Card type flags */
 
-
+unsigned char temp[512];	
 
 /*-----------------------------------------------------------------------*/
 /* SPI controls (Platform dependent)                                     */
@@ -669,19 +669,38 @@ DWORD e;
 return e;	
 }
 
-void test(void)
+
+void READ_REG_FROM_SD (unsigned int adr_page, unsigned short offset, unsigned char *buf, unsigned short size)
 {
+	unsigned char res;
 	
+	if (disk_status(0) != 0) disk_initialize(0);	
 	
-	
-//	select();
-//	//CS_HIGH();
-//	for (Timer1 = 10; Timer1; ) ;
-//	deselect();
-//	//CS_LOW();
-//	for (Timer1 = 10; Timer1; ) ;
-	
+ //копируем страницу в буфер
+ res = disk_read(0, &temp[0], 1+adr_page, 1);
+
+ if ((offset+size) <= 512) memcpy(buf, &temp[offset], size);
 	
 }
+
+
+
+void WRITE_REG_TO_SD (unsigned int adr_page, unsigned short offset, unsigned char *buf, unsigned short size)
+{
+ 
+ unsigned char res;
+		
+ if (disk_status(0) != 0) disk_initialize(0);	
+
+ //копируем страницу в буфер
+ res = disk_read(0, &temp[0], 1+adr_page, 1);
+
+ if ((offset+size) <= 512) memcpy(&temp[offset], buf, size);
+
+ res = disk_write(0, &temp[0], 1+adr_page, 1); 
+
+}
+
+
 
 

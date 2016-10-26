@@ -10,6 +10,7 @@ typedef struct
 
 s8 rod_CreateFile(void);
 s8 rod_GET_NameElement(TNameElement * Element, unsigned char num);
+s8 rod_GET_NameElement_NEXT(TNameElement * Element, unsigned char num);
 s8 rod_INIT(void);
 s8 rod_create_files ( void );
 //void AddPointToRoad ( void );

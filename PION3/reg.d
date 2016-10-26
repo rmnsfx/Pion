@@ -32,6 +32,8 @@
 .\reg.o: .\USB\mscuser.h
 .\reg.o: ..\PION3\main.h
 .\reg.o: .\FAT\File_Config.h
+.\reg.o: .\fatfs\diskio.h
+.\reg.o: .\fatfs\integer.h
 .\reg.o: main.h
 .\reg.o: .\FAT\File_Config.h
 .\reg.o: RealTime.h

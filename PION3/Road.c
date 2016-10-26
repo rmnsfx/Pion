@@ -16,79 +16,91 @@
 u8		t[512];
 TNameElement NEl;
 FILE  		*pRFile = 0;
+FATFS flsys;
+FIL fil;
 
 
 s8 rod_INIT(void)
 {
-	char temp[20];
+	char t1[20];	
+	unsigned char result;
+	unsigned int br, bw;
 	
-	
-	if (pRFile == 0) pRFile = fopen ("M:\\Road.log","r");
-	else 
-	{
-		fclose(pRFile);	
-		pRFile = fopen ("M:\\Road.log","r");
-	}
-	
-	if (pRFile!=0)
-	{
-	
-		fscanf(pRFile, "%s", temp);			
-		fclose(pRFile);	
+	f_mount(&flsys, "0:", 1);
 		
-		pRFile = fopen (temp,"r");
-		
-//		if (pRFile == 0)
-//		{
-//			pRFile = fopen ("M:\\Road.000","r");
-//			if (pRFile == 0)
-//			{
-//				///rod_CreateFile();
-//				//rod_CreateFile_edit();
-//				pRFile = fopen ("M:\\Road.000","r");
-//			}
-//		}
-//	return 0;
+	result = f_open(&fil, "0:Road.log", FA_OPEN_EXISTING | FA_READ);
+	
+	if (result != 0) 
+	{		
+		f_close(&fil);
+		result = f_open(&fil, "0:Road.log", FA_CREATE_ALWAYS | FA_WRITE);		
 	}
+			
+	result = f_read(&fil, t1, sizeof(t1), &br);    
+	f_close(&fil);
 	
+	//result = f_open(&fil, t1, FA_OPEN_EXISTING | FA_READ);
 	
-// pRFile = fopen (FileName,"r");
+	//result = f_sync(&fil);
 
-// if (pRFile==0) return -1; //?????? ???????? ?????
-//	}
-//	
- return 0;
+	f_mount(0, "0:", 0);
+	
+	return result;
 }
 
 
 void rod_DEINIT ( void )
 {
-	if (pRFile != NULL) fclose (pRFile);
+	f_close (&fil);
 }
 
 
 s8 rod_GET_NameElement(TNameElement * Element, unsigned char num)
 {
- if (pRFile==0) return -1;
 
-
- memset(Element,' ',SizeElement);
- 
- if (num==0)	return -1;
-
- fseek(pRFile, (u32)(num-1)*SizeElement, SEEK_SET);
+	unsigned char result;
+	unsigned int br, bw;
+	char tr[20];	
+	char t2[20];
+	FATFS fls2;
+	FIL fil2;
 	
- if (fread(Element,1,SizeElement,pRFile)==SizeElement) 
-	 
-  if (Element->StringName_1[0]==0)
+	if (num == 0)	return -1;	
+	
+	result = disk_status(0);		
+	
+	result = f_mount(&fls2, "0:", 1);	
+	result = f_open(&fil2, "0:Road.log", FA_OPEN_EXISTING | FA_READ);	
+	result = f_read(&fil2, tr, sizeof(tr), &br);    
+	f_close(&fil2);
+	result = f_open(&fil2, tr, FA_OPEN_EXISTING | FA_READ);	
+	
+	memset(Element,' ',SizeElement);	
+	
+	f_lseek(&fil, (u32)(num-1)*SizeElement);		
+	
+	result = f_read(&fil2, Element, SizeElement, &br);
+	
+	if (br == SizeElement) 	 
 	{
-	 memset(Element,0x00,SizeElement);
-	 return -1;
+		if (Element->StringName_1[0] == 0)
+		{
+			memset(Element, 0x00, SizeElement);		
+			return -1;
+		}
+		
+		result = f_close(&fil2);
+		result = f_mount(0,"0:", 0);
+		
+		return 0;
 	}
-   else return 0;
- 
- return -1; 
+	
+	result = f_close(&fil2);
+	result = f_mount(0,"0:", 0);
+
 }
+
+
 
 
 long rod_CreateFile_edit (void)
@@ -103,9 +115,9 @@ long rod_CreateFile_edit (void)
 	long res = 0;
 	char t_str[25];
 	
-	finit();
-	Delay(100000);
-	fat_init();
+//	finit();
+//	Delay(100000);
+//	fat_init();
 
 	__disable_irq();
 	__disable_fiq(); 
@@ -133,11 +145,9 @@ long rod_CreateFile_edit (void)
 	
 	f_close(&Fil);
 		
-	
 	//Только чтение
 	f_chmod("0:Road.0", AM_RDO, AM_RDO | AM_ARC);
-	
-	
+		
 	f_open(&Fil,"0:Road.log", FA_CREATE_ALWAYS | FA_WRITE);
 	f_printf(&Fil,"%s", "Road.0");
 	f_close(&Fil);
@@ -146,20 +156,14 @@ long rod_CreateFile_edit (void)
 	f_printf(&Fil2,"%s", "Road.0");
 	f_close(&Fil2);
 		
-
-	
 //	//Проверяем размер 
 //	f_open(&Fil,"0:Road.100", FA_OPEN_ALWAYS);				
 //	//if (f_size(&Fil) == 16000) res = 1;			
 //	res = f_size(&Fil);
 //	f_close(&Fil);
-	
-	
-	
+		
 	f_mount(0,"0:", 0);
-	
-	
-	
+		
 	__enable_irq();
 	__enable_fiq();
 	

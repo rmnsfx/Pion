@@ -16,27 +16,26 @@
 #include "vga_lib.h"
 
 
-   extern FATFS   fls;            
-   extern FIL     FileTmp;          
-	 extern FRESULT res_t; 
-	 extern	FILINFO fno;
+extern FATFS   fls;            
+extern FIL     FileTmp;          
+extern FRESULT res_t; 
+extern	FILINFO fno;
+
 
 BOOL mmc_init (void)
 {
-//	u8 i = 0;
-////	while ((AT45DB_INIT() != 0) || (i < 10)) i++;
-//	while (i++ < 10)
-//		if (AT45DB_INIT() == 0) break;
-//	
-// //AT45DB_INIT();
-// return (__TRUE);
+
 }
 
 BOOL mmc_write_sect (U32 sect, U8 *buf, U32 cnt)
 {
 	U8 res;
+	FATFS fls;
 	
-	if (disk_status(0) != 0) disk_initialize(0);	
+	res = disk_status(0);
+	
+	//if (res != 0) disk_initialize(0);	
+	if (res != 0) res = f_mount(&fls, "0:", 1);	
 	 						
 	__disable_irq();
 	__disable_fiq();
@@ -45,27 +44,31 @@ BOOL mmc_write_sect (U32 sect, U8 *buf, U32 cnt)
 	
 	__enable_irq();
 	__enable_fiq();
+	res = f_mount(0,"0:", 0);
 
-
-   return (__TRUE);
+	return (__TRUE);
 }
 
 BOOL mmc_read_sect (U32 sect, U8 *buf, U32 cnt)
 {
 	U8 res;
-		
-	if (disk_status(0) != 0) disk_initialize(0);	
+	unsigned char buf_test[512];
 	
-		__disable_irq();
-		__disable_fiq();
+	res = disk_status(0);
+		
+	//if (res != 0) disk_initialize(0);	
+	if (res != 0) res = f_mount(&fls, "0:", 1);	
+	
+	__disable_irq();
+	__disable_fiq();
 
 	res = disk_read(0, buf, sect, 1);
+		
+	__enable_irq();
+	__enable_fiq();
+	res = f_mount(0,"0:", 0);
 	
-		__enable_irq();
-		__enable_fiq();
-
-	
-   return (__TRUE);
+	return (__TRUE);
 }
 
 BOOL mmc_read_config (MMCFG *cfg)

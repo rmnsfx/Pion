@@ -31,3 +31,5 @@
 .\fs_time.o: ..\PION3\main.h
 .\fs_time.o: .\FAT\File_Config.h
 .\fs_time.o: ..\PION3\params.h
+.\fs_time.o: .\fatfs\diskio.h
+.\fs_time.o: .\fatfs\integer.h

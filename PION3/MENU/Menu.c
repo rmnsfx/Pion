@@ -272,29 +272,29 @@ void men_1ms(void)
 //----------------------------------------------------------------//
 void men_SETUP(void)
 {
-// men_LEVEL_ACCES = (men_PAROL1==0);
-// men_TIME_PAROL  = NIL;
- //men_STATUS      = men_MAIN;
-
- //vga_INIT();
- men_SET_CONFIG(REG(CHANEL_MESUARE));		 //меняем конфигурацию меню если выбрали другой канал измерения 
+	unsigned char temp;
 	
- if (rod_INIT()!=0) 
- {
-   men_SHOW_MESSAGE("Ошибка открытия","маршрутного файла",500);
- }
+	men_SET_CONFIG(REG(CHANEL_MESUARE));		 //меняем конфигурацию меню если выбрали другой канал измерения 
+	
+	if (rod_INIT()!=0) 
+	{
+		men_SHOW_MESSAGE("Ошибка открытия","маршрутного файла",500);
+	}
  
- rod_GET_NameElement(&NEl,1);
-	//Alex
-	//Road_Name = NEl.StringName_1;
+	rod_GET_NameElement(&NEl,1);
+	
 	memcpy(Road_Name, NEl.StringName_1, 15);
+ 
 	Road_Number = NEl.Number;
-	//rod_GET_NameElement(&NEl,REG(NUMFILE_CURENT));
+	
 	if (Road_Number == 0) 
 	{
-		REGW(NUMFILE_CURENT,REG(BEYOND_ROAD));
-		rod_GET_NameElement(&NEl,1+REG(BEYOND_ROAD));
-		REGW(NUMFILE_CURENT,1+REG(BEYOND_ROAD));
+		///Номер файла для выборки, текущий
+		//REGW( NUMFILE_CURENT, REG(BEYOND_ROAD) );		
+		temp = REG(BEYOND_ROAD);
+		rod_GET_NameElement( &NEl, 1+REG(BEYOND_ROAD) );		
+		REGW( NUMFILE_CURENT, 1+REG(BEYOND_ROAD) );		
+		
 	}
 	else 
 	{
@@ -438,6 +438,8 @@ void men_SHOW_REFRESH(void)
  uint16_t A, V, S, cn;
  float* result;
  unsigned int sch=0;
+ unsigned int br;
+ unsigned int temp;
 	
 
 	
@@ -649,39 +651,47 @@ void men_SHOW_REFRESH(void)
 							
 							
 							
-									 vga_SET_POS_TEXT(82,1);		
-									 vga_PRINT_STR("ВЬ",&FONT_4x7);				
-									 vga_LINE(91,2,91,6);
-									 
-									 vga_SET_POS_TEXT(92,1);											 
-									 sprintf(t_str,"БОРКА %03d",REG(ROUTE_NUM)+1);									 
-									 vga_PRINT_STR(t_str,&FONT_4x7);
+										vga_SET_POS_TEXT(82,1);		
+										vga_PRINT_STR("ВЬ",&FONT_4x7);				
+										vga_LINE(91,2,91,6);									 
+										vga_SET_POS_TEXT(92,1);											 
+										sprintf(t_str,"БОРКА %03d",REG(ROUTE_NUM)+1);									 
+										vga_PRINT_STR(t_str,&FONT_4x7);
 
-
-									 //vga_RECTANGLE(8,22,20+100+2,33,drRECT_NO_FILL);
-									 vga_SET_POS_TEXT(2,14);
-									 temp_val = REG(SAMPLING_STATUS);	
-								
+										//vga_RECTANGLE(8,22,20+100+2,33,drRECT_NO_FILL);
+										vga_SET_POS_TEXT(2,14);
+										temp_val = REG(SAMPLING_STATUS);									
 									
-									 vga_RECTANGLE(2,25,2+122,29,drRECT_NO_FILL);
-									 if (temp_val==0xFF) temp_val = 0;
+										vga_RECTANGLE(2,25,2+122,29,drRECT_NO_FILL);
+										if (temp_val==0xFF) temp_val = 0;
 
-									 if (BeyondRoad) vga_PRINT_STR(Road_Name,&FONT_6x8);
-									 else vga_PRINT_STR(Road_Name,&FONT_6x8);
-									 
-									 
-									 vga_SET_POS_TEXT(95,14);
-									 sprintf(t_str,"%3d %%",temp_val);
-									 vga_PRINT_STR(t_str,&FONT_6x8);
-								     
-									 vga_SET_POS_TEXT(2,33);
-									 sprintf(t_str,"точка %03d             ",REG(BEYOND_ROAD));
-									 
+										///Имя маршрута
+										if (BeyondRoad) vga_PRINT_STR(Road_Name,&FONT_6x8);
+										else vga_PRINT_STR(Road_Name,&FONT_6x8);
+									 									 
+										vga_SET_POS_TEXT(95,14);
+										sprintf(t_str,"%3d %%",temp_val);
+										vga_PRINT_STR(t_str,&FONT_6x8);
+								    
+										///Точка 
+										vga_SET_POS_TEXT(2,33);
+										sprintf(t_str,"точка %03d             ",REG(BEYOND_ROAD));
+										vga_PRINT_STR(t_str,&FONT_6x8);
 
-									if (BeyondRoad) vga_PRINT_TEXT(NEl.StringName_1,15,&FONT_6x8);
-									else vga_PRINT_TEXT(NEl.StringName_1,15,&FONT_6x8);
+										if (BeyondRoad) vga_PRINT_TEXT(NEl.StringName_1,15,&FONT_6x8);
+										else vga_PRINT_TEXT(NEl.StringName_1,15,&FONT_6x8);
 
 
+										///Номер сигнала в выборке (правый нижний угол)
+										vga_RECTANGLE(2,25,2+122*temp_val/100,29,drRECT_FILL);
+										vga_SET_POS_TEXT(109,56);
+										vga_SET_DRAW_MODE(drMODE_XOR);
+										
+										sprintf(t_str,"%03d",NEl.Number);									
+										vga_PRINT_TEXT(t_str,3,&FONT_6x8);
+										vga_RECTANGLE(108,55,128,64,drRECT_FILL); 
+										vga_SET_DRAW_MODE(drMODE_NORMAL);
+									
 								
 								
 						/////////////////////////////////////////////////////								
@@ -748,13 +758,13 @@ void men_SHOW_REFRESH(void)
 										
 										
 										///sprintf(t_str,"M:\\%03u.%03u\\Signal %d.dat",Road_Number,REG(ROUTE_NUM),NEl.Number);
-										sprintf(t_str,"M:\\%03u.%03u\\Signal %d.dat",road_pos_int,REG(ROUTE_NUM),NEl.Number);								
+										sprintf(t_str,"0:%03u.%03u\\Signal %d.dat",road_pos_int,REG(ROUTE_NUM),NEl.Number);								
 																		
 										A = calc_from_dat_A(t_str);
 										V = calc_from_dat_V(t_str);
 
 
-										sprintf(t_str2,"0:%03u.%03u/Signal %d.dat",road_pos_int,REG(ROUTE_NUM),NEl.Number);
+										sprintf(t_str2,"0:%03u.%03u\\Signal %d.dat",road_pos_int,REG(ROUTE_NUM),NEl.Number);
 										savefilenameTCHAR2 = t_str2;
 										
 										f_mount(&fls, "0:", 1);
@@ -775,11 +785,11 @@ void men_SHOW_REFRESH(void)
 										REGW(NUMFILE_CURENT,temp_reg);
 										rod_GET_NameElement(&NEl,temp_reg);
 										if (NEl.Number == 0) 
-											{
+										{
 											 temp_reg--;
 											 REGW(NUMFILE_CURENT,temp_reg);
 											 rod_GET_NameElement(&NEl,temp_reg);
-											}									
+										}									
 									
 								}
 							
@@ -787,49 +797,47 @@ void men_SHOW_REFRESH(void)
 								///Отображение A,V в выборке
 								
 							 //sprintf(t_str,"M:\\%03u.%03u\\Signal %d.dat",Road_Number,REG(ROUTE_NUM),NEl.Number);	
-							 sprintf(t_str,"M:\\%03u.%03u\\Signal %d.dat",road_indicator,REG(ROUTE_NUM),NEl.Number);	
+							 //sprintf(t_str,"0:%03u.%03u\\Signal %d.dat",road_indicator,REG(ROUTE_NUM),NEl.Number);	
 							 
 							
-									 if (pRFile = fopen (t_str,"r"))
-										 {
-												fseek(pRFile,-4,SEEK_END);
-												fread(&A,2,1,pRFile);
-												fread(&V,2,1,pRFile);
-											 
-												memset(t_str,'\0', 20);
-												sprintf(t_str,"СКЗ A = %3.02f м/с%c",(float)A/100,0xbd);
-												vga_SET_POS_TEXT(2,45);
-												vga_PRINT_TEXT(t_str,20,&FONT_6x8);
+								f_mount(&fls, "0:", 1);
+								res_t = f_open(&Fil, t_str, FA_OPEN_ALWAYS | FA_READ); 
+								if (res_t == 0x00)
+								{								
+									res_t = f_lseek(&Fil, f_size(&Fil)-4);
+									res_t = f_read(&Fil, &A, 2, &br); 
+									res_t = f_read(&Fil, &V, 2, &br); 
+									f_close(&Fil);
+									f_mount(0, "0:", 0);
 
-												if ( (V/100) > 99 )
-												sprintf(t_str,"СКЗ V = %d мм/с ", (int)V/100);
-												else
-												sprintf(t_str,"СКЗ V = %3.01f мм/с", (float)V/100);
-												vga_SET_POS_TEXT(2,57);
-												vga_PRINT_TEXT(t_str,20,&FONT_6x8);
-//												memset(t_str,' ', 20);
-//												vga_SET_POS_TEXT(2,60);
-//												vga_PRINT_TEXT(t_str,20,&FONT_6x8);
-											 
-												fclose(pRFile);
-												SampleAlreadyExist = 1;
-										 }
-										 else SampleAlreadyExist = 0;
-												vga_RECTANGLE(2,25,2+122*temp_val/100,29,drRECT_FILL);
-										 
-										 //if (!BeyondRoad)
-										 {
-												vga_SET_POS_TEXT(109,56);
-												vga_SET_DRAW_MODE(drMODE_XOR);
-												sprintf(t_str,"%03d",NEl.Number);
-												vga_PRINT_TEXT(t_str,3,&FONT_6x8);
-												vga_RECTANGLE(108,55,128,64,drRECT_FILL); 
-												vga_SET_DRAW_MODE(drMODE_NORMAL);
-										 }											 
+									memset(t_str,'\0', 20);
+									sprintf(t_str,"СКЗ A = %3.02f м/с%c",(float)A/100,0xbd);
+									vga_SET_POS_TEXT(2,45);
+									vga_PRINT_TEXT(t_str,20,&FONT_6x8);
+								
+									if ( (V/100) > 99 ) sprintf(t_str,"СКЗ V = %d мм/с ", (int)V/100);
+									else sprintf(t_str,"СКЗ V = %3.01f мм/с", (float)V/100);
+								
+									vga_SET_POS_TEXT(2,57);
+									vga_PRINT_TEXT(t_str,20,&FONT_6x8);									 
+								
+									SampleAlreadyExist = 1;
+								}
+								else 
+								{
+									SampleAlreadyExist = 0;
+									f_close(&Fil);
+									f_mount(0, "0:", 0);
+								}
+								
+
+
 									 //Alex
-										if (temp_val == 0x64) 
-										{measure_stat = 0; 
-											men_EN_MENU();}
+										if (temp_val == 0x64)
+											{
+												measure_stat = 0;
+												men_EN_MENU();
+											}
 								
 									 
 						  default:	 break;		
@@ -910,8 +918,7 @@ void men_SHOW_REFRESH(void)
 						
 						break;
 	
-	case form_CHARGE:
-		
+	case form_CHARGE:		
 	
 	
 	if (id_akb == 0) //Новый АКБ					
@@ -1478,29 +1485,34 @@ void men_CLEAR_ITEM(unsigned char str_num)
 //----------------------------------------------------------------//
 void men_INC_POINT()
 {
- unsigned short pp = 0;
+	unsigned short pp = 0;
 	uint8_t i = 0;
-FILE* pRFile;
+	FILE* pRFile;
 	char temp[10];
+	unsigned int res;
 	
- pp = men_GET_NEXT_ITEM(men_POINTER);
-//if (Items[men_POINTER].Data_reg == 0xFF) road_pos++;	
- if (pp==NIL) return;
-//Alex
+	pp = men_GET_NEXT_ITEM(men_POINTER);
+	//if (Items[men_POINTER].Data_reg == 0xFF) road_pos++;	
+	if (pp==NIL) return;
+	//Alex
 	if ((Items[men_POINTER].Data_reg == 0xFF)||(Items[men_POINTER].Data_reg == 0xFE))
 	{
 		if (road_cursor_pos<4) road_cursor_pos++; 
 		if (road_pos<255) road_pos++;
 		
-		if ((pRFile = fopen ("Roads.txt","r")) != NULL)
-			{
-				fseek(pRFile,9*(road_pos),SEEK_SET);
-				if (fscanf(pRFile, "%s", temp) != 1) road_pos--;
-				fclose(pRFile);
-			}
-			
+		f_mount(&fls, "0:", 1);
+		res = f_open(&FileTmp,"Roads.txt", FA_OPEN_ALWAYS | FA_READ);
+		
+		if (res == 0)	
+		{
+			res = f_lseek(&FileTmp, 9*(road_pos));
+			f_gets(temp, 10, &FileTmp);
+			if (res != 1) road_pos--;
+		}
+		
+		f_close(&FileTmp);
+		f_mount(0,"0:", 0);			
 
-//men_CURSOR_STR++;
 		men_SHOW_MENU();
 		return;
 	}
@@ -1734,7 +1746,8 @@ void men_SHOW_MENU(void)
 	uint16_t b =0;
 	uint16_t c =0;
 	uint16_t d =0;
-	
+	unsigned int res;
+	unsigned int br;
 	uint8_t ip = 0;
 	uint16_t i = 0;
 	uint16_t j = 0;
@@ -1745,6 +1758,7 @@ void men_SHOW_MENU(void)
 	uint16_t AddPos = 0;
   men_STATUS 	   = men_MULTI_ITEM;
   men_s			   = men_CURSOR_STR;
+	
 
 //Alex
 	
@@ -1752,7 +1766,7 @@ void men_SHOW_MENU(void)
 	{
 		vga_CLEAR();
 		men_SHOW_RECT(Items[men_LEVEL_POINT[men_LEVEL-1]].Text_0);
-		//men_SHOW_ITEMS();
+		
 		if (road_pos>4) AddPos = road_pos-4;
 		else AddPos = 0;
 		ip = 0;
@@ -1760,17 +1774,22 @@ void men_SHOW_MENU(void)
 		while (ip<5)
 		{
 			vga_SET_POS_TEXT(men_X0, men_Y0 + men_OFFSET + (unsigned short)ip * men_HEIGHT_STR);
-			pRFile = fopen ("Roads.txt","r");
-			if (pRFile != NULL)
+			
+			
+			f_mount(&fls, "0:", 1);
+			res = f_open(&FileTmp,"Roads.txt", FA_OPEN_ALWAYS | FA_READ);
+			
+			if (res == 0)
 			{
-				fseek(pRFile,9*(ip+AddPos),SEEK_SET);
-				fscanf(pRFile, "%s", temp);
-				fclose(pRFile);
-				if ((pRFile = fopen (temp,"r")) != NULL) 
+				f_lseek(&FileTmp, 9*(ip+AddPos));
+				f_gets(temp, 20, &FileTmp);				
+				f_close(&FileTmp);
+				
+				if ((res = f_open(&FileTmp, temp, FA_OPEN_ALWAYS | FA_READ)) == 0) 
 				{
 					memset(temp,0,20);
-					fread(temp,1,15,pRFile);
-					fclose(pRFile);
+					res = f_read(&FileTmp, temp, 15, &br);
+					f_close(&FileTmp);
 					vga_PRINT_TEXT(temp,20,men_FONT_DEFAULT);
 					NumberOfFiles++;
 				}
@@ -1781,19 +1800,20 @@ void men_SHOW_MENU(void)
 			{
 				memset(temp,0,20);
 				sprintf(temp,"Road.%03u",ip+AddPos);
-				pRFile = fopen (temp,"r");
-				if (pRFile != NULL) 
-					{
-					fread(temp,1,15,pRFile);
-					fclose(pRFile);
-					vga_PRINT_TEXT(temp,20,men_FONT_DEFAULT);
-					//	road_cursor_pos--;
-						NumberOfFiles++;
-					}
+				res = f_open(&FileTmp, temp, FA_OPEN_ALWAYS | FA_READ);
+				if (res == 0) 
+				{
+					res = f_read(&FileTmp, temp, 15, &br);
+					f_close(&FileTmp);
+					vga_PRINT_TEXT(temp,20,men_FONT_DEFAULT);					
+					NumberOfFiles++;
+				}
 			}
 
 			
 		ip++;
+			
+		f_mount(0, "0:", 0);
 			
 		}
 
@@ -1976,43 +1996,23 @@ u8 men_MENU_CONTROL(void)
 u8 key_event = 0;
  if (men_CHECK_EV(men_EVENT_REF))
   {
-   //обновить значения параметров в мульти режиме
-   //if (men_STATUS==men_MULTI_ITEM) men_SHOW_ITEMS(); 
-   //обновить ззначение параметра в одиночном режиме
-   /*if (men_STATUS==men_ONE_ITEM)  {
-    							   men_READ_VALUE_PARAM(men_POINTER);
-								   men_SHOW_ONEITEM(men_POINTER);
-								   //mem_SHOW_ITEM(mem_POINTER,3);
-								  }*/
+
    //обновить главную форму
-   if (men_STATUS==men_MAIN)       
-   									men_SHOW_REFRESH();//mem_SHOW_MAINFORMS(mem_ID_FORM);
+   if (men_STATUS==men_MAIN) men_SHOW_REFRESH();		
 
   }
-
- /*if (men_CHECK_EV(men_EVENT_TIME_MESAGE))	//истекло время меню
-  {
-   men_STATUS = men_SAVE_STATUS;
-   //обновить меню
-   //men_UPDATE(); 
-  }*/
  
- //mem_CONTROL_CONFIG();
 
  //обработка событий клавиатуры
  if (!key_CHECK_ST(key_MESUARE))
-  {
-   /*if (key_CHECK_EV(key_EVENT_PRESSED_ENTER))	 	{SET_CLOCK_SPEED(CLK_72MHz);men_EN_MENU();SET_CLOCK_SPEED(CLK_8MHz);} 
-   if (key_CHECK_EV(key_EVENT_PRESSED_UP))	 	    {SET_CLOCK_SPEED(CLK_72MHz);men_UP_MENU();SET_CLOCK_SPEED(CLK_8MHz);} 
-   if (key_CHECK_EV(key_EVENT_PRESSED_DOWN))	 	{SET_CLOCK_SPEED(CLK_72MHz);men_DW_MENU();SET_CLOCK_SPEED(CLK_8MHz);} 
-   if (key_CHECK_EV(key_EVENT_PRESSED_ESC_MENU))	{SET_CLOCK_SPEED(CLK_72MHz);men_ES_MENU();SET_CLOCK_SPEED(CLK_8MHz);} */
+  {  
 
    if (key_CHECK_EV(key_EVENT_PRESSED_ENTER))	 	{key_event = 1; measure_stat = 0; men_EN_MENU();}
    if (key_CHECK_EV(key_EVENT_PRESSED_UP))	 	    {key_event = 1;measure_stat = 0;men_UP_MENU();}
    if (key_CHECK_EV(key_EVENT_PRESSED_DOWN))	 	{key_event = 1;measure_stat = 0;men_DW_MENU();}
    if (key_CHECK_EV(key_EVENT_PRESSED_ESC_MENU))	{key_event = 1;measure_stat = 0;men_ES_MENU();}
   }			
-//if (men_STATUS!=men_MAIN)&&key_event ==   measure_stat = 0; 	
+
 return  key_event;  
 }
 
@@ -2021,12 +2021,13 @@ return  key_event;
 //----------------------------------------------------------------//
 void men_UP_MENU(void)
 {
- unsigned int temp_reg;
- //if (mem_TIME_PAROL!=NIL) mem_TIME_PAROL = mem_TIME_RES_PAROL; 
-BeyondRoad = 0;
- switch (men_STATUS)
-   {
-    case men_MAIN:      
+	
+	unsigned int temp_reg;
+ 
+	BeyondRoad = 0;
+	switch (men_STATUS)
+  {
+			case men_MAIN:      
 //						if (Road_Number != 0)
 //						{	
 								temp_reg = REG(NUMFILE_CURENT);
@@ -2609,6 +2610,7 @@ void men_EN_MENU(void)
 	DWORD sector[2];
 	uint8_t ffarr1[50000];
 	TCHAR* ffarr2;
+	unsigned int res;
 	
  
 	switch (men_STATUS)
@@ -2674,10 +2676,10 @@ void men_EN_MENU(void)
 											}
 									
 
-											sprintf(FileName,"M:\\%03u.%03u\\Signal %d.dat",road_pos_int,REG(ROUTE_NUM),NEl.Number);											
+											sprintf(FileName,"0:%03u.%03u\\Signal %d.dat",road_pos_int,REG(ROUTE_NUM),NEl.Number);											
 																			
 											sprintf(savefiledir,"0:%03u.%03u",road_pos_int,REG(ROUTE_NUM));		
-											sprintf(savefilename,"0:%03u.%03u/Signal %d.dat",road_pos_int,REG(ROUTE_NUM),NEl.Number);
+											sprintf(savefilename,"0:%03u.%03u\\Signal %d.dat",road_pos_int,REG(ROUTE_NUM),NEl.Number);
 														
 											Num_of_Road = Road_Number;				
 									
@@ -2797,29 +2799,38 @@ void men_EN_MENU(void)
 					
 			sample_pos = 0;
 			sample_cursor_pos = 0;
-
+			 
+			f_mount(&fls, "0:", 1);
+			 
 			if(road_pos == 0)
 			{
-				if ((pRFile = fopen ("Roads.txt","r")) != NULL)
-				{
-					fseek(pRFile,9*(road_pos),SEEK_SET);
-					fscanf(pRFile, "%s", FileName);
-					fclose(pRFile);
+				res = f_open(&Fil,"Roads.txt", FA_READ | FA_OPEN_ALWAYS );  
+				
+				if (res == 0)					
+				{					
+					f_lseek(&FileTmp, 9*(road_pos));
+					f_gets(temp, 20, &FileTmp);					
+					f_close(&FileTmp);
 					
-					if ((pRFile = fopen ("M:\\Road.log","w")) != NULL)
+					res = f_open(&FileTmp,"Road.log", FA_WRITE | FA_CREATE_ALWAYS );  
+					if (res == 0)
 					{
-						fprintf(pRFile,"%s",FileName);
-						fclose(pRFile);
+						f_printf(&FileTmp,"%s",FileName);
+						f_close(&FileTmp);
+						f_mount(0, "0:", 0);
 					}
 				}
 				else
 				{
-					if ((pRFile = fopen ("M:\\Road.log","w")) != NULL)
+					res = f_open(&FileTmp,"Road.log", FA_WRITE | FA_CREATE_ALWAYS );  
+					if (res == 0)
 					{
-						fprintf(pRFile,"Road.%03u",road_pos);
-						fclose(pRFile);
+						f_printf(&FileTmp,"Road.%03u",road_pos);
+						f_close(&FileTmp);
+						f_mount(0, "0:", 0);
 					}				
 				}
+				
 				REGW(NUMFILE_CURENT,0x00);
 				REGW(ROUTE_NUM,0);
 
@@ -2830,7 +2841,7 @@ void men_EN_MENU(void)
 				
 				BKP_WriteBackupRegister(BKP_DR12, road_indicator);
 
-				 return;
+			  return;
 			}
 			else men_CALL_CUB_ITEM();
 			return;

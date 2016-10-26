@@ -182,7 +182,7 @@ void Timer_1ms_CallBack(void)
 			if (timer2 == 30) timer2 = 0; ///30 секунд
 			if (timer3 == 900000) timer3 = 0; ///15 мин.
 			
-			if(timer4 == 5)
+			if(timer4 == 10)
 			{
 				disk_timerproc();
 				timer4=0;	
@@ -1132,32 +1132,30 @@ int main(void)
   
   SystemInit();
   SET_CLOCK_SPEED(CLK_72MHz); 
+	
   //инициализация внутреннего АЦП -----------------------------//
   adc_SETUP();
   
-
-  
   vga_INIT();
 	
-	
-  first_flag = 1; /// Флаг первого включения
-	
-
-	
+	/// Флаг первого включения
+  first_flag = 1; 
 	
   //минимальная диагностика----------------------------------------------------------//
   if (rtc_SETUP()==_ERR) GLOBAL_ERROR|=0x01;	//тест часов
   if (FAT_Init() ==_ERR) GLOBAL_ERROR|=0x04;;	//тест фат
 	
+	/// Копируем параметры sd-карты в глоб. переменную для иниц. карты по usb 
 	sdinfo = get_mmc();
 	
 	USB_Init();                                        // USB Initialization
 	
   if (reg_SETUP()==_ERR) GLOBAL_ERROR|=0x02;	//начальная инициализация регистров
-  GLOBAL_ERROR = 0;
   
-	MakeTIK();
+  
+	MakeTIK();	
 	vga_UPDATE();	
+	Delay(5000000);
 
 	
 	
@@ -1248,7 +1246,7 @@ int main(void)
 
   //задаем новую конфигурацию меню, если нажаты кнопки "верх","вниз"
   if ((key_CHECK_ST(key_UP))&&(key_CHECK_ST(key_DOWN))) 
-   men_SET_CONFIG(0x80);
+  men_SET_CONFIG(0x80);
 
 
   k_reg = ((float)REG(K_VIBRO)/1000);
@@ -1269,7 +1267,7 @@ int main(void)
 	///Вспоминаем емкость АКБ	
 	akbemk_count = (float) BKP_ReadBackupRegister(BKP_DR10) * 0.00001831082;
 	
-	//Читаем значение емкости из регистра меню
+	///Читаем значение емкости из регистра меню
 	if (REG(AKB_EMK_COUNT) == 0) akbemk_menu = 0.6;
 	else akbemk_menu = 1.2;
 	
@@ -1290,6 +1288,14 @@ int main(void)
 		GPIO_ResetBits(GPIOA,GPIO_Pin_3);	 
 		GPIO_Init(GPIOA, &GPIO_InitStructure);		
 	}
+	
+	
+	IWDG_WriteAccessCmd(IWDG_WriteAccess_Enable);
+  IWDG_SetPrescaler(IWDG_Prescaler_256);
+  //IWDG_SetReload(0xFF);
+	IWDG_SetReload(0x400);
+  IWDG_Enable();
+	
 	
 	
 	
@@ -1315,14 +1321,6 @@ int main(void)
 
 	
 	
-	
-	IWDG_WriteAccessCmd(IWDG_WriteAccess_Enable);
-  IWDG_SetPrescaler(IWDG_Prescaler_256);
-  //IWDG_SetReload(0xFF);
-	IWDG_SetReload(0x400);
-  IWDG_Enable();
-
-		
 	///Считаем емкость АКБ
 	CAPACITY();	
 
@@ -1338,6 +1336,7 @@ int main(void)
 			 
 			 USB_CONNECT = pin_USB_5V;	 
 
+			 
 			 
 			if (USB_CONNECT)  //если было событие подключен USB
 			{								
@@ -1361,12 +1360,6 @@ int main(void)
 				 SET_CLOCK_SPEED(CLK_72MHz);								
 			
 				 usb_transit = 0;	
-				
-				f_mount(&fls, "0:", 1);
-				f_open(&FileTmp,"test.txt", FA_CREATE_ALWAYS | FA_WRITE);
-				f_putc('9',&FileTmp);
-				f_close(&FileTmp);
-				f_mount(0,"0:", 0);
 								 
 			}
 			else 			   
@@ -1392,7 +1385,7 @@ int main(void)
 					
 						for (j=0;j<=255;j++)
 						{
-							sprintf(FileName,"M:\\%03u.%03u\\Signal %d.dat",0,0,j);						
+							sprintf(FileName,"0:%03u.%03u/Signal %d.dat",0,0,j);						
 							if (f_stat(FileName, &fno) == FR_OK) temp_reg++;						
 						}
 						
@@ -1422,9 +1415,10 @@ int main(void)
 						f_close(&FileTmp);
 
 						f_getlabel("", FileName, 0);
-						if(strcmp(FileName, "PION-3"))
+						
+						if(strcmp(FileName, "PION"))
 						{
-							f_setlabel("PION-3");
+							f_setlabel("PION");
 						}
 							
 						f_mount(0,"0:", 0);
@@ -1440,24 +1434,21 @@ int main(void)
 						j = 0;
 							
 							
-						//*Alex
-				if ((pRFile = fopen ("M:\\prog1.bin","rb")) != NULL) 
-				{
-						JumpToApplication(0x8000000);
-						road_pos = 0;
-						road_cursor_pos = 0;
-				}	
-
-						
+//						//*Alex
+//				if ((pRFile = fopen ("M:\\prog1.bin","rb")) != NULL) 
+//				{
+//						JumpToApplication(0x8000000);
+//						road_pos = 0;
+//						road_cursor_pos = 0;
+//				}							
 		
 				SET_CLOCK_SPEED(CLK_8MHz); 
-				Delay(200000);				   //антидребезговая задержка
-							
+				
+				Delay(200000);				   //антидребезговая задержка							
 		
 				rod_INIT();
 				
-				men_SHOW_MAINFORMS(form_MESUARE); 			
-					 
+				men_SHOW_MAINFORMS(form_MESUARE); 						 
 
 			}		
 				
@@ -1496,7 +1487,7 @@ int main(void)
 						LED_CHARGE_OFF();
 						CHARGE_OFF();
 
-						if (measure_stat == 0) CONTROL_BAT(0); ///Проверка АКБ на разряд (вне режима измерения)						
+						//if (measure_stat == 0) CONTROL_BAT(0); ///Проверка АКБ на разряд (вне режима измерения)						
 		
 						//Alex
 						if ((measure_stat == 0)&&key_CHECK_EV(key_EVENT_PRESSED_MESUARE)) measure_stat = 1; 

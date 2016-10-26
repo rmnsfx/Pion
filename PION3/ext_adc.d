@@ -34,3 +34,5 @@
 .\ext_adc.o: ..\PION3\main.h
 .\ext_adc.o: .\FAT\File_Config.h
 .\ext_adc.o: params.h
+.\ext_adc.o: .\fatfs\diskio.h
+.\ext_adc.o: .\fatfs\integer.h
