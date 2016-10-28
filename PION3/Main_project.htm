@@ -3,7 +3,7 @@
 <title>Static Call Graph - [.\Main_project.axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image .\Main_project.axf</H1><HR>
-<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5050106: Last Updated: Fri Oct 28 14:42:27 2016
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5050106: Last Updated: Fri Oct 28 15:18:22 2016
 <BR><P>
 <H3>Maximum Stack Usage =       3020 bytes + Unknown(Functions without stacksize, Cycles, Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
@@ -417,7 +417,7 @@ Global Symbols
 <LI><a href="#[8c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__2sprintf
 </UL>
 
-<P><STRONG><a name="[8d]"></a>FORMAT</STRONG> (Thumb, 540 bytes, Stack size 536 bytes, main_1.o(.text))
+<P><STRONG><a name="[8d]"></a>FORMAT</STRONG> (Thumb, 524 bytes, Stack size 536 bytes, main_1.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 2684 + Unknown Stack Size
 <LI>Call Chain = FORMAT &rArr; rod_CreateFile_edit &rArr; f_open &rArr; dir_register &rArr; dir_find &rArr; dir_next &rArr; create_chain &rArr; put_fat &rArr; move_window &rArr; sync_window &rArr; disk_write &rArr; send_cmd &rArr;  send_cmd (Cycle)
 </UL>
@@ -953,13 +953,12 @@ Global Symbols
 <LI><a href="#[1cc]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;write_sector
 </UL>
 
-<P><STRONG><a name="[107]"></a>mmc_read_sect</STRONG> (Thumb, 68 bytes, Stack size 24 bytes, flash.o(.text))
+<P><STRONG><a name="[107]"></a>mmc_read_sect</STRONG> (Thumb, 72 bytes, Stack size 24 bytes, flash.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 252<LI>Call Chain = mmc_read_sect &rArr; f_mount &rArr; find_volume &rArr; check_fs &rArr; move_window &rArr; sync_window &rArr; disk_write &rArr; send_cmd &rArr;  send_cmd (Cycle)
 </UL>
 <BR>[Calls]<UL><LI><a href="#[105]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;disk_status
 <LI><a href="#[108]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;disk_read
 <LI><a href="#[d7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;f_mount
-<LI><a href="#[98]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;disk_initialize
 </UL>
 <BR>[Called By]<UL><LI><a href="#[20d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;read_cache
 <LI><a href="#[1d5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;read_sector
@@ -4898,7 +4897,6 @@ Global Symbols
 <LI><a href="#[29d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;deselect
 </UL>
 <BR>[Called By]<UL><LI><a href="#[109]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;f_mkfs
-<LI><a href="#[107]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;mmc_read_sect
 <LI><a href="#[96]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;FAT_Init
 <LI><a href="#[28a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;find_volume
 </UL>

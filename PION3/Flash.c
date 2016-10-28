@@ -54,8 +54,8 @@ BOOL mmc_read_sect (U32 sect, U8 *buf, U32 cnt)
 		unsigned int res;
 	
 		res = disk_status(0);
-		//if (res != 0) res = f_mount(&fls, "0:", 1);	
-		if (res != 0) res = disk_initialize(0);;	
+		if (res != 0) res = f_mount(&fls, "0:", 1);	
+		//if (res != 0) res = disk_initialize(0);;	
 
 
 		__disable_irq();

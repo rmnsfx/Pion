@@ -619,8 +619,8 @@ TStatus FORMAT(void)
 	res = rod_CreateFile_edit();	
 	
 	
-	vga_CLEAR();
-	men_SHOW_MESSAGE("Форматирование...","",0);
+//	vga_CLEAR();
+//	men_SHOW_MESSAGE("Форматирование...","",0);
 	vga_SET_DRAW_MODE(drMODE_NORMAL);
 	vga_RECTANGLE(1,30,vga_GET_WIDTH_DISPLAY-3,33,drRECT_NO_FILL);
 	vga_UPDATE();	
@@ -641,11 +641,10 @@ TStatus FORMAT(void)
 	vga_UPDATE();	
 			
 
-
 	IWDG_ReloadCounter();
 
 	Delay(1500000);
-	
+		
 
 	vga_CLEAR();
   vga_SET_POS_TEXT(28,25);  
@@ -657,6 +656,7 @@ TStatus FORMAT(void)
 	BKP_WriteBackupRegister(BKP_DR12, 0); ///Индикация A,V
 		
 	pin_OFF();
+	
 	
 	return _OK;
 	
