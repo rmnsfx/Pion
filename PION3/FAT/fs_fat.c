@@ -131,6 +131,28 @@ unsigned char n=0;
 char str_out[5];
 int ii=0;	
 						
+//	
+//	m11:
+//	
+//	mmc_init ();		
+//	
+//  /* Initialize Flash Card interface. */
+//  if (mmc_init () == __FALSE) 
+//	{
+//    
+////						vga_CLEAR();
+////						vga_SET_POS_TEXT(1,50);
+////						sprintf(str_out,"%d", ii++);						
+////						vga_PRINT_STR(str_out,&FONT_6x8);
+////						vga_UPDATE();	
+//						
+//		
+//		/* Failed to Initialize or No Card error. */
+//    if(++n>=4) return (1);
+//		else 
+//			goto m11;
+//					
+//  }
 
   /* Initialize FAT file system. */
   return (init_dev ());
@@ -1623,7 +1645,7 @@ BOOL fat_write_data(U32 adr, U8 *buf, U16 cnt)
  if (read_sector(sect)==__TRUE)
   {
    	memcpy(&ca.buf[offset],buf,cnt);
-	  return (write_sector(sect));
+	return (write_sector(sect));
   }
 
  return (__FALSE);
@@ -1953,7 +1975,8 @@ static BOOL is_fat_valid (void) {
     case 8:
     case 16:
     case 32:
-    case 64: break;
+    case 64: 
+		case 128: break;
     default: return (__FALSE);
   }
   /* There should be at least 1 reserved sector. */

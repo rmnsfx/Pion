@@ -94,7 +94,7 @@
 #include "diskio.h"
 #include "FLASH_AT45DB.h"
 #include "main.h"
-
+#include "ff.h"
 
 
 /* MMC/SD command */
@@ -129,7 +129,7 @@ UINT Timer1, Timer2;	/* 1kHz decrement timer stopped at zero (disk_timerproc()) 
 static
 BYTE CardType;			/* Card type flags */
 
-
+unsigned char buf_temp[512];	
 
 /*-----------------------------------------------------------------------*/
 /* SPI controls (Platform dependent)                                     */
@@ -669,19 +669,40 @@ DWORD e;
 return e;	
 }
 
-void test(void)
+
+void READ_REG_FROM_SD (unsigned int adr_page, unsigned short offset, unsigned char *buf, unsigned short size)
 {
+	unsigned char res;
+	FATFS fatfs;
 	
+	if (disk_status(0) != 0) res = f_mount(&fatfs, "0:", 1);	
 	
-	
-//	select();
-//	//CS_HIGH();
-//	for (Timer1 = 10; Timer1; ) ;
-//	deselect();
-//	//CS_LOW();
-//	for (Timer1 = 10; Timer1; ) ;
-	
+ //копируем страницу в буфер
+ res = disk_read(0, &buf_temp[0], 1+adr_page, 1);
+
+ if ((offset+size) <= 512) memcpy(buf, &buf_temp[offset], size);
 	
 }
+
+
+
+void WRITE_REG_TO_SD (unsigned int adr_page, unsigned short offset, unsigned char *buf, unsigned short size)
+{
+ 
+ unsigned char res;
+	FATFS fatfs;
+		
+ if (disk_status(0) != 0) res = f_mount(&fatfs, "0:", 1);	
+
+ //копируем страницу в буфер
+ res = disk_read(0, &buf_temp[0], 1+adr_page, 1);
+
+ if ((offset+size) <= 512) memcpy(&buf_temp[offset], buf, size);
+
+ res = disk_write(0, &buf_temp[0], 1+adr_page, 1); 
+
+}
+
+
 
 

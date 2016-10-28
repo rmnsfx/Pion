@@ -95,6 +95,7 @@ int timer1=0;
 int timer2=0;
 int timer3=0;
 int timer4=0;
+int timer5=0;
  
 int frzbat1=0;
 int frzbat2=0; 
@@ -117,6 +118,7 @@ float akbemk_volt = 0;
 int akbstatus = -1;
 float akbemk_menu = 0;
 FATINFO sdinfo;
+
 
 
 
@@ -160,8 +162,13 @@ void Timer_1ms_CallBack(void)
 			men_1ms();			
 			key_1ms();
 
-							
-			if (REG(AUTOPOWEROFF) == 1) POWER_OFF--;
+			if(timer4 == 5)
+			{
+				
+				timer4=0;	
+			}
+				
+			POWER_OFF--;
 				
 			 if (Sec_timer==0) {
 								Sec_timer = 1000; 
@@ -181,15 +188,14 @@ void Timer_1ms_CallBack(void)
 			
 			if (timer2 == 30) timer2 = 0; ///30 секунд
 			if (timer3 == 900000) timer3 = 0; ///15 мин.
-			
-			if(timer4 == 5)
+			timer4++;
+									
+			if(timer5 == 10)
 			{
 				disk_timerproc();
-				timer4=0;	
+				timer5=0;	
 			}
-			else timer4++;
-									
-			
+			else timer5++;
 			
 }
 
@@ -658,52 +664,13 @@ TStatus FORMAT(void)
 	
 }
 
-void SPI_SETUP(void)
-{
-  RCC->APB2ENR |=  RCC_APB2ENR_AFIOEN;//???????? ???????????? ?????????????? ???????
-  RCC->APB2ENR |=  RCC_APB2ENR_IOPAEN;//???????? ???????????? ????? ?
-	//RCC_APB2PeriphClockCmd(RCC_APB2Periph_SPI1, ENABLE);
- 
-  //????? ?????????? SS: ????? ???????????, ?????? ??????????,50MHz
-  GPIOA->CRL   |=  GPIO_CRL_MODE4;    //
-  GPIOA->CRL   &= ~GPIO_CRL_CNF4;     //
-  GPIOA->BSRR   =  GPIO_BSRR_BS4;     //
- 
-  //????? SCK: ????? ???????????, ?????????????? ???????, 50MHz
-  GPIOA->CRL   |=  GPIO_CRL_MODE5;    //
-  GPIOA->CRL   &= ~GPIO_CRL_CNF5;     //
-  GPIOA->CRL   |=  GPIO_CRL_CNF5_1;   //
- 
-  //????? MISO: ???? ???????? ? ????????????? ??????????, ???????? ? ?????
-  GPIOA->CRL   &= ~GPIO_CRL_MODE6;    //
-  GPIOA->CRL   &= ~GPIO_CRL_CNF6;     //
-  GPIOA->CRL   |=  GPIO_CRL_CNF6_1;   //
-  GPIOA->BSRR   =  GPIO_BSRR_BS6;     //
- 
-  //????? MOSI: ????? ???????????, ?????????????? ???????, 50MHz
-  GPIOA->CRL   |=  GPIO_CRL_MODE7;    //
-  GPIOA->CRL   &= ~GPIO_CRL_CNF7;     //
-  GPIOA->CRL   |=  GPIO_CRL_CNF7_1;   //
-
-
-
-	RCC->APB2ENR |= RCC_APB2ENR_SPI1EN;
-	SPI1->CR2     = 0x0000;
-	SPI1->CR1     = SPI_CR1_MSTR;       //?????????? ?????? ???? ????????,???????
-  //SPI1->CR1    |= SPI_CR1_BR;         //??? ?????? ??????? ????????? ????????
-	SPI1->CR1    |= SPI_CR1_BR_1;
-  SPI1->CR1    |= SPI_CR1_SSI;
-  SPI1->CR1    |= SPI_CR1_SSM;
-	SPI1->CR1    |= SPI_CR1_SPE; 
-}
-
 TStatus FAT_Init(void)
 {
   u32 res;
   
 	SPI_SETUP();	
 	res = disk_initialize(0);
-	res = finit(); 
+	res = finit();   
 
   return _OK;	 
 }
@@ -894,7 +861,7 @@ void CONTROL_POWER(u8 RESET)
 {
 		 if (key_STATE > 0) POWER_OFF = TIME_POWER_OFF; 
 
-		 if (pin_USB_5V) POWER_OFF = TIME_POWER_OFF; 	
+		 //if (pin_USB_5V) POWER_OFF = TIME_POWER_OFF; 	
 	
 		 ///if (measure_stat == 2) POWER_OFF = TIME_POWER_OFF; 
 			
@@ -1136,7 +1103,7 @@ int main(void)
   adc_SETUP();
   
 
-  
+  USB_Init();                                        // USB Initialization
   vga_INIT();
 	
 	
@@ -1148,94 +1115,89 @@ int main(void)
   //минимальная диагностика----------------------------------------------------------//
   if (rtc_SETUP()==_ERR) GLOBAL_ERROR|=0x01;	//тест часов
   if (FAT_Init() ==_ERR) GLOBAL_ERROR|=0x04;;	//тест фат
-	
-	sdinfo = get_mmc();
-	
-	USB_Init();                                        // USB Initialization
-	
   if (reg_SETUP()==_ERR) GLOBAL_ERROR|=0x02;	//начальная инициализация регистров
   GLOBAL_ERROR = 0;
   
-	MakeTIK();
-	vga_UPDATE();	
-
+	
+	/// Копируем параметры sd-карты в глоб. переменную для иниц. карты по usb 
+	sdinfo = get_mmc();
 	
 	
-//	if (GLOBAL_ERROR>0) 	 //если есть ошибка
-//	{	   
-//						 temp_reg = 0;
-//						 //выводим сообщение об ошибке 
-//						 vga_PRINT_STR("ERROR:",&FONT_6x8);
-//						 
-//						 if (GLOBAL_ERROR&0x01)   {vga_SET_POS_TEXT(5,++temp_reg*10);vga_PRINT_STR("Часы",&FONT_6x8);}
-//						 if (GLOBAL_ERROR&0x02)   {vga_SET_POS_TEXT(5,++temp_reg*10);vga_PRINT_STR("Инициализация FLASH",&FONT_6x8);}
-//						 if (GLOBAL_ERROR&0x04)   {vga_SET_POS_TEXT(5,++temp_reg*10);vga_PRINT_STR("Инициализация FAT16",&FONT_6x8);}
-//						 
-//						 vga_UPDATE();						 
-//						 
-//						 Delay(700000); 
-//						 ShowPowerOffForm();
-//						 Delay(700000); 						 
-//						 pin_OFF();
-//	}
+	if (GLOBAL_ERROR>0) 	 //если есть ошибка
+			{	   
+						 temp_reg = 0;
+						 //выводим сообщение об ошибке 
+						 vga_PRINT_STR("ERROR:",&FONT_6x8);
+						 
+						 if (GLOBAL_ERROR&0x01)   {vga_SET_POS_TEXT(5,++temp_reg*10);vga_PRINT_STR("Часы",&FONT_6x8);}
+						 if (GLOBAL_ERROR&0x02)   {vga_SET_POS_TEXT(5,++temp_reg*10);vga_PRINT_STR("Инициализация FLASH",&FONT_6x8);}
+						 if (GLOBAL_ERROR&0x04)   {vga_SET_POS_TEXT(5,++temp_reg*10);vga_PRINT_STR("Инициализация FAT16",&FONT_6x8);}
+						 
+						 vga_UPDATE();						 
+						 
+						 Delay(700000); 
+						 ShowPowerOffForm();
+						 Delay(700000); 						 
+						 pin_OFF();
+			}
 
-//		
-//					
+		
+					
 
 						
-//   if (REG(NUMFILE)==0) //установлен лок байт
-//    {
-//	 //форматируем
-//	 vga_SET_POS_TEXT(1,1);
-//	 vga_PRINT_STR("Ошибка записи FAT16",&FONT_6x8);
-//	 vga_SET_POS_TEXT(1,25);
-//	 vga_PRINT_STR("Форматировать...?",&FONT_6x8);
-//	 vga_UPDATE();
-//	 //сохринить калибровочный параметр
-//	 //BKP_WriteBackupRegister(BKP_DR2, REG(K_VIBRO));
-//		IWDG_ReloadCounter();
-//		SET_CLOCK_SPEED(CLK_8MHz);
-//			
-//		while(1)	
-//		if (key_CHECK_EV(key_EVENT_PRESSED_ENTER)) 
-//		{ 
-//			vga_CLEAR();
-//			vga_UPDATE();
-//			FORMAT();				   //нужно ли форматировать!!!!!!!! плохо это!!!!
-//			
-//			ShowPowerOffForm();
-//			Delay(700000); 
-//			vga_CLEAR();
-//			vga_UPDATE();	
-//			pin_OFF();
-//		}
-//		else
-//		{
-//			if (key_CHECK_EV(key_EVENT_PRESSED_ESC_MENU)) 
-//			{
-//				ShowPowerOffForm();
-//				Delay(700000); 
-//				vga_CLEAR();
-//				vga_UPDATE();	
-//				pin_OFF();
-//			}
-//		}
-//	
+   if (REG(NUMFILE)==0) //установлен лок байт
+    {
+	 //форматируем
+	 vga_SET_POS_TEXT(1,1);
+	 vga_PRINT_STR("Ошибка записи FAT16",&FONT_6x8);
+	 vga_SET_POS_TEXT(1,25);
+	 vga_PRINT_STR("Форматировать...?",&FONT_6x8);
+	 vga_UPDATE();
+	 //сохринить калибровочный параметр
+	 //BKP_WriteBackupRegister(BKP_DR2, REG(K_VIBRO));
+		IWDG_ReloadCounter();
+		SET_CLOCK_SPEED(CLK_8MHz);
+			
+		while(1)	
+		if (key_CHECK_EV(key_EVENT_PRESSED_ENTER)) 
+		{ 
+			vga_CLEAR();
+			vga_UPDATE();
+			FORMAT();				   //нужно ли форматировать!!!!!!!! плохо это!!!!
+			
+			ShowPowerOffForm();
+			Delay(700000); 
+			vga_CLEAR();
+			vga_UPDATE();	
+			pin_OFF();
+		}
+		else
+		{
+			if (key_CHECK_EV(key_EVENT_PRESSED_ESC_MENU)) 
+			{
+				ShowPowerOffForm();
+				Delay(700000); 
+				vga_CLEAR();
+				vga_UPDATE();	
+				pin_OFF();
+			}
+		}
+	
 
-//	}
-//   else
-//    {
-//	  REGW(NUMFILE_CURENT,REG(NUMFILE));
-//	}
+	}
+   else
+    {
+	  REGW(NUMFILE_CURENT,REG(NUMFILE));
+	}
   
 	
 	//---------------------------------------------------------------------------------//
-//	if (REG(LOCK_REG) != 100)
-//	{
-//	MakeTIK();
-//	vga_UPDATE();		
-//	for(i=0;i<0x2FFFFF;i++){__NOP();}
-//	}	
+	if (REG(LOCK_REG) != 100)
+	{
+	MakeTIK();
+	vga_UPDATE();		
+	for(i=0;i<0x2FFFFF;i++){__NOP();}
+	}	
 
   ext_adc_SETUP(20);//16 - 62.5 кГц//20 - 50кГц
   
@@ -1347,26 +1309,20 @@ int main(void)
 					rod_DEINIT();	
 					Delay(200000);				   //антидребезговая задержка								
 					
-//					//жесткий костыль ))
-//					if (REG(LOCK_REG) == 100) REGW(LOCK_REG,99);
-//					else 
-//					{
-//						REGW(LOCK_REG,100);
-//						__enable_irq();
-//						__enable_fiq();
-//						NVIC_SystemReset();
-//					}			
+					//жесткий костыль ))
+					if (REG(LOCK_REG) == 100) REGW(LOCK_REG,99);
+					else 
+					{
+						REGW(LOCK_REG,100);
+						__enable_irq();
+						__enable_fiq();
+						NVIC_SystemReset();
+					}			
 				 
 				 
 				 SET_CLOCK_SPEED(CLK_72MHz);								
 			
 				 usb_transit = 0;	
-				
-				f_mount(&fls, "0:", 1);
-				f_open(&FileTmp,"test.txt", FA_CREATE_ALWAYS | FA_WRITE);
-				f_putc('9',&FileTmp);
-				f_close(&FileTmp);
-				f_mount(0,"0:", 0);
 								 
 			}
 			else 			   
@@ -1422,9 +1378,9 @@ int main(void)
 						f_close(&FileTmp);
 
 						f_getlabel("", FileName, 0);
-						if(strcmp(FileName, "PION-3"))
+						if(strcmp(FileName, "PION"))
 						{
-							f_setlabel("PION-3");
+							f_setlabel("PION");
 						}
 							
 						f_mount(0,"0:", 0);
@@ -1493,6 +1449,9 @@ int main(void)
 						
 						usb_transit = 0; 
 								
+						///Автоотключение
+						if (REG(AUTOPOWEROFF) == 1) CONTROL_POWER(1);	
+		
 						LED_CHARGE_OFF();
 						CHARGE_OFF();
 
@@ -1548,10 +1507,8 @@ int main(void)
 							
 						ext_adc_OVER = 0;										 //сбрасываем признак перегрузка канала
 					
-
-					
 						//контроль вывода
-						if (men_MENU_CONTROL()) if (REG(AUTOPOWEROFF) == 1) CONTROL_POWER(1); ///Выключение в теч. 10 мин., если не нажата кнопка
+						men_MENU_CONTROL();
 						
 						
 						//обновить режим
@@ -1561,8 +1518,7 @@ int main(void)
 	}	//конец - "работаем в нормальном режиме"
 		
 	else  
-	{
-		if (REG(AUTOPOWEROFF) == 1) CONTROL_POWER(1);
+	{		
 	
 			if (USB_Configuration == 0) 
 				{ 			
@@ -1582,9 +1538,8 @@ int main(void)
 				}			
 			else men_SHOW_MAINFORMS(form_USB);			
 		
-	}
+	}		
 	
-
  } //конец основного цикла
 	
 	

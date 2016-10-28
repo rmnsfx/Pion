@@ -439,6 +439,11 @@
               <FilePath>.\Flash.c</FilePath>
             </File>
             <File>
+              <FileName>FM25V10.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\FM25V10.c</FilePath>
+            </File>
+            <File>
               <FileName>EXT_ADC.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\EXT_ADC.c</FilePath>
@@ -462,6 +467,11 @@
               <FileName>RealTime.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\RealTime.c</FilePath>
+            </File>
+            <File>
+              <FileName>FLASH_AT45DB.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\FLASH_AT45DB.c</FilePath>
             </File>
             <File>
               <FileName>Road.c</FileName>

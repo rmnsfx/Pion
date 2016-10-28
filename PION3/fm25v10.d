@@ -20,6 +20,8 @@
 .\fm25v10.o: .\USB\type.h
 .\fm25v10.o: main.h
 .\fm25v10.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdio.h
+.\fm25v10.o: .\FAT\File_Config.h
+.\fm25v10.o: .\FAT\RTL.h
 .\fm25v10.o: SPI.h
 .\fm25v10.o: Pin.h
 .\fm25v10.o: Pin.h

@@ -19,7 +19,7 @@
 #include "type.h"
 #include "main.h"
 
-// для форматирования флэш
+//// для форматирования флэш
 //#define ClusterPerDisk	3839488//60000// ///3600000 //кластеров на 1 диск	 //полный объем
 ////#define ClusterPerFat	((ClusterPerDisk)/256+1) //кол-во кластеров на 1 фат, для FAT16, очень грубый расчет...
 //#define ClusterPerFat 32768
@@ -30,12 +30,11 @@
 //#define FILEDATA_OFFSET (ROOT_OFFSET+1)				    //область данных
 
 
-/* Mass Storage Memory Layout */
+///* Mass Storage Memory Layout */
 //#define MSC_MemorySize  ClusterPerDisk*512//8192//8192//1024*512//8192//4096//4096//8192
 //#define MSC_BlockSize   512
 //#define MSC_BlockCount  (MSC_MemorySize / MSC_BlockSize)
-//#define MSC_BlockCount  ClusterPerDisk
-//#define MSC_Offset 		1024//смещение внтури Flash
+////#define MSC_Offset 		1024//смещение внтури Flash
 
 /* Max In/Out Packet Size */
 #define MSC_MAX_PACKET  64//64

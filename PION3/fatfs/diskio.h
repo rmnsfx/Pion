@@ -104,7 +104,8 @@ void disk_timerproc (void);
 
 void test(void);
 
-
+void READ_REG_FROM_SD (unsigned int adr_page, unsigned short offset, unsigned char *buf, unsigned short size);
+void WRITE_REG_TO_SD (unsigned int adr_page, unsigned short offset, unsigned char *buf, unsigned short size);
 
 
 #ifdef __cplusplus
