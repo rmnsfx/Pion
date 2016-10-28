@@ -81,24 +81,19 @@ BOOL mmc_format(void)
 	
 	U32 i;
 	unsigned int res;
-
  
-__disable_irq();
-__disable_fiq(); 
+	__disable_irq();
+	__disable_fiq(); 
  
-IWDG_ReloadCounter();
+	IWDG_ReloadCounter();	
 	
-
-	
- res = f_mount(&fls, "0:", 1);
- res = f_mkfs("", 0, 0); 
- res = f_setlabel("PION"); 
- res = f_mount(0,"0:", 0);
+	res = f_mount(&fls, "0:", 1);
+	res = f_mkfs("0:", 0, 0); 
+	res = f_setlabel("PION"); 
+	res = f_mount(0,"0:", 0);
  
-__enable_irq();
-__enable_fiq(); 
- 
-
+	__enable_irq();
+	__enable_fiq(); 
  
  return (__TRUE);
 }

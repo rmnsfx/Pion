@@ -103,9 +103,6 @@ long rod_CreateFile_edit (void)
 	long res = 0;
 	char t_str[25];
 	
-//	finit();
-//	Delay(100000);
-//	fat_init();
 
 	__disable_irq();
 	__disable_fiq(); 
@@ -136,8 +133,7 @@ long rod_CreateFile_edit (void)
 	IWDG_ReloadCounter();	
 	
 	//Только чтение
-	f_chmod("0:Road.0", AM_RDO, AM_RDO | AM_ARC);
-	
+	f_chmod("0:Road.0", AM_RDO, AM_RDO | AM_ARC);	
 	
 	f_open(&Fil,"0:Road.log", FA_CREATE_ALWAYS | FA_WRITE);
 	f_printf(&Fil,"%s", "Road.0");
@@ -145,21 +141,16 @@ long rod_CreateFile_edit (void)
 	
 	f_open(&Fil2,"0:Roads.txt", FA_CREATE_ALWAYS | FA_WRITE);
 	f_printf(&Fil2,"%s", "Road.0");
-	f_close(&Fil2);
-		
+	f_close(&Fil2);	
 
 	
 //	//Проверяем размер 
 //	f_open(&Fil,"0:Road.100", FA_OPEN_ALWAYS);				
 //	//if (f_size(&Fil) == 16000) res = 1;			
 //	res = f_size(&Fil);
-//	f_close(&Fil);
+//	f_close(&Fil);	
 	
-	
-	
-	f_mount(0,"0:", 0);
-	
-	
+	f_mount(0,"0:", 0);	
 	
 	__enable_irq();
 	__enable_fiq();
