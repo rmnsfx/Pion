@@ -73,6 +73,11 @@ BOOL mmc_read_sect (U32 sect, U8 *buf, U32 cnt)
 
 BOOL mmc_read_config (MMCFG *cfg)
 { 
+	
+ cfg->blocknr = sdinfo.DskSize;
+ cfg->read_blen = sdinfo.BytesPerSec;
+ cfg->write_blen = sdinfo.BytesPerSec;  
+	
  return (__TRUE);
 }	
 
@@ -81,16 +86,21 @@ BOOL mmc_format(void)
 	
 	U32 i;
 	unsigned int res;
+	//unsigned int disk_size = sdinfo.DskSize;
  
 	__disable_irq();
 	__disable_fiq(); 
  
 	IWDG_ReloadCounter();	
 	
-	res = f_mount(&fls, "0:", 1);
-	res = f_mkfs("0:", 0, 0); 
-	res = f_setlabel("PION"); 
-	res = f_mount(0,"0:", 0);
+	if (sdinfo.DskSize >= 7773631)
+	{
+		res = f_mount(&fls, "0:", 1);
+		res = f_mkfs("0:", 0, 0); 
+		res = f_setlabel("PION"); 
+		res = f_mount(0,"0:", 0);
+	}
+	else	res = fat_format("PION");
  
 	__enable_irq();
 	__enable_fiq(); 

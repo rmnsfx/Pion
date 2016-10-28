@@ -1116,7 +1116,7 @@ int main(void)
   if (rtc_SETUP()==_ERR) GLOBAL_ERROR|=0x01;	//тест часов
   if (FAT_Init() ==_ERR) GLOBAL_ERROR|=0x04;;	//тест фат
   if (reg_SETUP()==_ERR) GLOBAL_ERROR|=0x02;	//начальна€ инициализаци€ регистров
-  GLOBAL_ERROR = 0;
+  //GLOBAL_ERROR = 0;
   
 	
 	///  опируем параметры sd-карты в глоб. переменную дл€ иниц. карты по usb 
@@ -1131,73 +1131,78 @@ int main(void)
 						 
 						 if (GLOBAL_ERROR&0x01)   {vga_SET_POS_TEXT(5,++temp_reg*10);vga_PRINT_STR("„асы",&FONT_6x8);}
 						 if (GLOBAL_ERROR&0x02)   {vga_SET_POS_TEXT(5,++temp_reg*10);vga_PRINT_STR("»нициализаци€ FLASH",&FONT_6x8);}
-						 if (GLOBAL_ERROR&0x04)   {vga_SET_POS_TEXT(5,++temp_reg*10);vga_PRINT_STR("»нициализаци€ FAT16",&FONT_6x8);}
+						 if (GLOBAL_ERROR&0x04)   {vga_SET_POS_TEXT(5,++temp_reg*10);vga_PRINT_STR("»нициализаци€ FAT",&FONT_6x8);}
 						 
 						 vga_UPDATE();						 
 						 
-						 Delay(700000); 
-						 ShowPowerOffForm();
-						 Delay(700000); 						 
-						 pin_OFF();
+//						 Delay(700000); 
+//						 ShowPowerOffForm();
+//						 Delay(700000); 						 
+//						 pin_OFF();
 			}
 
 		
 					
 
 						
-   if (REG(NUMFILE)==0) //установлен лок байт
-    {
-	 //форматируем
-	 vga_SET_POS_TEXT(1,1);
-	 vga_PRINT_STR("ќшибка записи FAT16",&FONT_6x8);
-	 vga_SET_POS_TEXT(1,25);
-	 vga_PRINT_STR("‘орматировать...?",&FONT_6x8);
-	 vga_UPDATE();
-	 //сохринить калибровочный параметр
-	 //BKP_WriteBackupRegister(BKP_DR2, REG(K_VIBRO));
-		IWDG_ReloadCounter();
-		SET_CLOCK_SPEED(CLK_8MHz);
-			
-		while(1)	
-		if (key_CHECK_EV(key_EVENT_PRESSED_ENTER)) 
-		{ 
-			vga_CLEAR();
-			vga_UPDATE();
-			FORMAT();				   //нужно ли форматировать!!!!!!!! плохо это!!!!
-			
-			ShowPowerOffForm();
-			Delay(700000); 
-			vga_CLEAR();
-			vga_UPDATE();	
-			pin_OFF();
-		}
-		else
-		{
-			if (key_CHECK_EV(key_EVENT_PRESSED_ESC_MENU)) 
-			{
-				ShowPowerOffForm();
-				Delay(700000); 
-				vga_CLEAR();
-				vga_UPDATE();	
-				pin_OFF();
-			}
-		}
-	
+//   if (REG(NUMFILE)==0) //установлен лок байт
+//    {
+//	 //форматируем
+//	 vga_SET_POS_TEXT(1,1);
+//	 vga_PRINT_STR("ќшибка записи FAT16",&FONT_6x8);
+//	 vga_SET_POS_TEXT(1,25);
+//	 vga_PRINT_STR("‘орматировать...?",&FONT_6x8);
+//	 vga_UPDATE();
+//	 //сохринить калибровочный параметр
+//	 //BKP_WriteBackupRegister(BKP_DR2, REG(K_VIBRO));
+//		IWDG_ReloadCounter();
+//		SET_CLOCK_SPEED(CLK_8MHz);
+//			
+//		while(1)	
+//		if (key_CHECK_EV(key_EVENT_PRESSED_ENTER)) 
+//		{ 
+//			vga_CLEAR();
+//			vga_UPDATE();
+//			FORMAT();				   //нужно ли форматировать!!!!!!!! плохо это!!!!
+//			
+//			ShowPowerOffForm();
+//			Delay(700000); 
+//			vga_CLEAR();
+//			vga_UPDATE();	
+//			pin_OFF();
+//		}
+//		else
+//		{
+//			if (key_CHECK_EV(key_EVENT_PRESSED_ESC_MENU)) 
+//			{
+//				ShowPowerOffForm();
+//				Delay(700000); 
+//				vga_CLEAR();
+//				vga_UPDATE();	
+//				pin_OFF();
+//			}
+//		}
+//	
 
-	}
-   else
-    {
-	  REGW(NUMFILE_CURENT,REG(NUMFILE));
-	}
-  
-	
-	//---------------------------------------------------------------------------------//
-	if (REG(LOCK_REG) != 100)
-	{
+//	}
+//   else
+//    {
+//	  REGW(NUMFILE_CURENT,REG(NUMFILE));
+//	}
+//  
+//	
+//	//---------------------------------------------------------------------------------//
+//	if (REG(LOCK_REG) != 100)
+//	{
+//	MakeTIK();
+//	vga_UPDATE();		
+//	for(i=0;i<0x2FFFFF;i++){__NOP();}
+//	}	
+
+
 	MakeTIK();
 	vga_UPDATE();		
 	for(i=0;i<0x2FFFFF;i++){__NOP();}
-	}	
 
   ext_adc_SETUP(20);//16 - 62.5 к√ц//20 - 50к√ц
   
