@@ -103,9 +103,9 @@ long rod_CreateFile_edit (void)
 	long res = 0;
 	char t_str[25];
 	
-	finit();
-	Delay(100000);
-	fat_init();
+//	finit();
+//	Delay(100000);
+//	fat_init();
 
 	__disable_irq();
 	__disable_fiq(); 
@@ -116,6 +116,7 @@ long rod_CreateFile_edit (void)
 	f_printf(&Fil,"%s", "без маршрута   ");		
 	f_putc(0,&Fil);
 	
+	IWDG_ReloadCounter();
 	
 //	f_open(&Fil,"0:Road.000", FA_OPEN_ALWAYS | FA_WRITE);	
 //	f_lseek(&Fil, 16);
@@ -129,10 +130,10 @@ long rod_CreateFile_edit (void)
 			}						
 	}		
 	//Получаем размер 
-	res = f_size(&Fil);	
-	
+	res = f_size(&Fil);		
 	f_close(&Fil);
-		
+
+	IWDG_ReloadCounter();	
 	
 	//Только чтение
 	f_chmod("0:Road.0", AM_RDO, AM_RDO | AM_ARC);

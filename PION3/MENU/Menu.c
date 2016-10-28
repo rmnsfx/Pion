@@ -748,7 +748,7 @@ void men_SHOW_REFRESH(void)
 										
 										
 										///sprintf(t_str,"M:\\%03u.%03u\\Signal %d.dat",Road_Number,REG(ROUTE_NUM),NEl.Number);
-										sprintf(t_str,"M:\\%03u.%03u\\Signal %d.dat",road_pos_int,REG(ROUTE_NUM),NEl.Number);								
+										sprintf(t_str,"0:%03u.%03u/Signal %d.dat",road_pos_int,REG(ROUTE_NUM),NEl.Number);								
 																		
 										A = calc_from_dat_A(t_str);
 										V = calc_from_dat_V(t_str);
@@ -1734,7 +1734,7 @@ void men_SHOW_MENU(void)
 	uint16_t b =0;
 	uint16_t c =0;
 	uint16_t d =0;
-	
+	unsigned int res;
 	uint8_t ip = 0;
 	uint16_t i = 0;
 	uint16_t j = 0;
@@ -1743,13 +1743,17 @@ void men_SHOW_MENU(void)
 	uint16_t compare_status = 0;
 	uint8_t NumberOfFiles = 8;
 	uint16_t AddPos = 0;
-  men_STATUS 	   = men_MULTI_ITEM;
+  FATFS f;
+	men_STATUS 	   = men_MULTI_ITEM;
   men_s			   = men_CURSOR_STR;
+	
 
 //Alex
 	
 	if ((Items[men_POINTER].Data_reg == 0xFF)||(Items[men_POINTER].Data_reg == 0xFE)) ///Выбор маршрута
-	{
+	{	
+		
+		
 		vga_CLEAR();
 		men_SHOW_RECT(Items[men_LEVEL_POINT[men_LEVEL-1]].Text_0);
 		//men_SHOW_ITEMS();
@@ -1760,6 +1764,15 @@ void men_SHOW_MENU(void)
 		while (ip<5)
 		{
 			vga_SET_POS_TEXT(men_X0, men_Y0 + men_OFFSET + (unsigned short)ip * men_HEIGHT_STR);
+			
+//			res = f_mount(NULL,"0:",0);
+//			res = disk_initialize(0);
+//			res = f_mount(&f,"0:",1);
+//			res = disk_status(0);
+//			res = f_mount(&f,"0:",1);
+//			//res = FAT_Init();
+//			res = disk_status(0);
+			
 			pRFile = fopen ("Roads.txt","r");
 			if (pRFile != NULL)
 			{
@@ -2006,7 +2019,8 @@ u8 key_event = 0;
    if (key_CHECK_EV(key_EVENT_PRESSED_UP))	 	    {SET_CLOCK_SPEED(CLK_72MHz);men_UP_MENU();SET_CLOCK_SPEED(CLK_8MHz);} 
    if (key_CHECK_EV(key_EVENT_PRESSED_DOWN))	 	{SET_CLOCK_SPEED(CLK_72MHz);men_DW_MENU();SET_CLOCK_SPEED(CLK_8MHz);} 
    if (key_CHECK_EV(key_EVENT_PRESSED_ESC_MENU))	{SET_CLOCK_SPEED(CLK_72MHz);men_ES_MENU();SET_CLOCK_SPEED(CLK_8MHz);} */
-
+		
+		
    if (key_CHECK_EV(key_EVENT_PRESSED_ENTER))	 	{key_event = 1; measure_stat = 0; men_EN_MENU();}
    if (key_CHECK_EV(key_EVENT_PRESSED_UP))	 	    {key_event = 1;measure_stat = 0;men_UP_MENU();}
    if (key_CHECK_EV(key_EVENT_PRESSED_DOWN))	 	{key_event = 1;measure_stat = 0;men_DW_MENU();}
@@ -2980,13 +2994,14 @@ void men_EN_MENU(void)
 						 vga_UPDATE();
 						 break;
 						}
-					   //вызов подменю
-					   if (Items[men_POINTER].Typedata==0xFE)
-					    if (Items[men_POINTER].LevelAcces<=men_LEVEL_ACCES) 
-						 {
-						  men_CALL_CUB_ITEM();
-						  break;
-						 }
+					   
+						//вызов подменю
+						if (Items[men_POINTER].Typedata==0xFE)
+					  if (Items[men_POINTER].LevelAcces<=men_LEVEL_ACCES) 
+						{
+								men_CALL_CUB_ITEM();								
+								break;
+						}
 
 
 						 

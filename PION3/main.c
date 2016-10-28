@@ -562,9 +562,9 @@ TStatus FORMAT(void)
 	int i2=0;
 	long res = 0;
 
-	finit();
-	Delay(100000);
-	fat_init();
+//	finit();
+//	Delay(100000);
+//	fat_init();
 	
 		
 	vga_CLEAR();
@@ -582,8 +582,7 @@ TStatus FORMAT(void)
 	IWDG_ReloadCounter();
 	
 	memset(temp_data,0,512);
-	
-	IWDG_ReloadCounter();
+		
 	
   //форматирование
   mmc_format();//очистка флэш, создание таблицы FAT
@@ -669,6 +668,7 @@ TStatus FAT_Init(void)
   u32 res;
   
 	SPI_SETUP();	
+	Delay(100000);
 	res = disk_initialize(0);
 	res = finit();   
 
@@ -1348,7 +1348,7 @@ int main(void)
 					
 						for (j=0;j<=255;j++)
 						{
-							sprintf(FileName,"M:\\%03u.%03u\\Signal %d.dat",0,0,j);						
+							sprintf(FileName,"0:%03u.%03u/Signal %d.dat",0,0,j);						
 							if (f_stat(FileName, &fno) == FR_OK) temp_reg++;						
 						}
 						

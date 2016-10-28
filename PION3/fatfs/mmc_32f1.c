@@ -21,7 +21,7 @@
 #if SPI_CH == 1	/* PA4:MMC_CS, PA5:MMC_SCLK, PA6:MMC_DO, PA7:MMC_DI, PC4:MMC_CD */
 #define CS_HIGH()	GPIOA_BSRR = _BV(4)
 #define CS_LOW()	GPIOA_BSRR = _BV(4+16)
-#define	MMC_CD		!(GPIOC_IDR & _BV(4))	/* Card detect (yes:true, no:false, default:true) */
+#define	MMC_CD		0//!(GPIOC_IDR & _BV(4))	/* Card detect (yes:true, no:false, default:true) */
 #define	MMC_WP		0 /* Write protected (yes:true, no:false, default:false) */
 #define SPIx_CR1	SPI1_CR1
 #define SPIx_SR		SPI1_SR
@@ -657,8 +657,8 @@ void disk_timerproc (void)
 		s &= ~STA_PROTECT;
 	if (MMC_CD)	/* Card is in socket */
 		s &= ~STA_NODISK;
-	else		/* Socket empty */
-		s |= (STA_NODISK | STA_NOINIT);
+//	else		/* Socket empty */
+//		s |= (STA_NODISK | STA_NOINIT);
 	Stat = s;
 }
 
