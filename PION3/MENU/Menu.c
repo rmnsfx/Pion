@@ -438,6 +438,7 @@ void men_SHOW_REFRESH(void)
  uint16_t A, V, S, cn;
  float* result;
  unsigned int sch=0;
+ unsigned int flag_charge = 0;
 	
 
 	
@@ -909,10 +910,7 @@ void men_SHOW_REFRESH(void)
 						}
 						
 						
-						
-						
-						
-						
+												
 						
 						//Проверяем бит зарядки от контроллера заряда АКБ
 						if ( GPIO_ReadInputDataBit(GPIOA,GPIO_Pin_8) == 0 )
@@ -923,7 +921,7 @@ void men_SHOW_REFRESH(void)
 						
 						CHARGE_ON();
 						
-						if ( GPIO_ReadInputDataBit(GPIOA,GPIO_Pin_8) == 1 & old_state_pa8 == 0 & pin_USB_5V & old_state_usb )
+						if ( GPIO_ReadInputDataBit(GPIOA,GPIO_Pin_8) == 1 && old_state_pa8 == 0 && pin_USB_5V == 1 && old_state_usb == 1 )
 						{							
 								LED_CHARGE_OFF();	
 							
@@ -931,15 +929,16 @@ void men_SHOW_REFRESH(void)
 								akbemk_count = akbemk_menu;
 								akbemk_percent = 100;	
 
-								usb_charge_state = 2;	
-									
-						}
+								usb_charge_state = 2;										
+						}			
+						
 						
 						//Запоминаем состояние usb и pa8
 						old_state_usb = pin_USB_5V;
 						old_state_pa8 = GPIO_ReadInputDataBit(GPIOA,GPIO_Pin_8);
-						
+												
 						frzbat1 = akbemk_percent;
+						
 						
 						break;
 	
@@ -990,7 +989,7 @@ void men_SHOW_REFRESH(void)
 								
 						//////////////////////////////////////////////////////		
 								
-						if ( GPIO_ReadInputDataBit(GPIOA,GPIO_Pin_8) == 1 & old_state_pa8 == 0 & pin_USB_5V & old_state_usb )
+						if ( GPIO_ReadInputDataBit(GPIOA,GPIO_Pin_8) == 1 && old_state_pa8 == 0 && pin_USB_5V == 1 && old_state_usb == 1 )
 						{							
 								LED_CHARGE_OFF();	
 							
@@ -1009,13 +1008,15 @@ void men_SHOW_REFRESH(void)
 									
 						}
 						
+						
+						
 						//Запоминаем состояние usb и pa8
 						old_state_usb = pin_USB_5V;
-						old_state_pa8 = GPIO_ReadInputDataBit(GPIOA,GPIO_Pin_8);
-						
+						old_state_pa8 = GPIO_ReadInputDataBit(GPIOA,GPIO_Pin_8);							
+							
 						frzbat1 = akbemk_percent;
 						
-		
+						
 	}
 	else //Старый АКБ
 	{

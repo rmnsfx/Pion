@@ -3,7 +3,7 @@
 <title>Static Call Graph - [.\Main_project.axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image .\Main_project.axf</H1><HR>
-<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5050106: Last Updated: Mon Oct 31 09:30:13 2016
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5050106: Last Updated: Mon Oct 31 15:50:21 2016
 <BR><P>
 <H3>Maximum Stack Usage =       3020 bytes + Unknown(Functions without stacksize, Cycles, Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
@@ -440,8 +440,8 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[25c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;men_EN_MENU
 </UL>
 
-<P><STRONG><a name="[96]"></a>FAT_Init</STRONG> (Thumb, 30 bytes, Stack size 8 bytes, main_1.o(.text))
-<BR><BR>[Stack]<UL><LI>Max Depth = 332<LI>Call Chain = FAT_Init &rArr; finit &rArr; fat_init &rArr; init_dev &rArr; count_free_clus &rArr; cache_fat &rArr; mmc_read_sect &rArr; f_mount &rArr; find_volume &rArr; check_fs &rArr; move_window &rArr; sync_window &rArr; disk_write &rArr; send_cmd &rArr;  send_cmd (Cycle)
+<P><STRONG><a name="[96]"></a>FAT_Init</STRONG> (Thumb, 60 bytes, Stack size 16 bytes, main_1.o(.text))
+<BR><BR>[Stack]<UL><LI>Max Depth = 340<LI>Call Chain = FAT_Init &rArr; finit &rArr; fat_init &rArr; init_dev &rArr; count_free_clus &rArr; cache_fat &rArr; mmc_read_sect &rArr; f_mount &rArr; find_volume &rArr; check_fs &rArr; move_window &rArr; sync_window &rArr; disk_write &rArr; send_cmd &rArr;  send_cmd (Cycle)
 </UL>
 <BR>[Calls]<UL><LI><a href="#[99]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;finit
 <LI><a href="#[98]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;disk_initialize
@@ -520,7 +520,7 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[6b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 </UL>
 
-<P><STRONG><a name="[ac]"></a>MESUARE_PROCESS</STRONG> (Thumb, 1620 bytes, Stack size 48 bytes, main_1.o(.text))
+<P><STRONG><a name="[ac]"></a>MESUARE_PROCESS</STRONG> (Thumb, 1618 bytes, Stack size 48 bytes, main_1.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 892<LI>Call Chain = MESUARE_PROCESS &rArr; reg_WRITE &rArr; WRITE_REG_TO_SD &rArr; f_mount &rArr; find_volume &rArr; check_fs &rArr; move_window &rArr; sync_window &rArr; disk_write &rArr; send_cmd &rArr;  send_cmd (Cycle)
 </UL>
 <BR>[Calls]<UL><LI><a href="#[93]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;reg_WRITE
@@ -4342,7 +4342,7 @@ Global Symbols
 <LI><a href="#[262]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;men_SHOW_REFRESH
 </UL>
 
-<P><STRONG><a name="[262]"></a>men_SHOW_REFRESH</STRONG> (Thumb, 3878 bytes, Stack size 104 bytes, menu.o(.text))
+<P><STRONG><a name="[262]"></a>men_SHOW_REFRESH</STRONG> (Thumb, 3862 bytes, Stack size 104 bytes, menu.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 2916 + Unknown Stack Size
 <LI>Call Chain = men_SHOW_REFRESH &rArr; men_EN_MENU &rArr; FORMAT &rArr; rod_CreateFile_edit &rArr; f_open &rArr; dir_register &rArr; dir_find &rArr; dir_next &rArr; create_chain &rArr; put_fat &rArr; move_window &rArr; sync_window &rArr; disk_write &rArr; send_cmd &rArr;  send_cmd (Cycle)
 </UL>
@@ -4483,7 +4483,7 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[e6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;men_MENU_CONTROL
 </UL>
 
-<P><STRONG><a name="[269]"></a>men_UP_MENU</STRONG> (Thumb, 214 bytes, Stack size 8 bytes, menu.o(.text))
+<P><STRONG><a name="[269]"></a>men_UP_MENU</STRONG> (Thumb, 212 bytes, Stack size 8 bytes, menu.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 2924 + Unknown Stack Size
 <LI>Call Chain = men_UP_MENU &rArr; men_SHOW_REFRESH &rArr; men_EN_MENU &rArr; FORMAT &rArr; rod_CreateFile_edit &rArr; f_open &rArr; dir_register &rArr; dir_find &rArr; dir_next &rArr; create_chain &rArr; put_fat &rArr; move_window &rArr; sync_window &rArr; disk_write &rArr; send_cmd &rArr;  send_cmd (Cycle)
 </UL>

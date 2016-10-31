@@ -666,10 +666,22 @@ TStatus FORMAT(void)
 TStatus FAT_Init(void)
 {
   u32 res;
+	unsigned int e = 0;
   
-	SPI_SETUP();	
-	Delay(100000);
+	SPI_SETUP();		
+	
 	res = disk_initialize(0);
+	
+	if (res != 0) 
+	{
+		while(e++ < 5)
+		{
+			res = disk_initialize(0);	
+			if (res == 0) break;
+			Delay(10000);
+		}
+	}
+	
 	res = finit();   
 
   return _OK;	 
