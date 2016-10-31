@@ -1314,15 +1314,15 @@ int main(void)
 					rod_DEINIT();	
 					Delay(200000);				   //антидребезговая задержка								
 					
-					//жесткий костыль ))
-					if (REG(LOCK_REG) == 100) REGW(LOCK_REG,99);
-					else 
-					{
-						REGW(LOCK_REG,100);
-						__enable_irq();
-						__enable_fiq();
-						NVIC_SystemReset();
-					}			
+//					//жесткий костыль ))
+//					if (REG(LOCK_REG) == 100) REGW(LOCK_REG,99);
+//					else 
+//					{
+//						REGW(LOCK_REG,100);
+//						__enable_irq();
+//						__enable_fiq();
+//						NVIC_SystemReset();
+//					}			
 				 
 				 
 				 SET_CLOCK_SPEED(CLK_72MHz);								
@@ -1542,6 +1542,8 @@ int main(void)
 					}
 				}			
 			else men_SHOW_MAINFORMS(form_USB);			
+		
+				
 		
 	}		
 	

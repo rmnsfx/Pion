@@ -884,7 +884,7 @@ void men_SHOW_REFRESH(void)
 						break;
   case form_USB:	
 						
-						usb_charge_state = 2;	
+						//usb_charge_state = 2;	
 	
 						vga_CLEAR();
 						men_READ_PARAM(TIME); //загружаем время
@@ -908,10 +908,42 @@ void men_SHOW_REFRESH(void)
 							
 						}
 						
+						
+						
+						
+						
+						
+						
+						//Проверяем бит зарядки от контроллера заряда АКБ
+						if ( GPIO_ReadInputDataBit(GPIOA,GPIO_Pin_8) == 0 )
+						{												
+							LED_CHARGE_ON();
+							usb_charge_state = 1;															
+						}	
+						
+						CHARGE_ON();
+						
+						if ( GPIO_ReadInputDataBit(GPIOA,GPIO_Pin_8) == 1 & old_state_pa8 == 0 & pin_USB_5V & old_state_usb )
+						{							
+								LED_CHARGE_OFF();	
+							
+								BKP_WriteBackupRegister(BKP_DR10, (int) ceil(akbemk_menu / 0.00001831082)); 
+								akbemk_count = akbemk_menu;
+								akbemk_percent = 100;	
+
+								usb_charge_state = 2;	
+									
+						}
+						
+						//Запоминаем состояние usb и pa8
+						old_state_usb = pin_USB_5V;
+						old_state_pa8 = GPIO_ReadInputDataBit(GPIOA,GPIO_Pin_8);
+						
+						frzbat1 = akbemk_percent;
+						
 						break;
 	
-	case form_CHARGE:
-		
+	case form_CHARGE:		
 	
 	
 	if (id_akb == 0) //Новый АКБ					
