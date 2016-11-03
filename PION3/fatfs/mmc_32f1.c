@@ -694,12 +694,17 @@ void WRITE_REG_TO_SD (unsigned int adr_page, unsigned short offset, unsigned cha
 		
  if (disk_status(0) != 0) res = f_mount(&fatfs, "0:", 1);	
 
+		__disable_fiq();
+	
  //копируем страницу в буфер
  res = disk_read(0, &buf_temp[0], 1+adr_page, 1);
 
  if ((offset+size) <= 512) memcpy(&buf_temp[offset], buf, size);
 
  res = disk_write(0, &buf_temp[0], 1+adr_page, 1); 
+	
+__enable_fiq();
+
 
 }
 

@@ -272,6 +272,7 @@ void men_1ms(void)
 //----------------------------------------------------------------//
 void men_SETUP(void)
 {
+	unsigned int temp;
 // men_LEVEL_ACCES = (men_PAROL1==0);
 // men_TIME_PAROL  = NIL;
  //men_STATUS      = men_MAIN;
@@ -311,8 +312,16 @@ void men_SETUP(void)
 	
 	if ( first_flag == 2 && Road_Number != 0)
 	{		
-		if (Road_Number != Num_of_Road) { REGW(ROUTE_NUM, 0); route=0; }	/// Сбрасываем регистр счетчика выборки			 
-		else { route++; REGW(ROUTE_NUM,route);	} /// Увеличиваем счетчик выборки
+		if (Road_Number != Num_of_Road) /// Сбрасываем регистр счетчика выборки	
+		{ 
+			REGW(ROUTE_NUM, 0); 
+			route=0; 
+		}				 
+		else /// Увеличиваем счетчик выборки
+		{ 
+			route++; 
+			REGW(ROUTE_NUM,route);	
+		} 
 	}
 	
 	first_flag = 2;
@@ -1757,7 +1766,7 @@ void men_SHOW_MENU(void)
 	char temppath[25];
 	char 		  FileName[25];
 	FILE  		*pRFile = 0;
-	
+	FATFS fat;
 	FIL fil;  
 	TCHAR *fn_ptr;
 	char* fn;
@@ -1768,6 +1777,7 @@ void men_SHOW_MENU(void)
 	uint16_t c =0;
 	uint16_t d =0;
 	unsigned int res;
+	unsigned int byte_read;
 	uint8_t ip = 0;
 	uint16_t i = 0;
 	uint16_t j = 0;
@@ -1794,55 +1804,56 @@ void men_SHOW_MENU(void)
 		else AddPos = 0;
 		ip = 0;
 		NumberOfFiles = 0;
+		
+		res = disk_status(0);
+		res = f_mount(&fat,"0:",1);
+		//file_stat = f_stat("Roads.txt", &filinfo);		
+		
+		
 		while (ip<5)
 		{
 			vga_SET_POS_TEXT(men_X0, men_Y0 + men_OFFSET + (unsigned short)ip * men_HEIGHT_STR);
 			
-//			res = f_mount(NULL,"0:",0);
-//			res = disk_initialize(0);
-//			res = f_mount(&f,"0:",1);
-//			res = disk_status(0);
-//			res = f_mount(&f,"0:",1);
-//			//res = FAT_Init();
-//			res = disk_status(0);
+			res = f_open(&Fil, "Roads.txt", FA_OPEN_EXISTING | FA_READ);
 			
-			pRFile = fopen ("Roads.txt","r");
-			if (pRFile != NULL)
-			{
-				fseek(pRFile,9*(ip+AddPos),SEEK_SET);
-				fscanf(pRFile, "%s", temp);
-				fclose(pRFile);
-				if ((pRFile = fopen (temp,"r")) != NULL) 
+			if (res == 0)
+			{				
+							
+				res = f_lseek(&Fil, 9*(ip+AddPos));
+				f_gets(temp, 9, &Fil);	
+				res = f_close(&Fil);		
+			
+				res = f_open(&Fil, temp, FA_OPEN_EXISTING | FA_READ);	
+				
+				if (res == 0) 
 				{
-					memset(temp,0,20);
-					fread(temp,1,15,pRFile);
-					fclose(pRFile);
-					vga_PRINT_TEXT(temp,20,men_FONT_DEFAULT);
-					NumberOfFiles++;
-				}
-				
-				
+						memset(temp,0,20);
+						res = f_read(&Fil, temp, 15, &byte_read);
+						res = f_close(&Fil);
+						vga_PRINT_TEXT(temp, 20, men_FONT_DEFAULT);
+						NumberOfFiles++;					
+				}				
 			}
-			else 
+			else
 			{
 				memset(temp,0,20);
-				sprintf(temp,"Road.%03u",ip+AddPos);
-				pRFile = fopen (temp,"r");
-				if (pRFile != NULL) 
-					{
-					fread(temp,1,15,pRFile);
-					fclose(pRFile);
+				if (AddPos == 0 && ip == 0) sprintf(temp,"Road.%01u",ip+AddPos);
+				else sprintf(temp,"Road.%03u",ip+AddPos);
+				res = f_open(&Fil, temp, FA_OPEN_EXISTING | FA_READ);	
+				if (res == 0) 
+				{
+					res = f_read(&Fil, temp, 15, &byte_read);
+					res = f_close(&Fil);
 					vga_PRINT_TEXT(temp,20,men_FONT_DEFAULT);
-					//	road_cursor_pos--;
-						NumberOfFiles++;
-					}
+					NumberOfFiles++;
+				}				
 			}
-
 			
-		ip++;
-			
+		ip++;			
 		}
 
+		res = f_mount(0,"0:",0);
+		
 		if (road_cursor_pos >= NumberOfFiles) road_cursor_pos--;
 		men_CURSOR_STR = road_cursor_pos;
 		
@@ -2656,6 +2667,9 @@ void men_EN_MENU(void)
 	DWORD sector[2];
 	uint8_t ffarr1[50000];
 	TCHAR* ffarr2;
+	unsigned char res;
+	FATFS fat;
+	FIL fil;
 	
  
 	switch (men_STATUS)
@@ -2839,34 +2853,67 @@ void men_EN_MENU(void)
    case men_MULTI_ITEM:
 
 		 
-		 if (Items[men_POINTER].Data_reg == 0xFF) ///"Без маршрута" в меню
+		 if (Items[men_POINTER].Data_reg == 0xFF) ///Вход в маршрут (нажали enter) (///"Без маршрута" в меню)
 		 {
 					
 			sample_pos = 0;
 			sample_cursor_pos = 0;
 
+			res = f_mount(&fat,"0:",1);
+			 
 			if(road_pos == 0)
 			{
-				if ((pRFile = fopen ("Roads.txt","r")) != NULL)
+				res = f_open(&fil, "Roads.txt", FA_OPEN_EXISTING | FA_READ);
+				
+				if(res == 0)	
 				{
-					fseek(pRFile,9*(road_pos),SEEK_SET);
-					fscanf(pRFile, "%s", FileName);
-					fclose(pRFile);
-					
-					if ((pRFile = fopen ("M:\\Road.log","w")) != NULL)
+					res = f_lseek(&fil, 9*(road_pos));
+					f_gets(FileName, 9, &fil);	
+					res = f_close(&fil);				
+				
+					res = f_open(&fil, "Roads.log", FA_CREATE_ALWAYS | FA_WRITE);
+					if(res == 0)	
 					{
-						fprintf(pRFile,"%s",FileName);
-						fclose(pRFile);
+						f_printf(&fil, "%s", FileName);
+						res = f_close(&fil);
 					}
 				}
 				else
 				{
-					if ((pRFile = fopen ("M:\\Road.log","w")) != NULL)
+					res = f_open(&fil, "Roads.log", FA_CREATE_ALWAYS | FA_WRITE);
+					if(res == 0)	
 					{
-						fprintf(pRFile,"Road.%03u",road_pos);
-						fclose(pRFile);
-					}				
+						f_printf(&fil, "Road.%03u", road_pos);
+						res = f_close(&fil);
+					}
 				}
+			
+				res = f_mount(0,"0:",0);
+			 
+//			if(road_pos == 0)
+//			{
+//				if ((pRFile = fopen ("Roads.txt","r")) != NULL)
+//				{
+//					fseek(pRFile,9*(road_pos),SEEK_SET);
+//					fscanf(pRFile, "%s", FileName);
+//					fclose(pRFile);
+//					
+//					if ((pRFile = fopen ("M:\\Road.log","w")) != NULL)
+//					{
+//						fprintf(pRFile,"%s",FileName);
+//						fclose(pRFile);
+//					}
+//				}
+//				else
+//				{
+//					if ((pRFile = fopen ("M:\\Road.log","w")) != NULL)
+//					{
+//						fprintf(pRFile,"Road.%03u",road_pos);
+//						fclose(pRFile);
+//					}				
+//				}
+				
+				
 				REGW(NUMFILE_CURENT,0x00);
 				REGW(ROUTE_NUM,0);
 
@@ -2877,7 +2924,7 @@ void men_EN_MENU(void)
 				
 				BKP_WriteBackupRegister(BKP_DR12, road_indicator);
 
-				 return;
+				return;
 			}
 			else men_CALL_CUB_ITEM();
 			return;
@@ -2892,25 +2939,55 @@ void men_EN_MENU(void)
 			 
 			 uint8_t ii = 0; /// Номер выборки			 
 			
-			if ((pRFile = fopen ("Roads.txt","r")) != NULL)
-			{
-				fseek(pRFile,9*(road_pos),SEEK_SET);
-				fscanf(pRFile, "%s", FileName);
-				fclose(pRFile);
-				if ((pRFile = fopen ("M:\\Road.log","w")) != NULL)
-				{						
-					fprintf(pRFile,"%s",FileName);
-					fclose(pRFile);					
-				}
-			}
-
-			else
-			{
-				if ((pRFile = fopen ("M:\\Road.log","w")) != NULL)
+			 res = f_mount(&fat,"0:",1);
+			 res = f_open(&fil, "Roads.txt", FA_OPEN_EXISTING | FA_READ);
+				
+				if(res == 0)	
 				{
-					fclose(pRFile);
-				}				
-			}
+					res = f_lseek(&fil, 9*(road_pos));
+					f_gets(FileName, 9, &fil);	
+					res = f_close(&fil);				
+				
+					res = f_open(&fil, "Roads.log", FA_CREATE_ALWAYS | FA_WRITE);
+					if(res == 0)	
+					{
+						f_printf(&fil, "%s", FileName);
+						res = f_close(&fil);
+					}
+				}
+				else
+				{
+					res = f_open(&fil, "Roads.log", FA_CREATE_ALWAYS | FA_WRITE);
+					if(res == 0)	
+					{
+						f_printf(&fil, "Road.%03u", road_pos);
+						res = f_close(&fil);
+					}
+				}
+			
+				res = f_mount(0,"0:",0);
+			 
+			 
+			 
+//			if ((pRFile = fopen ("Roads.txt","r")) != NULL)
+//			{
+//				fseek(pRFile,9*(road_pos),SEEK_SET);
+//				fscanf(pRFile, "%s", FileName);
+//				fclose(pRFile);
+//				if ((pRFile = fopen ("M:\\Road.log","w")) != NULL)
+//				{						
+//					fprintf(pRFile,"%s",FileName);
+//					fclose(pRFile);					
+//				}
+//			}
+
+//			else
+//			{
+//				if ((pRFile = fopen ("M:\\Road.log","w")) != NULL)
+//				{
+//					fclose(pRFile);
+//				}				
+//			}
 
 								
 			 REGW(NUMFILE_CURENT,0x00);			 	
@@ -2919,15 +2996,26 @@ void men_EN_MENU(void)
 			 men_STATUS=men_MAIN;
 
 
-
-			///Определяем маршрут по курсору 
-			pRFile = fopen ("Roads.txt","r");
-			if (pRFile != NULL)
+			res = f_mount(&fat,"0:",1);
+			res = f_open(&fil, "Roads.txt", FA_OPEN_EXISTING | FA_READ);
+				
+			if(res == 0)	
 			{
-					fseek(pRFile,9*road_pos,SEEK_SET);
-					fscanf(pRFile, "%s", road_pos_edit);
-					fclose(pRFile);
+				res = f_lseek(&fil, 9*(road_pos));
+				f_gets(road_pos_edit, 9, &fil);	
+				res = f_close(&fil);				
 			}
+
+
+
+//			///Определяем маршрут по курсору 
+//			pRFile = fopen ("Roads.txt","r");
+//			if (pRFile != NULL)
+//			{
+//					fseek(pRFile,9*road_pos,SEEK_SET);
+//					fscanf(pRFile, "%s", road_pos_edit);
+//					fclose(pRFile);
+//			}
 
 			IWDG_ReloadCounter();			
 																								

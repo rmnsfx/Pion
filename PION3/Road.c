@@ -7,6 +7,7 @@
 #include "diskio.h"
 #include "vga_lib.h"
 #include "Pin.h"
+#include "ff.h"
 
 
 #define MaxNumElement 500					  //???????????? ????? ????? ? ????????
@@ -16,6 +17,11 @@
 u8		t[512];
 TNameElement NEl;
 FILE  		*pRFile = 0;
+FIL fil;
+FATFS fat;
+unsigned char res;
+unsigned int byte_read;
+
 
 
 s8 rod_INIT(void)
@@ -89,6 +95,34 @@ s8 rod_GET_NameElement(TNameElement * Element, unsigned char num)
  
  return -1; 
 }
+
+//s8 rod_GET_NameElement(TNameElement * Element, unsigned char num)
+//{
+
+//	memset(Element,' ',SizeElement);
+//	
+//	if (num==0)	return -1;
+//	
+//	res = f_mount(&fat,"0:",1);
+//	res = f_open(&fil, "Road.log", FA_OPEN_EXISTING | FA_READ);
+//	res = f_lseek(&fil, (u32) (num-1)*SizeElement);
+//	res = f_read(&fil, Element, SizeElement, &byte_read);
+//	if (byte_read == SizeElement)
+//	{
+//		if (Element->StringName_1[0]==0)
+//		{
+//			memset(Element,0x00,SizeElement);
+//			return -1;
+//		}
+//		else 
+//		{
+//			f_close(&fil);
+//			res = f_mount(0,"0:",0);
+//			return 0;
+//		}
+//	}
+//	
+//}
 
 
 long rod_CreateFile_edit (void)
