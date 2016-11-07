@@ -88,22 +88,22 @@ BOOL mmc_format(void)
 	unsigned int res;
 	//unsigned int disk_size = sdinfo.DskSize;
  
-	__disable_irq();
-	__disable_fiq(); 
+//	__disable_irq();
+//	__disable_fiq(); 
  
 	IWDG_ReloadCounter();	
 	
-	if (sdinfo.DskSize >= 7773631)
-	{
+//	if (sdinfo.DskSize >= 7000000)
+//	{
 		res = f_mount(&fls, "0:", 1);
-		res = f_mkfs("0:", 0, 0); 
+		res = f_mkfs("0:", 0, sdinfo.ClusSize); 
 		res = f_setlabel("PION"); 
 		res = f_mount(0,"0:", 0);
-	}
-	else	res = fat_format("PION");
- 
-	__enable_irq();
-	__enable_fiq(); 
+//	}
+//	else	res = fat_format("PION");
+	
+//	__enable_irq();
+//	__enable_fiq(); 
  
  return (__TRUE);
 }

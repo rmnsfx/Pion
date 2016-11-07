@@ -21,6 +21,7 @@
 #include "ADC.h"
 #include "math.h"
 #include "diskio.h"		
+#include <cerrno>
 
 
 
@@ -275,14 +276,17 @@ void men_SETUP(void)
 // men_LEVEL_ACCES = (men_PAROL1==0);
 // men_TIME_PAROL  = NIL;
  //men_STATUS      = men_MAIN;
-
  //vga_INIT();
+FILE *file;	
+	
  men_SET_CONFIG(REG(CHANEL_MESUARE));		 //меняем конфигурацию меню если выбрали другой канал измерения 
+	
 	
  if (rod_INIT()!=0) 
  {
    men_SHOW_MESSAGE("Ошибка открытия","маршрутного файла",500);
  }
+ 
  
  rod_GET_NameElement(&NEl,1);
 	//Alex
@@ -290,9 +294,11 @@ void men_SETUP(void)
 	memcpy(Road_Name, NEl.StringName_1, 15);
 	Road_Number = NEl.Number;
 	//rod_GET_NameElement(&NEl,REG(NUMFILE_CURENT));
+ 
+ 
 	if (Road_Number == 0) 
 	{
-		REGW(NUMFILE_CURENT,REG(BEYOND_ROAD));
+		//REGW(NUMFILE_CURENT,REG(BEYOND_ROAD));
 		rod_GET_NameElement(&NEl,1+REG(BEYOND_ROAD));
 		REGW(NUMFILE_CURENT,1+REG(BEYOND_ROAD));
 	}
@@ -1755,8 +1761,10 @@ void men_SHOW_MENU(void)
 	char temp4[25];
 	char procent[10];
 	char temppath[25];
+	char err[25];
 	char 		  FileName[25];
 	FILE  		*pRFile = 0;
+	FILE  		*file = 0;
 	
 	FIL fil;  
 	TCHAR *fn_ptr;
@@ -1784,8 +1792,7 @@ void men_SHOW_MENU(void)
 //Alex
 	
 	if ((Items[men_POINTER].Data_reg == 0xFF)||(Items[men_POINTER].Data_reg == 0xFE)) ///Выбор маршрута
-	{	
-		
+	{		
 		
 		vga_CLEAR();
 		men_SHOW_RECT(Items[men_LEVEL_POINT[men_LEVEL-1]].Text_0);
@@ -1806,7 +1813,13 @@ void men_SHOW_MENU(void)
 //			//res = FAT_Init();
 //			res = disk_status(0);
 			
+			
+
+			
 			pRFile = fopen ("Roads.txt","r");
+						
+			sprintf(err, "%s", strerror(errno));
+			
 			if (pRFile != NULL)
 			{
 				fseek(pRFile,9*(ip+AddPos),SEEK_SET);
@@ -1819,9 +1832,7 @@ void men_SHOW_MENU(void)
 					fclose(pRFile);
 					vga_PRINT_TEXT(temp,20,men_FONT_DEFAULT);
 					NumberOfFiles++;
-				}
-				
-				
+				}				
 			}
 			else 
 			{
@@ -2739,11 +2750,14 @@ void men_EN_MENU(void)
 								savefilenameTCHAR = savefilename;
 
 								IWDG_ReloadCounter();
+								__disable_fiq();
+								__disable_irq();
+								
 								
 								f_mount(&fls, "0:", 1);
 								res_t = f_mkdir(savefiledirTCHAR);								
 								res_t = f_open(&Fil, savefilenameTCHAR, FA_WRITE | FA_CREATE_ALWAYS);
-								f_sync(&Fil);
+								//f_sync(&Fil);
 								
 								res_t = f_write(&Fil,&k_reg,4,&iout);										
 								res_t = f_write(&Fil,ext_adc_SIM,25000*2,&iout);		
@@ -2752,7 +2766,10 @@ void men_EN_MENU(void)
 											
 								//res_t = f_printf(&Fil, ffarr2);
 								
-								f_sync(&Fil);
+								//f_sync(&Fil);
+								
+								__enable_fiq();
+								__enable_irq();
 								
 								
 								

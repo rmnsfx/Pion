@@ -4178,6 +4178,7 @@ FRESULT f_mkfs (
 		for (n = 1; n < n_fat; n++) {		/* This loop may take a time on FAT32 volume due to many single sector writes */
 			if (disk_write(pdrv, tbl, wsect++, 1))
 				return FR_DISK_ERR;
+			IWDG_ReloadCounter();
 		}
 	}
 

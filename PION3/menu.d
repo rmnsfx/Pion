@@ -57,3 +57,5 @@
 .\menu.o: ..\PION3\RealTime.h
 .\menu.o: ..\PION3\ADC.h
 .\menu.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\math.h
+.\menu.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\cerrno
+.\menu.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\errno.h
