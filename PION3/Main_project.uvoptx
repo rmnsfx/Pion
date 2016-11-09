@@ -187,32 +187,65 @@
           <Type>0</Type>
           <LineNumber>99</LineNumber>
           <EnabledFlag>1</EnabledFlag>
-          <Address>0</Address>
+          <Address>134321660</Address>
           <ByteObject>0</ByteObject>
           <HtxType>0</HtxType>
           <ManyObjects>0</ManyObjects>
           <SizeOfObject>0</SizeOfObject>
           <BreakByAccess>0</BreakByAccess>
+<<<<<<< Updated upstream
           <BreakIfRCount>0</BreakIfRCount>
           <Filename>.\Flash.c</Filename>
+=======
+          <BreakIfRCount>1</BreakIfRCount>
+          <Filename>.\FAT\fs_fat.c</Filename>
+>>>>>>> Stashed changes
           <ExecCommand></ExecCommand>
-          <Expression></Expression>
+          <Expression>\\Main_project\FAT/fs_fat.c\232</Expression>
         </Bp>
         <Bp>
           <Number>1</Number>
           <Type>0</Type>
+<<<<<<< Updated upstream
           <LineNumber>232</LineNumber>
           <EnabledFlag>1</EnabledFlag>
           <Address>134321328</Address>
+=======
+          <LineNumber>4042</LineNumber>
+          <EnabledFlag>1</EnabledFlag>
+          <Address>134362000</Address>
           <ByteObject>0</ByteObject>
           <HtxType>0</HtxType>
           <ManyObjects>0</ManyObjects>
           <SizeOfObject>0</SizeOfObject>
           <BreakByAccess>0</BreakByAccess>
           <BreakIfRCount>1</BreakIfRCount>
+          <Filename>.\fatfs\ff.c</Filename>
+          <ExecCommand></ExecCommand>
+          <Expression>\\Main_project\fatfs/ff.c\4042</Expression>
+        </Bp>
+        <Bp>
+          <Number>2</Number>
+          <Type>0</Type>
+          <LineNumber>1041</LineNumber>
+          <EnabledFlag>1</EnabledFlag>
+          <Address>134352606</Address>
+>>>>>>> Stashed changes
+          <ByteObject>0</ByteObject>
+          <HtxType>0</HtxType>
+          <ManyObjects>0</ManyObjects>
+          <SizeOfObject>0</SizeOfObject>
+          <BreakByAccess>0</BreakByAccess>
+          <BreakIfRCount>1</BreakIfRCount>
+<<<<<<< Updated upstream
           <Filename>.\FAT\fs_fat.c</Filename>
           <ExecCommand></ExecCommand>
           <Expression>\\Main_project\FAT/fs_fat.c\232</Expression>
+=======
+          <Filename>.\fatfs\ff.c</Filename>
+          <ExecCommand></ExecCommand>
+          <Expression>\\Main_project\fatfs/ff.c\1041</Expression>
+>>>>>>> Stashed changes
         </Bp>
       </Breakpoint>
       <WatchWindow1>
@@ -304,7 +337,7 @@
       <GroupNumber>1</GroupNumber>
       <FileNumber>1</FileNumber>
       <FileType>1</FileType>
-      <tvExp>1</tvExp>
+      <tvExp>0</tvExp>
       <Focus>0</Focus>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>

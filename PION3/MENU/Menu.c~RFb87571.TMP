@@ -21,7 +21,6 @@
 #include "ADC.h"
 #include "math.h"
 #include "diskio.h"		
-#include <cerrno>
 
 
 
@@ -276,17 +275,14 @@ void men_SETUP(void)
 // men_LEVEL_ACCES = (men_PAROL1==0);
 // men_TIME_PAROL  = NIL;
  //men_STATUS      = men_MAIN;
+
  //vga_INIT();
-FILE *file;	
-	
  men_SET_CONFIG(REG(CHANEL_MESUARE));		 //меняем конфигурацию меню если выбрали другой канал измерения 
-	
 	
  if (rod_INIT()!=0) 
  {
    men_SHOW_MESSAGE("Ошибка открытия","маршрутного файла",500);
  }
- 
  
  rod_GET_NameElement(&NEl,1);
 	//Alex
@@ -294,11 +290,9 @@ FILE *file;
 	memcpy(Road_Name, NEl.StringName_1, 15);
 	Road_Number = NEl.Number;
 	//rod_GET_NameElement(&NEl,REG(NUMFILE_CURENT));
- 
- 
 	if (Road_Number == 0) 
 	{
-		//REGW(NUMFILE_CURENT,REG(BEYOND_ROAD));
+		REGW(NUMFILE_CURENT,REG(BEYOND_ROAD));
 		rod_GET_NameElement(&NEl,1+REG(BEYOND_ROAD));
 		REGW(NUMFILE_CURENT,1+REG(BEYOND_ROAD));
 	}
@@ -1761,11 +1755,9 @@ void men_SHOW_MENU(void)
 	char temp4[25];
 	char procent[10];
 	char temppath[25];
-	char err[25];
 	char 		  FileName[25];
 	FILE  		*pRFile = 0;
-	FILE  		*file = 0;
-	
+	FATFS fat;
 	FIL fil;  
 	TCHAR *fn_ptr;
 	char* fn;
@@ -1776,6 +1768,7 @@ void men_SHOW_MENU(void)
 	uint16_t c =0;
 	uint16_t d =0;
 	unsigned int res;
+	unsigned int byte_read;
 	uint8_t ip = 0;
 	uint16_t i = 0;
 	uint16_t j = 0;
@@ -1792,7 +1785,8 @@ void men_SHOW_MENU(void)
 //Alex
 	
 	if ((Items[men_POINTER].Data_reg == 0xFF)||(Items[men_POINTER].Data_reg == 0xFE)) ///Выбор маршрута
-	{		
+	{	
+		
 		
 		vga_CLEAR();
 		men_SHOW_RECT(Items[men_LEVEL_POINT[men_LEVEL-1]].Text_0);
@@ -1801,59 +1795,48 @@ void men_SHOW_MENU(void)
 		else AddPos = 0;
 		ip = 0;
 		NumberOfFiles = 0;
+		
+		res = disk_status(0);
+		res = f_mount(&fat,"0:",1);
+		//file_stat = f_stat("Roads.txt", &filinfo);
+		res = f_open(&Fil, "Roads.txt", FA_OPEN_EXISTING | FA_READ);
+		
+		
 		while (ip<5)
 		{
 			vga_SET_POS_TEXT(men_X0, men_Y0 + men_OFFSET + (unsigned short)ip * men_HEIGHT_STR);
 			
-//			res = f_mount(NULL,"0:",0);
-//			res = disk_initialize(0);
-//			res = f_mount(&f,"0:",1);
-//			res = disk_status(0);
-//			res = f_mount(&f,"0:",1);
-//			//res = FAT_Init();
-//			res = disk_status(0);
-			
-			
 
 			
-			pRFile = fopen ("Roads.txt","r");
-						
-			sprintf(err, "%s", strerror(errno));
+			if (res == 0)
+			{				
+							
+				res = f_lseek(&Fil, 9*(ip+AddPos));
+				f_gets(temp, 9, &Fil);	
+				res = f_close(&Fil);		
 			
-			if (pRFile != NULL)
-			{
-				fseek(pRFile,9*(ip+AddPos),SEEK_SET);
-				fscanf(pRFile, "%s", temp);
-				fclose(pRFile);
-				if ((pRFile = fopen (temp,"r")) != NULL) 
+				res = f_open(&Fil, temp, FA_OPEN_EXISTING | FA_READ);	
+				
+				if (res == 0) 
 				{
-					memset(temp,0,20);
-					fread(temp,1,15,pRFile);
-					fclose(pRFile);
-					vga_PRINT_TEXT(temp,20,men_FONT_DEFAULT);
-					NumberOfFiles++;
-				}				
+						memset(temp,0,20);
+						res = f_read(&Fil, temp, 15, &byte_read);
+						res = f_close(&Fil);
+						vga_PRINT_TEXT(temp, 20, men_FONT_DEFAULT);
+						NumberOfFiles++;					
+				}
+				
 			}
-			else 
-			{
-				memset(temp,0,20);
-				sprintf(temp,"Road.%03u",ip+AddPos);
-				pRFile = fopen (temp,"r");
-				if (pRFile != NULL) 
-					{
-					fread(temp,1,15,pRFile);
-					fclose(pRFile);
-					vga_PRINT_TEXT(temp,20,men_FONT_DEFAULT);
-					//	road_cursor_pos--;
-						NumberOfFiles++;
-					}
-			}
-
+			
+			
+			
 			
 		ip++;
 			
 		}
 
+		res = f_mount(0,"0:",0);
+		
 		if (road_cursor_pos >= NumberOfFiles) road_cursor_pos--;
 		men_CURSOR_STR = road_cursor_pos;
 		
@@ -2750,24 +2733,20 @@ void men_EN_MENU(void)
 								savefilenameTCHAR = savefilename;
 
 								IWDG_ReloadCounter();
-								__disable_fiq();
-								__disable_irq();
 								
-								finit();
 								f_mount(&fls, "0:", 1);
 								res_t = f_mkdir(savefiledirTCHAR);								
 								res_t = f_open(&Fil, savefilenameTCHAR, FA_WRITE | FA_CREATE_ALWAYS);
+								f_sync(&Fil);
+								
 								res_t = f_write(&Fil,&k_reg,4,&iout);										
 								res_t = f_write(&Fil,ext_adc_SIM,25000*2,&iout);		
-								f_sync(&Fil);
+								//res_t = f_write(&Fil,ffarr1,25000,&iout);		
 								
 											
 								//res_t = f_printf(&Fil, ffarr2);
 								
-								//f_sync(&Fil);
-								
-								__enable_fiq();
-								__enable_irq();
+								f_sync(&Fil);
 								
 								
 								
@@ -2791,8 +2770,8 @@ void men_EN_MENU(void)
 								}									
 
 								
-//								f_close(&Fil);			
-//								f_mount(0,"0:", 0);		
+								f_close(&Fil);			
+								f_mount(0,"0:", 0);		
 								
 								
 //								Delay(100000);
@@ -2810,7 +2789,7 @@ void men_EN_MENU(void)
 								V = calc_from_dat_V(FileName);								
 
 	
-//								f_mount(&fls, "0:", 1);
+								f_mount(&fls, "0:", 1);
 								res_t = f_open(&Fil,savefilenameTCHAR, FA_READ | FA_WRITE);  
 								res_t = f_lseek(&Fil, f_size(&Fil));
 								res_t = f_write(&Fil,&A,2,&iout);		
