@@ -68,7 +68,7 @@ extern unsigned int usb_charge_state;
 extern FATINFO sdinfo;
 
 //Выключатель usb для отладки 
-#define USB_SWITCH 1
+#define USB_SWITCH 0
 
 
 

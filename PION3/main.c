@@ -561,6 +561,7 @@ TStatus FORMAT(void)
 	char str_out[5];
 	int i2=0;
 	long res = 0;
+	uint8_t buf[512];
 
 //	finit();
 //	Delay(100000);
@@ -581,12 +582,16 @@ TStatus FORMAT(void)
 	
 	IWDG_ReloadCounter();
 	
-	memset(temp_data,0,512);
-		
+	memset(temp_data,0,512);		
 	
+	memset(buf, 0x00, 512);
+  
+//	res = disk_write(0, buf, 0*512, 1);
+//	res = disk_write(0, buf, 1*512, 1);
+//	res = disk_write(0, buf, 2*512, 1);
+		
   //форматирование
-  mmc_format();//очистка флэш, создание таблицы FAT
-
+  res = mmc_format();//очистка флэш, создание таблицы FAT
 
 	vga_SET_DRAW_MODE(drMODE_NORMAL);
 	vga_RECTANGLE(1,30,vga_GET_WIDTH_DISPLAY-3,33,drRECT_NO_FILL);

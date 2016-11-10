@@ -86,6 +86,7 @@ BOOL mmc_format(void)
 	
 	U32 i;
 	unsigned int res;
+	unsigned int res_format;
 	//unsigned int disk_size = sdinfo.DskSize;
  
 //	__disable_irq();
@@ -93,19 +94,24 @@ BOOL mmc_format(void)
  
 	IWDG_ReloadCounter();	
 	
+	
+	
+	
 //	if (sdinfo.DskSize >= 7000000)
 //	{
 		res = f_mount(&fls, "0:", 1);
-		res = f_mkfs("0:", 0, sdinfo.ClusSize); 
+		res_format = f_mkfs("0:", 0, 0); 
 		res = f_setlabel("PION"); 
-		res = f_mount(0,"0:", 0);
+		res = f_mount(0,"0:",0);
 //	}
-//	else	res = fat_format("PION");
+//	else	
+	
+//	res = fat_format("PION");
 	
 //	__enable_irq();
 //	__enable_fiq(); 
  
- return (__TRUE);
+ return (res_format);
 }
 
 

@@ -255,6 +255,11 @@ BOOL fat_format (const char *label) {
       /* 4 GB cards. */
       mcfg.blocknr *= 4;
       break;
+		
+		case 4096:
+      /* 8 GB cards. */
+      mcfg.blocknr *= 8;
+      break;
 
     default:
       /* Block Size not supported. */

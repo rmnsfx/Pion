@@ -20,29 +20,26 @@ FILE  		*pRFile = 0;
 
 s8 rod_INIT(void)
 {
-	char temp[20];
+	char temp[20];	
 	
+	if (pRFile == 0) pRFile = fopen ("Road.log","r");
+	else 
+	{
+		fclose(pRFile);			
+	}
 	
-//	if (pRFile == 0) pRFile = fopen ("Road.log","r");
-//	else 
-//	{
-//		fclose(pRFile);	
-//		pRFile = fopen ("Road.log","r");
-//	}
-//	
-//	if (pRFile!=0)
-//	{
-//	
-//		fscanf(pRFile, "%s", temp);			
-//		fclose(pRFile);	
-//		
-//		pRFile = fopen (temp,"r");		
-//		
-//		return 0;
-//	}
+	if (pRFile != 0)
+	{
 	
-
- return 0;
+		fscanf(pRFile, "%s", temp);			
+		fclose(pRFile);	
+		
+		pRFile = fopen (temp,"r");		
+		
+		if (pRFile != 0) return 0;
+		else return -1;
+	}
+	else return -1;
 }
 
 

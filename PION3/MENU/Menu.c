@@ -277,18 +277,18 @@ void men_SETUP(void)
 // men_TIME_PAROL  = NIL;
  //men_STATUS      = men_MAIN;
  //vga_INIT();
-FILE *file;	
+	FILE *file;	
 	
- men_SET_CONFIG(REG(CHANEL_MESUARE));		 //меняем конфигурацию меню если выбрали другой канал измерения 
+	men_SET_CONFIG(REG(CHANEL_MESUARE));		 //меняем конфигурацию меню если выбрали другой канал измерения 
 	
 	
- if (rod_INIT()!=0) 
- {
-   men_SHOW_MESSAGE("Ошибка открытия","маршрутного файла",500);
- }
+	if (rod_INIT() != 0) 
+	{
+		men_SHOW_MESSAGE("Ошибка открытия","файла Road.log",800);
+		return;
+	}	 
  
- 
- rod_GET_NameElement(&NEl,1);
+	rod_GET_NameElement(&NEl,1);
 	//Alex
 	//Road_Name = NEl.StringName_1;
 	memcpy(Road_Name, NEl.StringName_1, 15);
@@ -1759,6 +1759,7 @@ void men_SHOW_MENU(void)
 	char temp2[9];
 	char temp3[3];
 	char temp4[25];
+	char temp5[10];
 	char procent[10];
 	char temppath[25];
 	char err[25];
@@ -1775,7 +1776,7 @@ void men_SHOW_MENU(void)
 	uint16_t b =0;
 	uint16_t c =0;
 	uint16_t d =0;
-	unsigned int res;
+	volatile unsigned int res;
 	uint8_t ip = 0;
 	uint16_t i = 0;
 	uint16_t j = 0;
@@ -1785,6 +1786,8 @@ void men_SHOW_MENU(void)
 	uint8_t NumberOfFiles = 8;
 	uint16_t AddPos = 0;
   FATFS f;
+	
+	
 	men_STATUS 	   = men_MULTI_ITEM;
   men_s			   = men_CURSOR_STR;
 	
@@ -1805,16 +1808,6 @@ void men_SHOW_MENU(void)
 		{
 			vga_SET_POS_TEXT(men_X0, men_Y0 + men_OFFSET + (unsigned short)ip * men_HEIGHT_STR);
 			
-//			res = f_mount(NULL,"0:",0);
-//			res = disk_initialize(0);
-//			res = f_mount(&f,"0:",1);
-//			res = disk_status(0);
-//			res = f_mount(&f,"0:",1);
-//			//res = FAT_Init();
-//			res = disk_status(0);
-			
-			
-
 			
 			pRFile = fopen ("Roads.txt","r");
 						
@@ -1864,140 +1857,143 @@ void men_SHOW_MENU(void)
 	}
 	
 	
-	/// Удаление 
-	
-	if ((Items[men_POINTER].Data_reg == 0xFB)||(Items[men_POINTER].Data_reg == 0xFC))
-	{
+//	/// Удаление 
+//	
+//	if ((Items[men_POINTER].Data_reg == 0xFB)||(Items[men_POINTER].Data_reg == 0xFC))
+//	{
 
 
-			IWDG_ReloadCounter();
-		
-			SET_CLOCK_SPEED(CLK_72MHz);
-			
-			__disable_irq();
-			__disable_fiq();
-			
-			f_mount(&fls, "0:", 1);
+//			IWDG_ReloadCounter();
+//		
+//			SET_CLOCK_SPEED(CLK_72MHz);
+//			
+//			f_mount(&fls, "0:", 1);
 
-			///Определяем имя файла маршрута по курсору 
-			pRFile = fopen ("Roads.txt","r");
-			if (pRFile != NULL)
-			{
-				fseek(pRFile,9*road_pos,SEEK_SET);
-				fscanf(pRFile, "%s", temp2);
-				fclose(pRFile);
-			}
+//			///Определяем имя файла маршрута по курсору 
+//			pRFile = fopen ("Roads.txt","r");
+//			if (pRFile != NULL)
+//			{
+//				fseek(pRFile,9*road_pos,SEEK_SET);
+//				fscanf(pRFile, "%s", temp2);
+//				fclose(pRFile);
+//			}
 
-			
-			f_unlink(temp2); ///Удаляем файл маршрута
-						
-			strncpy(temp3,temp2+5,8-5); ///Выделяем первичный индекс папки с выборкой			
-			b = atoi(&temp3); /// В int
-			
-					
-			
-			do ///Определяем количество выборок в удаляемом маршруте
-			{
-				sprintf(temppath,"%03u.%03u", b, d);	
-				d++;
-			} while ( (result = f_stat(temppath, &fno)) == FR_OK );
-			
-			
-			
-				vga_CLEAR();
-				vga_SET_POS_TEXT(1,1);
-				vga_PRINT_STR("Удаление...",&FONT_6x8);				
-				vga_UPDATE();
-			
-			
-			for (a=0;a<=d-2;a++) ///Выборка
-			{
-				for (c=0;c<=255;c++) ///Сигнал
-				{
-					sprintf(temp4,"%03u.%03u\\Signal %d.dat", b, a, c);
-					f_unlink(temp4);
-					
-					
-				}
-				
-				///Удаляем папку
-				sprintf(temp4,"%03u.%03u", b, a);
-				f_unlink(temp4);
-				
-							
-					vga_CLEAR();
-					vga_SET_POS_TEXT(1,1);
-					vga_PRINT_STR("Удаление...",&FONT_6x8);
-					vga_SET_POS_TEXT(70,1);										
-					vga_PRINT_STR(temp4,&FONT_6x8);
-					vga_UPDATE();
-				
-			}
-					
+//			fdelete(temp2);
+//			//res = f_unlink(temp2); ///Удаляем файл маршрута
+//						
+//			strncpy(temp3,temp2+5,8-5); ///Выделяем первичный индекс папки с выборкой			
+//			b = atoi(&temp3); /// В int
+//			
+//					
+//			
+//			do ///Определяем количество выборок в удаляемом маршруте
+//			{
+//				sprintf(temppath,"%03u.%03u", b, d);	
+//				d++;
+//			} while ( (result = f_stat(temppath, &fno)) == FR_OK );
+//			f_mount(0, "0:", 0);
+//			
+//			
+//				vga_CLEAR();
+//				vga_SET_POS_TEXT(1,1);
+//				vga_PRINT_STR("Удаление...",&FONT_6x8);				
+//				vga_UPDATE();
+//			
+//			
+//			for (a=0;a<=d;a++) ///Выборка
+//			{
+//				for (c=0;c<=255;c++) ///Сигнал
+//				{
+//					sprintf(temp4,"M:\\%03u.%03u\\Signal %d.dat", b, a, c);
+//					//f_unlink(temp4);
+//					fdelete(temp4);
+//					
+//				}
+//				
+//				///Удаляем папку
+//				sprintf(temp5,"M:\\%03u.%03u\\", b, a);
+//				//f_unlink(temp4);
+//				fdelete(temp5);
+//							
+////				vga_CLEAR();
+////				vga_SET_POS_TEXT(1,1);
+////				vga_PRINT_STR("Удаление: ",&FONT_6x8);
+////				vga_SET_POS_TEXT(70,1);										
+////				vga_PRINT_STR(temp4,&FONT_6x8);
+////				vga_UPDATE();
+//				
+//			}
+//					
 
-			
-			
-				
-			///Обновляем Roads.txt
-														
-			f_open(&FileTmp,"Roads.txt", FA_CREATE_ALWAYS | FA_WRITE);
-					
-			sprintf(FileName,"Road.%01u  ",0);
-			f_printf(&FileTmp,FileName);
-			f_putc('\n',&FileTmp);
-			
-			for(i=1;i<255;i++)
-			{
-					sprintf(FileName,"Road.%03u",i);
-				
-					if (f_stat(FileName, &fno) == FR_OK)
-					{
-							f_printf(&FileTmp,FileName);
-							f_putc('\n',&FileTmp);
-					}
-						
-			}
-			
-			f_close(&FileTmp);
-			
-			
-			///Обновляем Roads.log
-			
-			f_open(&Fil,"0:Road.log", FA_CREATE_ALWAYS | FA_WRITE);
-			f_printf(&Fil,"%s", "Road.0");
-			f_close(&Fil);
-			
-						
-			f_mount(0,"0:", 0);	
-			
-			__enable_irq();
-			__enable_fiq();		
-										
-						
-			vga_CLEAR();
-			vga_SET_POS_TEXT(1,1);
-			vga_PRINT_STR("Удаление завершено.",&FONT_6x8);				
-			vga_UPDATE();
-			
-			Delay (10000000);
-			
-			vga_CLEAR();
-			vga_SET_POS_TEXT(28,25);  
-			vga_PRINT_STR("ВЫКЛЮЧЕНИЕ",&FONT_7x10_bold);
-			vga_UPDATE();
-	
-			Delay(5500000);
-			
-			BKP_WriteBackupRegister(BKP_DR12, 0); ///Индикация A,V			
-							
-			SET_CLOCK_SPEED(CLK_8MHz);
-			
-			NVIC_SystemReset();
-			 
-			
+//			
+//			
+//				
+//			///Обновляем Roads.txt
+//			f_mount(&fls, "0:", 1);											
+//			f_open(&FileTmp,"Roads.txt", FA_CREATE_ALWAYS | FA_WRITE);
+//					
+//			sprintf(FileName,"Road.%01u  ",0);
+//			f_printf(&FileTmp,FileName);
+//			f_putc('\n',&FileTmp);
+//			
+//			for(i=1;i<255;i++)
+//			{
+//					sprintf(FileName,"Road.%03u",i);
+//				
+//					if (f_stat(FileName, &fno) == FR_OK)
+//					{
+//							f_printf(&FileTmp,FileName);
+//							f_putc('\n',&FileTmp);
+//					}
+//						
+//			}
+//			
+//			f_close(&FileTmp);
+//			
+//			
+//			///Обновляем Roads.log
+//			
+//			f_open(&Fil,"0:Road.log", FA_CREATE_ALWAYS | FA_WRITE);
+//			f_printf(&Fil,"%s", "Road.0");
+//			f_close(&Fil);
+//			
+//						
+//			f_mount(0,"0:", 0);	
 
-		return;
-	}
+//			
+//			vga_CLEAR();
+//			vga_SET_POS_TEXT(1,1);
+//			vga_PRINT_STR("Удаление завершено.",&FONT_6x8);				
+//			vga_UPDATE();
+//			
+//			Delay (10000000);
+//			
+////			vga_CLEAR();
+////			vga_SET_POS_TEXT(28,25);  
+////			vga_PRINT_STR("ВЫКЛЮЧЕНИЕ",&FONT_7x10_bold);
+////			vga_UPDATE();
+////	
+////			Delay(5500000);
+//			
+//			BKP_WriteBackupRegister(BKP_DR12, 0); ///Индикация A,V			
+//							
+//			SET_CLOCK_SPEED(CLK_8MHz);
+//			
+////			NVIC_SystemReset();
+
+//			
+
+////men_STATUS=men_MAIN;
+////men_SHOW_REFRESH();
+////men_SHOW_MAINFORMS(form_MESUARE);				
+////men_SETUP();		
+////men_ES_MENU();
+////men_CALLBACK(); 
+////men_SHOW_ITEMS();
+
+
+//		return;
+//	}
 	//*Alex
 	
  //men_START_POINTER = men_POINTER;
@@ -2655,7 +2651,7 @@ void men_EN_MENU(void)
   unsigned int temp_reg; 
 	uint16_t A=0, V=0;
 	uint16_t Aa=0,Vv=0;
-	char temp[25];	
+		
 	uint8_t ip = 0;	
 	unsigned int i = 0, j = 0;
 	uint8_t NumberOfFiles = 8;
@@ -2667,6 +2663,20 @@ void men_EN_MENU(void)
 	DWORD sector[2];
 	uint8_t ffarr1[50000];
 	TCHAR* ffarr2;
+	char temp[25];
+	char temp2[9];
+	char temp3[3];
+	char temp4[25];
+	char temp5[10];
+	uint16_t a =0;
+	uint16_t b =0;
+	uint16_t c =0;	
+	volatile unsigned int res;
+	char temppath[25];
+	
+	
+	
+	
 	
  
 	switch (men_STATUS)
@@ -2690,22 +2700,7 @@ void men_EN_MENU(void)
 								
 							  REGW(NUMFILE,0); //ставим лок-байт
 								
-//								if (BeyondRoad) /// Вне маршрута
-//								{
-//									
-//										
-//									temp_reg = REG(BEYOND_ROAD);
-//									
-//									sprintf(FileName,"M:\\%03u.%03u\\Signal %d.dat",0,0,temp_reg);
-//									
-//									sprintf(savefiledir,"0:%03u.%03u",0,0);		
-//									sprintf(savefilename,"0:%03u.%03u/Signal %d.dat",0,0,temp_reg);		
-//									
-//									temp_reg++;
-//									REGW(BEYOND_ROAD,temp_reg);		
-//								}
-//								else 
-								{
+
 								
 									
 																											
@@ -2738,8 +2733,7 @@ void men_EN_MENU(void)
 											sprintf(savefilename,"0:%03u.%03u/Signal %d.dat",road_pos_int,REG(ROUTE_NUM),NEl.Number);
 														
 											Num_of_Road = Road_Number;				
-									
-								}
+
 
 															
 							
@@ -2750,6 +2744,7 @@ void men_EN_MENU(void)
 								savefilenameTCHAR = savefilename;
 
 								IWDG_ReloadCounter();
+											
 								__disable_fiq();
 								__disable_irq();
 								
@@ -2761,14 +2756,8 @@ void men_EN_MENU(void)
 								res_t = f_write(&Fil,ext_adc_SIM,25000*2,&iout);		
 								f_sync(&Fil);
 								
-											
-								//res_t = f_printf(&Fil, ffarr2);
-								
-								//f_sync(&Fil);
-								
 								__enable_fiq();
-								__enable_irq();
-								
+								__enable_irq();								
 								
 								
 								if (iout < 50000)	
@@ -2788,29 +2777,14 @@ void men_EN_MENU(void)
 									sprintf(temp,"%d", res_t);						
 									vga_PRINT_STR(temp, &FONT_6x8);	
 									vga_UPDATE();
-								}									
-
-								
-//								f_close(&Fil);			
-//								f_mount(0,"0:", 0);		
-								
-								
-//								Delay(100000);
-//								
-//								f_mount(&fls, "0:", 1);
-//								res_t = f_open(&Fil, "0:control.dat", FA_WRITE | FA_CREATE_ALWAYS);
-//								res_t = f_write(&Fil,ext_adc_SIM,25000*2,&iout);
-//								f_close(&Fil);			
-//								f_mount(0,"0:", 0);
-								
-								
+								}																
+						
 								
 								/// Вычисляем ускорение и скорость
 								A = calc_from_dat_A(FileName);								
 								V = calc_from_dat_V(FileName);								
 
-	
-//								f_mount(&fls, "0:", 1);
+
 								res_t = f_open(&Fil,savefilenameTCHAR, FA_READ | FA_WRITE);  
 								res_t = f_lseek(&Fil, f_size(&Fil));
 								res_t = f_write(&Fil,&A,2,&iout);		
@@ -2969,6 +2943,133 @@ void men_EN_MENU(void)
 			
 			 return;			 
 		 }
+		 
+		 
+		 
+		 
+		 
+		/// Удаление 	
+		if (Items[men_POINTER].Data_reg == 0xf2)
+		{
+
+			IWDG_ReloadCounter();
+		
+			SET_CLOCK_SPEED(CLK_72MHz);
+			
+			f_mount(&fls, "0:", 1);
+
+			///Определяем имя файла маршрута по курсору 
+			pRFile = fopen ("Roads.txt","r");
+			if (pRFile != NULL)
+			{
+				fseek(pRFile,9*road_pos,SEEK_SET);
+				fscanf(pRFile, "%s", temp2);
+				fclose(pRFile);
+			}
+
+			fdelete(temp2);
+			//res = f_unlink(temp2); ///Удаляем файл маршрута
+						
+			strncpy(temp3,temp2+5,8-5); ///Выделяем первичный индекс папки с выборкой			
+			b = atoi(&temp3); /// В int
+			
+					
+			
+			do ///Определяем количество выборок в удаляемом маршруте
+			{
+				sprintf(temppath,"%03u.%03u", b, d);	
+				d++;
+			} while ( (result = f_stat(temppath, &fno)) == FR_OK );
+			f_mount(0, "0:", 0);
+			
+			
+				vga_CLEAR();
+				vga_SET_POS_TEXT(1,1);
+				vga_PRINT_STR("Удаление...",&FONT_6x8);				
+				vga_UPDATE();
+			
+			
+			for (a=0;a<=d;a++) ///Выборка
+			{
+				for (c=0;c<=255;c++) ///Сигнал
+				{
+					sprintf(temp4,"M:\\%03u.%03u\\Signal %d.dat", b, a, c);
+					//f_unlink(temp4);
+					fdelete(temp4);
+					
+				}
+				
+				///Удаляем папку
+				sprintf(temp5,"M:\\%03u.%03u\\", b, a);
+				//f_unlink(temp4);
+				fdelete(temp5);
+							
+//				vga_CLEAR();
+//				vga_SET_POS_TEXT(1,1);
+//				vga_PRINT_STR("Удаление: ",&FONT_6x8);
+//				vga_SET_POS_TEXT(70,1);										
+//				vga_PRINT_STR(temp4,&FONT_6x8);
+//				vga_UPDATE();
+				
+			}
+			
+				
+			///Обновляем Roads.txt
+			f_mount(&fls, "0:", 1);											
+			f_open(&FileTmp,"Roads.txt", FA_CREATE_ALWAYS | FA_WRITE);
+					
+			sprintf(FileName,"Road.%01u  ",0);
+			f_printf(&FileTmp,FileName);
+			f_putc('\n',&FileTmp);
+			
+			for(i=1;i<255;i++)
+			{
+					sprintf(FileName,"Road.%03u",i);
+				
+					if (f_stat(FileName, &fno) == FR_OK)
+					{
+							f_printf(&FileTmp,FileName);
+							f_putc('\n',&FileTmp);
+					}
+						
+			}
+			
+			f_close(&FileTmp);
+			
+			
+			///Обновляем Roads.log
+			
+			f_open(&Fil,"0:Road.log", FA_CREATE_ALWAYS | FA_WRITE);
+			f_printf(&Fil,"%s", "Road.0");
+			f_close(&Fil);
+			
+						
+			f_mount(0,"0:", 0);	
+
+			
+			vga_CLEAR();
+			vga_SET_POS_TEXT(1,1);
+			vga_PRINT_STR("Удаление завершено.",&FONT_6x8);				
+			vga_UPDATE();
+			
+			Delay (10000000);
+			
+			BKP_WriteBackupRegister(BKP_DR12, 0); ///Индикация A,V			
+							
+			SET_CLOCK_SPEED(CLK_8MHz);
+			
+			men_SETUP();
+			//men_SHOW_REFRESH();
+			men_SHOW_MENU();
+
+			//men_STATUS=men_MAIN;
+			//men_SHOW_MAINFORMS(form_MESUARE);				
+			//men_ES_MENU();
+			//men_CALLBACK(); 
+
+			return;
+		}
+		 
 		 
 		 
 		  
