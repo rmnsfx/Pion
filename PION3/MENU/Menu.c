@@ -2894,7 +2894,7 @@ void men_EN_MENU(void)
 		 
   
 		 
-		 if(Items[men_POINTER].Data_reg == 0xf0) ////// Создание маршрута
+		 if(Items[men_POINTER].Data_reg == 0xf0) ///Создание маршрута
 		 {
 			 
 			 uint8_t ii = 0; /// Номер выборки			 
@@ -3101,21 +3101,69 @@ void men_EN_MENU(void)
 			SET_CLOCK_SPEED(CLK_8MHz);
 			
 			men_SETUP();
-			//men_SHOW_REFRESH();
-			men_SHOW_MENU();
 
-			//men_STATUS=men_MAIN;
-			//men_SHOW_MAINFORMS(form_MESUARE);				
-			//men_ES_MENU();
-			//men_CALLBACK(); 
+			
+			///Рисуем возврат в меню "выбор маршрута"
+			men_LEVEL--;
+			if (Items[men_POINTER].Data_reg == 0xFE) men_POINTER = 27;				
+			else if (Items[men_POINTER].Data_reg == 0xF0) men_POINTER = 0x25;
+			else if (Items[men_POINTER].Data_reg == 0xFB) men_POINTER = 40;
+			else if (Items[men_POINTER].Data_reg == 0xFC) men_POINTER = 40;
+			else if (Items[men_POINTER].Data_reg == 0xFF) men_POINTER = 0;
+			else men_POINTER = 0;
+			men_CURSOR_STR = 0;
+			
+			vga_CLEAR();
+			men_SHOW_RECT(Items[men_LEVEL_POINT[men_LEVEL-1]].Text_0);
+			if (road_pos>4) AddPos = road_pos-4;
+			else AddPos = 0;
+			ip = 0;
+			NumberOfFiles = 0;
+			while (ip<5)
+			{
+				vga_SET_POS_TEXT(men_X0, men_Y0 + men_OFFSET + (unsigned short)ip * men_HEIGHT_STR);												
+				pRFile = fopen ("Roads.txt","r");					
+				if (pRFile != NULL)
+				{
+					fseek(pRFile,9*(ip+AddPos),SEEK_SET);
+					fscanf(pRFile, "%s", temp);
+					fclose(pRFile);
+					if ((pRFile = fopen (temp,"r")) != NULL) 
+					{
+						memset(temp,0,20);
+						fread(temp,1,15,pRFile);
+						fclose(pRFile);
+						vga_PRINT_TEXT(temp,20,men_FONT_DEFAULT);
+						NumberOfFiles++;
+					}				
+				}
+				else 
+				{
+					memset(temp,0,20);
+					sprintf(temp,"Road.%03u",ip+AddPos);
+					pRFile = fopen (temp,"r");
+					if (pRFile != NULL) 
+					{
+						fread(temp,1,15,pRFile);
+						fclose(pRFile);
+						vga_PRINT_TEXT(temp,20,men_FONT_DEFAULT);
+						NumberOfFiles++;
+					}
+				}						
+				ip++;						
+			}
+			if (road_cursor_pos >= NumberOfFiles) road_cursor_pos--;
+			men_CURSOR_STR = road_cursor_pos;					
+			men_SHOW_CURSOR();		
+			vga_UPDATE();		
 
 			return;
 		}
 		 
 		 
 		 
-		  
-		 if(Items[men_POINTER].Data_reg == 0xfd) ////////////////////////////////////////Калибровка батареи
+		 ///Калибровка батареи 
+		 if(Items[men_POINTER].Data_reg == 0xfd) 
 		 { 			
 			 SERVICE_ACC2();			 
 		 }
