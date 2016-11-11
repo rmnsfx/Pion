@@ -22,12 +22,10 @@ s8 rod_INIT(void)
 {
 	char temp[20];	
 	
-	if (pRFile == 0) pRFile = fopen ("Road.log","r");
-	else 
-	{
-		fclose(pRFile);			
-	}
+	pRFile = NULL;
 	
+	pRFile = fopen ("Road.log","r");
+		
 	if (pRFile != 0)
 	{
 	
@@ -36,7 +34,11 @@ s8 rod_INIT(void)
 		
 		pRFile = fopen (temp,"r");		
 		
-		if (pRFile != 0) return 0;
+		if (pRFile != 0) 
+		{
+			fclose(pRFile);	
+			return 0;
+		}
 		else return -1;
 	}
 	else return -1;

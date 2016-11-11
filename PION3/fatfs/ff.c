@@ -4041,6 +4041,7 @@ FRESULT f_mkfs (
 	if (n_clst >= MIN_FAT16) fmt = FS_FAT16;
 	if (n_clst >= MIN_FAT32) fmt = FS_FAT32;
 
+	
 	/* Determine offset and size of FAT structure */
 	if (fmt == FS_FAT32) {
 		n_fat = ((n_clst * 4) + 8 + SS(fs) - 1) / SS(fs);
@@ -4062,7 +4063,7 @@ FRESULT f_mkfs (
 	n = (b_data + n - 1) & ~(n - 1);	/* Next nearest erase block from current data start */
 	n = (n - b_data) / N_FATS;
 	if (fmt == FS_FAT32) {		/* FAT32: Move FAT offset */
-		n_rsv += n;
+		n_rsv += n;		
 		b_fat += n;
 	} else {					/* FAT12/16: Expand FAT size */
 		n_fat += n;

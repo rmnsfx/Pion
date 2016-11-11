@@ -584,7 +584,7 @@ TStatus FORMAT(void)
 	
 	memset(temp_data,0,512);		
 	
-	memset(buf, 0x00, 512);
+//	memset(buf, 0x00, 512);
   
 //	res = disk_write(0, buf, 0*512, 1);
 //	res = disk_write(0, buf, 1*512, 1);

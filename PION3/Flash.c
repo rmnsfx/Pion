@@ -94,19 +94,16 @@ BOOL mmc_format(void)
  
 	IWDG_ReloadCounter();	
 	
+	finit();
 	
 	
-	
-//	if (sdinfo.DskSize >= 7000000)
-//	{
-		res = f_mount(&fls, "0:", 1);
-		res_format = f_mkfs("0:", 0, 0); 
-		res = f_setlabel("PION"); 
-		res = f_mount(0,"0:",0);
-//	}
-//	else	
-	
-//	res = fat_format("PION");
+
+	res = f_mount(&fls, "0:", 0);
+	res_format = f_mkfs("0:", 0, 0); 
+	res = f_setlabel("PION"); 
+	res = f_mount(0,"0:",0);
+
+//	res_format = fat_format("PION");
 	
 //	__enable_irq();
 //	__enable_fiq(); 
