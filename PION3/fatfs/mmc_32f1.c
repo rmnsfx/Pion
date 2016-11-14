@@ -95,6 +95,8 @@
 #include "FLASH_AT45DB.h"
 #include "main.h"
 #include "ff.h"
+#include "RealTime.h"
+
 
 
 /* MMC/SD command */
@@ -663,11 +665,38 @@ void disk_timerproc (void)
 }
 
 
-DWORD get_fattime(void)
-{ 
-DWORD e;
-return e;	
+/*-----------------------------------------------------------------------*/
+/* Get current time                                                      */
+/*-----------------------------------------------------------------------*/
+DWORD get_fattime(void){
+ 
+	char temp[25];
+	
+	int yearft =0;
+	int monthft = 0;
+	int mdayft = 0;
+	int hourft = 0;
+	int minft = 0;
+	int secft = 0;
+		
+	
+	yearft = rtc_READ(rtc_YEAR);
+  monthft = rtc_READ(rtc_MON);
+  mdayft = rtc_READ(rtc_DAY);
+  hourft = rtc_READ(rtc_HOUR);
+  minft = rtc_READ(rtc_MIN);  
+	secft = rtc_READ(rtc_SEC);
+
+
+return	  ((DWORD)(/*rtc.year*/yearft-60) << 25)
+			| ((DWORD)/*rtc.month*/monthft << 21)
+			| ((DWORD)/*rtc.mday*/mdayft << 16)
+			| ((DWORD)/*rtc.hour*/hourft << 11)
+			| ((DWORD)/*rtc.min*/minft << 5)
+			| ((DWORD)/*rtc.sec*/secft >> 1);
+
 }
+
 
 
 void READ_REG_FROM_SD (unsigned int adr_page, unsigned short offset, unsigned char *buf, unsigned short size)

@@ -10,3 +10,4 @@
 .\mmc_32f1.o: .\FAT\RTL.h
 .\mmc_32f1.o: fatfs\ff.h
 .\mmc_32f1.o: fatfs\ffconf.h
+.\mmc_32f1.o: ..\PION3\RealTime.h

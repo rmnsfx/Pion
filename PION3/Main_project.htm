@@ -3,7 +3,7 @@
 <title>Static Call Graph - [.\Main_project.axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image .\Main_project.axf</H1><HR>
-<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5050106: Last Updated: Fri Nov 11 10:26:35 2016
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5050106: Last Updated: Mon Nov 14 11:10:18 2016
 <BR><P>
 <H3>Maximum Stack Usage =       3116 bytes + Unknown(Functions without stacksize, Cycles, Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
@@ -1322,6 +1322,7 @@ Global Symbols
 <P><STRONG><a name="[a4]"></a>rtc_READ</STRONG> (Thumb, 76 bytes, Stack size 0 bytes, realtime.o(.text))
 <BR><BR>[Called By]<UL><LI><a href="#[a0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;reg_READ
 <LI><a href="#[a1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;CONTROL_RTC
+<LI><a href="#[28d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;get_fattime
 <LI><a href="#[241]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;set_timestamp
 </UL>
 
@@ -4955,8 +4956,12 @@ Global Symbols
 <BR><BR>[Called By]<UL><LI><a href="#[72]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Timer_1ms_CallBack
 </UL>
 
-<P><STRONG><a name="[28d]"></a>get_fattime</STRONG> (Thumb, 2 bytes, Stack size 0 bytes, mmc_32f1.o(.text))
-<BR><BR>[Called By]<UL><LI><a href="#[108]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;f_mkfs
+<P><STRONG><a name="[28d]"></a>get_fattime</STRONG> (Thumb, 96 bytes, Stack size 32 bytes, mmc_32f1.o(.text))
+<BR><BR>[Stack]<UL><LI>Max Depth = 32<LI>Call Chain = get_fattime
+</UL>
+<BR>[Calls]<UL><LI><a href="#[a4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rtc_READ
+</UL>
+<BR>[Called By]<UL><LI><a href="#[108]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;f_mkfs
 <LI><a href="#[dd]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;f_setlabel
 <LI><a href="#[d7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;f_open
 <LI><a href="#[25f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;f_sync
