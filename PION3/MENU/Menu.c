@@ -145,6 +145,7 @@ void men_SET_CONFIG(unsigned char conf);
 	unsigned int freezbat2 = 0;
 	unsigned int iout = 0;  		
 	FIL Fil;
+	FIL Fil_2;
 	FRESULT result;	
 	//const TCHAR savefiledirTCHAR[50];
 	const TCHAR * savefiledirTCHAR;
@@ -754,8 +755,8 @@ void men_SHOW_REFRESH(void)
 										__disable_fiq();
 										
 										
-										///sprintf(t_str,"M:\\%03u.%03u\\Signal %d.dat",Road_Number,REG(ROUTE_NUM),NEl.Number);
-										sprintf(t_str,"0:%03u.%03u/Signal %d.dat",road_pos_int,REG(ROUTE_NUM),NEl.Number);								
+										sprintf(t_str,"M:\\%03u.%03u\\Signal %d.dat",Road_Number,REG(ROUTE_NUM),NEl.Number);
+										//sprintf(t_str,"0:%03u.%03u/Signal %d.dat",road_pos_int,REG(ROUTE_NUM),NEl.Number);								
 																		
 										A = calc_from_dat_A(t_str);
 										V = calc_from_dat_V(t_str);
@@ -2650,8 +2651,7 @@ void men_EN_MENU(void)
   char 		  FileName[25];
   unsigned int temp_reg; 
 	uint16_t A=0, V=0;
-	uint16_t Aa=0,Vv=0;
-		
+	uint16_t Aa=0,Vv=0;	
 	uint8_t ip = 0;	
 	unsigned int i = 0, j = 0;
 	uint8_t NumberOfFiles = 8;
@@ -2754,7 +2754,8 @@ void men_EN_MENU(void)
 								res_t = f_open(&Fil, savefilenameTCHAR, FA_WRITE | FA_CREATE_ALWAYS);
 								res_t = f_write(&Fil,&k_reg,4,&iout);										
 								res_t = f_write(&Fil,ext_adc_SIM,25000*2,&iout);		
-								f_sync(&Fil);
+								f_close(&Fil);
+								f_mount(0,"0:", 0);		
 								
 								__enable_fiq();
 								__enable_irq();								
@@ -2782,14 +2783,19 @@ void men_EN_MENU(void)
 								
 								/// Вычисляем ускорение и скорость
 								A = calc_from_dat_A(FileName);								
-								V = calc_from_dat_V(FileName);								
+								V = calc_from_dat_V(FileName);
 
 
-								res_t = f_open(&Fil,savefilenameTCHAR, FA_READ | FA_WRITE);  
-								res_t = f_lseek(&Fil, f_size(&Fil));
-								res_t = f_write(&Fil,&A,2,&iout);		
-								res_t = f_write(&Fil,&V,2,&iout);		
-								f_close(&Fil);			
+								f_mount(&fls, "0:", 1);
+								res_t = f_open(&Fil_2,savefilenameTCHAR, FA_WRITE);  
+																
+								res_t = f_lseek(&Fil_2, f_size(&Fil_2));
+																	
+								res_t = f_write(&Fil_2,&A,2,&iout);		
+																	
+								res_t = f_write(&Fil_2,&V,2,&iout);		
+																
+								f_close(&Fil_2);			
 								f_mount(0,"0:", 0);								
 								
 								crtflag = 1;
