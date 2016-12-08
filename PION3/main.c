@@ -541,7 +541,7 @@ void progressbar_percent(void)
 			vga_SET_POS_TEXT(1,1);
 			vga_PRINT_STR("Форматирование...",&FONT_6x8);
 		 
-			vga_SET_POS_TEXT(1,20);
+			vga_SET_POS_TEXT(1,1);
 			sprintf(str_out2,"%.1f%%", (1000 - ii)/10.0);		 								
 			vga_PRINT_STR(str_out2,&FONT_6x8);
 			vga_UPDATE();			
@@ -550,6 +550,31 @@ void progressbar_percent(void)
 	 
 }
 
+void progressbar(unsigned int value, unsigned int delay)
+{
+	int ii = 0;
+	char str_out2[5];
+	float k = 0;
+	
+	vga_SET_DRAW_MODE(drMODE_NORMAL);
+	vga_RECTANGLE(1,30,vga_GET_WIDTH_DISPLAY-3,33,drRECT_NO_FILL);
+
+	k = value * 1.26;
+	
+	while (ii++ <= k)
+	{		
+		vga_SET_DRAW_MODE(drMODE_NORMAL);				 	
+		vga_RECTANGLE(1,30, ii,33,drRECT_FILL);		
+	}		
+		
+	vga_SET_POS_TEXT(1,1);
+  vga_PRINT_STR("Форматирование:", &FONT_6x8);	
+	vga_SET_POS_TEXT(103,1);
+	sprintf(str_out2,"%d%%", value);
+	vga_PRINT_STR(str_out2, &FONT_6x8);
+	vga_UPDATE();	
+	
+}
 
 
 //процедура форматирования дискаа
@@ -560,47 +585,23 @@ TStatus FORMAT(void)
 	s8 i;
 	char str_out[5];
 	int i2=0;
-	long res = 0;
+	unsigned char res = 0;
 	uint8_t buf[512];
 
-//	finit();
-//	Delay(100000);
-//	fat_init();
-	
 		
+	SET_CLOCK_SPEED(CLK_72MHz);
+
+	IWDG_ReloadCounter();	
+	
 	vga_CLEAR();
-	men_SHOW_MESSAGE("Форматирование...","",0);
-	
-	
-	/// Прогресс-бар
-	vga_SET_DRAW_MODE(drMODE_NORMAL);
-	vga_RECTANGLE(1,30,vga_GET_WIDTH_DISPLAY-3,33,drRECT_NO_FILL);
-	vga_UPDATE();	
-	vga_SET_DRAW_MODE(drMODE_NORMAL);
-	vga_RECTANGLE(1,30,20,33,drRECT_FILL);
-	vga_UPDATE();	
-	
-	IWDG_ReloadCounter();
-	
-	memset(temp_data,0,512);		
-	
-//	memset(buf, 0x00, 512);
-  
-//	res = disk_write(0, buf, 0*512, 1);
-//	res = disk_write(0, buf, 1*512, 1);
-//	res = disk_write(0, buf, 2*512, 1);
 		
-  //форматирование
   res = mmc_format();//очистка флэш, создание таблицы FAT
 
-	vga_SET_DRAW_MODE(drMODE_NORMAL);
-	vga_RECTANGLE(1,30,vga_GET_WIDTH_DISPLAY-3,33,drRECT_NO_FILL);
-	vga_UPDATE();		
-	vga_SET_DRAW_MODE(drMODE_NORMAL);
-	vga_RECTANGLE(1,30,60,33,drRECT_FILL);
-	vga_UPDATE();	
+//	while (i++ < 3 || res == 0)		
+//	res = mmc_format();			
 	
-	
+	SET_CLOCK_SPEED(CLK_8MHz);
+		
 	IWDG_ReloadCounter();
 	
  	REGW(NUMFILE,1);
@@ -608,32 +609,13 @@ TStatus FORMAT(void)
 	REGW(ROUTE_NUM,0);
 	REGW(BEYOND_ROAD,1);
 
-  IWDG_ReloadCounter();
-
-
-	vga_SET_DRAW_MODE(drMODE_NORMAL);
-	vga_RECTANGLE(1,30,vga_GET_WIDTH_DISPLAY-3,33,drRECT_NO_FILL);
-	vga_UPDATE();	
-	vga_SET_DRAW_MODE(drMODE_NORMAL);
-	vga_RECTANGLE(1,30,100,33,drRECT_FILL);
-	vga_UPDATE();	
-
-	IWDG_ReloadCounter();
-
+  progressbar(80, 2);
 	
 	res = rod_CreateFile_edit();	
 	
+	progressbar(100, 2);
 	
-//	vga_CLEAR();
-//	men_SHOW_MESSAGE("Форматирование...","",0);
-	vga_SET_DRAW_MODE(drMODE_NORMAL);
-	vga_RECTANGLE(1,30,vga_GET_WIDTH_DISPLAY-3,33,drRECT_NO_FILL);
-	vga_UPDATE();	
-	vga_SET_DRAW_MODE(drMODE_NORMAL);
-	vga_RECTANGLE(1,30,vga_GET_WIDTH_DISPLAY-3,33,drRECT_FILL);
-	vga_UPDATE();	
-
-	Delay(1400000);
+	Delay(1500000);		
 	
 	vga_CLEAR();
 	vga_SET_POS_TEXT(1,1);
@@ -643,25 +625,28 @@ TStatus FORMAT(void)
 	vga_SET_POS_TEXT(1,12);
 	sprintf(str_out,"завершено.");		 								
 	vga_PRINT_STR(str_out,&FONT_6x8);
-	vga_UPDATE();	
-			
+	vga_UPDATE();				
 
 	IWDG_ReloadCounter();
+	
+//	vga_SET_POS_TEXT(10,1);
+//	sprintf(str_out,"%d",res);		 								
+//	vga_PRINT_STR(str_out,&FONT_6x8);
+//	vga_UPDATE();		
 
-	Delay(1500000);
-		
+	Delay(1500000);		
+	
 
 	vga_CLEAR();
   vga_SET_POS_TEXT(28,25);  
 	vga_PRINT_STR("ВЫКЛЮЧЕНИЕ",&FONT_7x10_bold);
 	vga_UPDATE();
 	
-	Delay(1500000);
+	Delay(1500000);		
 	
 	BKP_WriteBackupRegister(BKP_DR12, 0); ///Индикация A,V
 		
-	pin_OFF();
-	
+	pin_OFF();	
 	
 	return _OK;
 	
@@ -1141,7 +1126,7 @@ int main(void)
 	
 	
 	if (GLOBAL_ERROR>0) 	 //если есть ошибка
-			{	   
+	{	   
 						 temp_reg = 0;
 						 //выводим сообщение об ошибке 
 						 vga_PRINT_STR("ERROR:",&FONT_6x8);
@@ -1156,7 +1141,7 @@ int main(void)
 //						 ShowPowerOffForm();
 //						 Delay(700000); 						 
 //						 pin_OFF();
-			}
+	}
 
 		
 					

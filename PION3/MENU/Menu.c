@@ -285,7 +285,8 @@ void men_SETUP(void)
 	
 	if (rod_INIT() != 0) 
 	{
-		men_SHOW_MESSAGE("Ошибка чтения","маршрутного файла",800);
+		//men_SHOW_MESSAGE("Ошибка чтения","маршрутного файла",800);
+		men_SHOW_MESSAGE("**","",100);
 		return;
 	}	 
  
@@ -3180,7 +3181,7 @@ void men_EN_MENU(void)
    					 if (Items[men_POINTER].Typedata==10)//если команда
 					    {
 								if (Items[men_POINTER].Data_reg==1) //форматирование
-								if (men_SHOW_MESSAGE("Форматировать память?","",15000)) //если нажали кнопку сохранить
+								if (men_SHOW_MESSAGE("Данные будут утеряны.","Форматировать?",15000)) //если нажали кнопку сохранить
 								{
 								 //men_SHOW_MESSAGE("Форматирование...","",0);
 								 //REGW(NUMFILE,0); //ставим лок-байт

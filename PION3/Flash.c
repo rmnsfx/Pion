@@ -79,7 +79,7 @@ BOOL mmc_read_config (MMCFG *cfg)
  return (__TRUE);
 }	
 
-BOOL mmc_format(void)
+unsigned int mmc_format(void)
 {
 	
 	U32 i;
@@ -87,24 +87,20 @@ BOOL mmc_format(void)
 	unsigned int res_format;
 	//unsigned int disk_size = sdinfo.DskSize;
  
-//	__disable_irq();
-//	__disable_fiq(); 
+	__disable_irq();
+	__disable_fiq(); 
  
-	IWDG_ReloadCounter();	
-	
+	IWDG_ReloadCounter();		
 	finit();
 	
-	
-
-	res = f_mount(&fls, "0:", 0);
-	res_format = f_mkfs("0:", 0, 0); 
+	res = f_mount(&fls, "0:", 1);
+	res_format = f_mkfs("0:", 0, 0); 	
+	IWDG_ReloadCounter();	
 	res = f_setlabel("PION"); 
 	res = f_mount(0,"0:",0);
-
-//	res_format = fat_format("PION");
 	
-//	__enable_irq();
-//	__enable_fiq(); 
+	__enable_irq();
+	__enable_fiq(); 
  
  return (res_format);
 }
