@@ -1,5 +1,5 @@
 Dependencies for Project 'Main_project', Target 'STM32': (DO NOT MODIFY !)
-F (.\main.c)(0x58494C90)(-c --cpu Cortex-M3 -g -W -O0 --apcs=interwork -I..\PION3 -I.\CMSIS -I.\DRIVER\inc -I.\DRIVER\src -I.\USB -I.\FAT -I.\OLED -I.\MENU -I.\fatfs-I C:\Users\SavchenkoRS\Desktop\PION3\RTE-I C:\Keil_v5\ARM\PACK\Keil\STM32F1xx_DFP\2.1.0-I C:\Keil_v5\ARM\CMSIS\Include-I C:\Keil_v5\ARM\PACK\Keil\STM32F1xx_DFP\2.1.0\Device\Include-D__UVISION_VERSION="514" -DSTM32F10X_HD -DARM_MATH_CM3-o .\main_1.o --omf_browse .\main_1.crf --depend .\main_1.d)
+F (.\main.c)(0x58495027)(-c --cpu Cortex-M3 -g -W -O0 --apcs=interwork -I..\PION3 -I.\CMSIS -I.\DRIVER\inc -I.\DRIVER\src -I.\USB -I.\FAT -I.\OLED -I.\MENU -I.\fatfs-I C:\Users\SavchenkoRS\Desktop\PION3\RTE-I C:\Keil_v5\ARM\PACK\Keil\STM32F1xx_DFP\2.1.0-I C:\Keil_v5\ARM\CMSIS\Include-I C:\Keil_v5\ARM\PACK\Keil\STM32F1xx_DFP\2.1.0\Device\Include-D__UVISION_VERSION="514" -DSTM32F10X_HD -DARM_MATH_CM3-o .\main_1.o --omf_browse .\main_1.crf --depend .\main_1.d)
 I (stm32f10x.h)(0x5555C86E)
 I (.\CMSIS\core_cm3.h)(0x5555C86E)
 I (C:\Keil_v5\ARM\ARMCC\include\stdint.h)(0x54761D30)

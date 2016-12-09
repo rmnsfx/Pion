@@ -559,7 +559,7 @@ void progressbar(unsigned int value, unsigned int delay)
 	vga_SET_DRAW_MODE(drMODE_NORMAL);
 	vga_RECTANGLE(1,30,vga_GET_WIDTH_DISPLAY-3,33,drRECT_NO_FILL);
 
-	k = value * 1.26;
+	k = value * 1.24;
 	
 	while (ii++ <= k)
 	{		
@@ -1125,23 +1125,23 @@ int main(void)
 	sdinfo = get_mmc();
 	
 	
-	if (GLOBAL_ERROR>0) 	 //если есть ошибка
-	{	   
-						 temp_reg = 0;
-						 //выводим сообщение об ошибке 
-						 vga_PRINT_STR("ERROR:",&FONT_6x8);
-						 
-						 if (GLOBAL_ERROR&0x01)   {vga_SET_POS_TEXT(5,++temp_reg*10);vga_PRINT_STR("Часы",&FONT_6x8);}
-						 if (GLOBAL_ERROR&0x02)   {vga_SET_POS_TEXT(5,++temp_reg*10);vga_PRINT_STR("Инициализация FLASH",&FONT_6x8);}
-						 if (GLOBAL_ERROR&0x04)   {vga_SET_POS_TEXT(5,++temp_reg*10);vga_PRINT_STR("Инициализация FAT",&FONT_6x8);}
-						 
-						 vga_UPDATE();						 
-						 
-//						 Delay(700000); 
-//						 ShowPowerOffForm();
-//						 Delay(700000); 						 
-//						 pin_OFF();
-	}
+//	if (GLOBAL_ERROR>0) 	 //если есть ошибка
+//	{	   
+//						 temp_reg = 0;
+//						 //выводим сообщение об ошибке 
+//						 vga_PRINT_STR("ERROR:",&FONT_6x8);
+//						 
+//						 if (GLOBAL_ERROR&0x01)   {vga_SET_POS_TEXT(5,++temp_reg*10);vga_PRINT_STR("Часы",&FONT_6x8);}
+//						 if (GLOBAL_ERROR&0x02)   {vga_SET_POS_TEXT(5,++temp_reg*10);vga_PRINT_STR("Инициализация FLASH",&FONT_6x8);}
+//						 if (GLOBAL_ERROR&0x04)   {vga_SET_POS_TEXT(5,++temp_reg*10);vga_PRINT_STR("Инициализация FAT",&FONT_6x8);}
+//						 
+//						 vga_UPDATE();						 
+//						 
+////						 Delay(700000); 
+////						 ShowPowerOffForm();
+////						 Delay(700000); 						 
+////						 pin_OFF();
+//	}
 
 		
 					

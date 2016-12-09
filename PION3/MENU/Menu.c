@@ -286,7 +286,7 @@ void men_SETUP(void)
 	if (rod_INIT() != 0) 
 	{
 		//men_SHOW_MESSAGE("Ошибка чтения","маршрутного файла",800);
-		men_SHOW_MESSAGE("**","",100);
+		//men_SHOW_MESSAGE("**","",100);
 		return;
 	}	 
  
@@ -2774,7 +2774,7 @@ void men_EN_MENU(void)
 								{
 									vga_CLEAR();					
 									vga_SET_POS_TEXT(1,1);
-									vga_PRINT_STR("Ошибка: ", &FONT_6x8);										
+									//vga_PRINT_STR("Ошибка: ", &FONT_6x8);										
 									vga_SET_POS_TEXT(55,1);
 									sprintf(temp,"%d", res_t);						
 									vga_PRINT_STR(temp, &FONT_6x8);	
