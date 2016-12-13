@@ -550,7 +550,7 @@ void progressbar_percent(void)
 	 
 }
 
-void progressbar(unsigned int value, unsigned int delay)
+void progressbar(unsigned int value)
 {
 	int ii = 0;
 	char str_out2[5];
@@ -609,11 +609,19 @@ TStatus FORMAT(void)
 	REGW(ROUTE_NUM,0);
 	REGW(BEYOND_ROAD,1);
 
-  progressbar(80, 2);
+  for(i = 60; i<80; i++) 
+	{
+		progressbar(i);
+		Delay(500);
+	}
 	
 	res = rod_CreateFile_edit();	
 	
-	progressbar(100, 2);
+	for(i = 80; i<=100; i++) 
+	{
+		progressbar(i);
+		Delay(500);
+	}
 	
 	Delay(1500000);		
 	
@@ -649,7 +657,6 @@ TStatus FORMAT(void)
 	pin_OFF();	
 	
 	return _OK;
-	
 	
 }
 

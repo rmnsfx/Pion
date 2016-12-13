@@ -114,8 +114,8 @@ long rod_CreateFile_edit (void)
 	char t_str[25];
 	
 
-//	__disable_irq();
-//	__disable_fiq(); 
+	__disable_irq();
+	__disable_fiq(); 
 		
 	f_mount(&fls, "0:", 1);
 				
@@ -128,13 +128,13 @@ long rod_CreateFile_edit (void)
 //	f_open(&Fil,"0:Road.000", FA_OPEN_ALWAYS | FA_WRITE);	
 //	f_lseek(&Fil, 16);
 	
-	for(i=1;i<1000;i++)
+	for(i=1;i<500;i++)
 	{
 			{
 					f_printf(&Fil,"%s %03u      ","точка",i);				
 					f_putc(i,&Fil);
 	
-			}						
+			}									
 	}		
 	//Получаем размер 
 	res = f_size(&Fil);		
@@ -162,8 +162,8 @@ long rod_CreateFile_edit (void)
 	
 	f_mount(0,"0:", 0);	
 	
-//	__enable_irq();
-//	__enable_fiq();
+	__enable_irq();
+	__enable_fiq();
 	
   return res;		 
 }

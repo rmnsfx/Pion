@@ -55,7 +55,7 @@ const BYTE USB_ConfigDescriptor[] = {
   0x00,                              /* iConfiguration */
   USB_CONFIG_BUS_POWERED /*|*/       /* bmAttributes */ 
 /*USB_CONFIG_REMOTE_WAKEUP*/,
-  USB_CONFIG_POWER_MA(500),          /* bMaxPower */ /// Запрашиваемый ток по USB
+  USB_CONFIG_POWER_MA(499),          /* bMaxPower */ /// Запрашиваемый ток по USB
 /* Interface 0, Alternate Setting 0, MSC Class */
   USB_INTERFACE_DESC_SIZE,           /* bLength */
   USB_INTERFACE_DESCRIPTOR_TYPE,     /* bDescriptorType */

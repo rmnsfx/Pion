@@ -867,7 +867,7 @@ void men_SHOW_REFRESH(void)
 							
 						
   					 //выводим кнопку "измерение"	
-						 //if (measure_stat == 2)
+						 
 						 if ( (measure_stat == 2) && REG(PION_STATUS) )
 						 {
 						  vga_SET_POS_TEXT(53,0);
@@ -893,7 +893,7 @@ void men_SHOW_REFRESH(void)
 						break;
   case form_USB:	
 						
-						//usb_charge_state = 2;	
+						
 	
 						vga_CLEAR();
 						men_READ_PARAM(TIME); //загружаем время
@@ -915,12 +915,31 @@ void men_SHOW_REFRESH(void)
 										sprintf(t_str,"%0.5f", (float) akbemk_count);						
 										vga_PRINT_STR(t_str,&FONT_4x7);
 							
+										//Напряжение
+										vga_SET_POS_TEXT(52, 1);						
+										sprintf(t_str,"%0.1f", (float) akbemk_volt);						
+										vga_PRINT_STR(t_str,&FONT_4x7);							
+							
+										
+										vga_SET_POS_TEXT(67, 1);						
+										sprintf(t_str,"%d", (int) frzbat1);						
+										vga_PRINT_STR(t_str,&FONT_4x7);
+							
+										//Ток
+										vga_SET_POS_TEXT(83, 1);						
+										sprintf(t_str,"%0.4f", (float) akbtemp);						
+										vga_PRINT_STR(t_str,&FONT_4x7);
+							
+										vga_SET_POS_TEXT(110, 1);						
+										sprintf(t_str,"%d", usb_charge_state);						
+										vga_PRINT_STR(t_str,&FONT_4x7);																	
+							
 						}
 						
 						
 												
 						
-						//Проверяем бит зарядки от контроллера заряда АКБ
+						///Проверяем бит зарядки от контроллера заряда АКБ
 						if ( GPIO_ReadInputDataBit(GPIOA,GPIO_Pin_8) == 0 )
 						{												
 							LED_CHARGE_ON();
@@ -928,6 +947,8 @@ void men_SHOW_REFRESH(void)
 						}	
 						
 						CHARGE_ON();
+						
+						Delay(100000);
 						
 						if ( GPIO_ReadInputDataBit(GPIOA,GPIO_Pin_8) == 1 && old_state_pa8 == 0 && pin_USB_5V == 1 && old_state_usb == 1 )
 						{							
@@ -941,7 +962,7 @@ void men_SHOW_REFRESH(void)
 						}			
 						
 						
-						//Запоминаем состояние usb и pa8
+						///Запоминаем состояние usb и pa8
 						old_state_usb = pin_USB_5V;
 						old_state_pa8 = GPIO_ReadInputDataBit(GPIOA,GPIO_Pin_8);
 												
@@ -956,7 +977,7 @@ void men_SHOW_REFRESH(void)
 	if (id_akb == 0) //Новый АКБ					
 	{					
 						
-						//Проверяем бит зарядки от контроллера заряда АКБ
+						///Проверяем бит зарядки от контроллера заряда АКБ
 						if ( GPIO_ReadInputDataBit(GPIOA,GPIO_Pin_8) == 0 )
 						{												
 							LED_CHARGE_ON();
@@ -985,17 +1006,18 @@ void men_SHOW_REFRESH(void)
 										sprintf(t_str,"%d", (int) frzbat1);						
 										vga_PRINT_STR(t_str,&FONT_4x7);
 							
-										vga_SET_POS_TEXT(80, 1);						
+										vga_SET_POS_TEXT(82, 1);						
 										sprintf(t_str,"%f", (float) akbtemp);						
 										vga_PRINT_STR(t_str,&FONT_4x7);
 							
-//										vga_SET_POS_TEXT(5, 1);						
-//										sprintf(t_str,"%d", usb_charge_state);						
-//										vga_PRINT_STR(t_str,&FONT_4x7);
+										vga_SET_POS_TEXT(120, 1);						
+										sprintf(t_str,"%d", usb_charge_state);						
+										vga_PRINT_STR(t_str,&FONT_4x7);
 						}
 						
 								
 						//////////////////////////////////////////////////////		
+						Delay(100000);
 								
 						if ( GPIO_ReadInputDataBit(GPIOA,GPIO_Pin_8) == 1 && old_state_pa8 == 0 && pin_USB_5V == 1 && old_state_usb == 1 )
 						{							

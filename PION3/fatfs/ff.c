@@ -4189,7 +4189,7 @@ FRESULT f_mkfs (
 				return FR_DISK_ERR;
 			IWDG_ReloadCounter();
 			perc = (unsigned int) (n * 60) / n_fat;
-			progressbar( perc, 0 ); 
+			progressbar( perc ); 
 		}
 	}
 

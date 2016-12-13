@@ -67,7 +67,7 @@ extern unsigned int usb_charge_state;
 
 extern FATINFO sdinfo;
 
-void progressbar(unsigned int value, unsigned int delay);
+void progressbar(unsigned int value);
 
 //Выключатель usb для отладки 
 #define USB_SWITCH 1
@@ -75,6 +75,6 @@ void progressbar(unsigned int value, unsigned int delay);
 
 
 //extern float  k_reg_mul;
-#define VER 360
+#define VER 361
 
 #endif
