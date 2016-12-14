@@ -577,6 +577,30 @@ void progressbar(unsigned int value)
 }
 
 
+unsigned int FAT_Init(void)
+{
+  u32 res;
+	unsigned int e = 0;
+  
+	SPI_SETUP();		
+	
+	res = disk_initialize(0);
+	
+	if (res != 0) 
+	{
+		while(e++ < 5)
+		{
+			res = disk_initialize(0);	
+			if (res == 0) break;
+			Delay(10000);
+		}
+	}
+	
+	res = finit();   
+
+  return res;	 
+}
+
 //ïðîöåäóðà ôîðìàòèðîâàíèÿ äèñêàà
 TStatus FORMAT(void)
 {
@@ -588,7 +612,8 @@ TStatus FORMAT(void)
 	unsigned char res = 0;
 	uint8_t buf[512];
 
-		
+	FAT_Init();
+	
 	SET_CLOCK_SPEED(CLK_72MHz);
 
 	IWDG_ReloadCounter();	
@@ -614,6 +639,8 @@ TStatus FORMAT(void)
 		progressbar(i);
 		Delay(500);
 	}
+	
+	FAT_Init();
 	
 	res = rod_CreateFile_edit();	
 	
@@ -644,45 +671,22 @@ TStatus FORMAT(void)
 
 	Delay(1500000);		
 	
-
-	vga_CLEAR();
-  vga_SET_POS_TEXT(28,25);  
-	vga_PRINT_STR("ÂÛÊËÞ×ÅÍÈÅ",&FONT_7x10_bold);
-	vga_UPDATE();
-	
-	Delay(1500000);		
-	
+//	vga_CLEAR();
+//  vga_SET_POS_TEXT(28,25);  
+//	vga_PRINT_STR("ÂÛÊËÞ×ÅÍÈÅ",&FONT_7x10_bold);
+//	vga_UPDATE();
+//	
+//	Delay(1500000);		
+//	
 	BKP_WriteBackupRegister(BKP_DR12, 0); ///Èíäèêàöèÿ A,V
-		
-	pin_OFF();	
+//		
+//	pin_OFF();	
 	
 	return _OK;
 	
 }
 
-TStatus FAT_Init(void)
-{
-  u32 res;
-	unsigned int e = 0;
-  
-	SPI_SETUP();		
-	
-	res = disk_initialize(0);
-	
-	if (res != 0) 
-	{
-		while(e++ < 5)
-		{
-			res = disk_initialize(0);	
-			if (res == 0) break;
-			Delay(10000);
-		}
-	}
-	
-	res = finit();   
 
-  return _OK;	 
-}
 
 void CONTROL_BAT(unsigned char MIN_VAL_BAT)
 {
@@ -1089,6 +1093,7 @@ int main(void)
 	unsigned char persent_bat_char = 5;	
 	uint16_t Number,Num;	
 	measure_stat = 0;	
+	
 	
 	
 		

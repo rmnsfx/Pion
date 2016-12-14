@@ -25,13 +25,14 @@ s8 rod_INIT(void)
 	pRFile = NULL;
 	
 	pRFile = fopen ("Road.log","r");
-		
+	
 	if (pRFile != 0)
 	{
-	
-		fscanf(pRFile, "%s", temp);			
-		fclose(pRFile);	
 		
+		fscanf(pRFile, "%s", temp);			
+		
+		fclose(pRFile);	
+				
 		pRFile = fopen (temp,"r");		
 		
 		if (pRFile != 0) 
@@ -116,15 +117,16 @@ long rod_CreateFile_edit (void)
 
 	__disable_irq();
 	__disable_fiq(); 
-		
-	f_mount(&fls, "0:", 1);
-				
-	f_open(&Fil,"0:Road.0", FA_CREATE_ALWAYS | FA_WRITE);	
-	f_printf(&Fil,"%s", "без маршрута   ");		
-	f_putc(0,&Fil);
 	
 	IWDG_ReloadCounter();
 	
+	res = f_mount(&fls, "0:", 1);
+				
+	res = f_open(&Fil,"0:Road.0", FA_CREATE_ALWAYS | FA_WRITE);	
+	f_printf(&Fil,"%s", "без маршрута   ");		
+	f_putc(0,&Fil);
+	
+		
 //	f_open(&Fil,"0:Road.000", FA_OPEN_ALWAYS | FA_WRITE);	
 //	f_lseek(&Fil, 16);
 	

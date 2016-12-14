@@ -87,11 +87,14 @@ unsigned int mmc_format(void)
 	unsigned int res_format;
 	//unsigned int disk_size = sdinfo.DskSize;
  
+	IWDG_ReloadCounter();
+	
 	__disable_irq();
 	__disable_fiq(); 
  
-	IWDG_ReloadCounter();		
-	finit();
+	Delay(100000);
+			
+	res = finit();
 	
 	res = f_mount(&fls, "0:", 1);
 	res_format = f_mkfs("0:", 0, 0); 	

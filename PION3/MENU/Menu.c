@@ -281,15 +281,14 @@ void men_SETUP(void)
 	FILE *file;	
 	
 	men_SET_CONFIG(REG(CHANEL_MESUARE));		 //меняем конфигурацию меню если выбрали другой канал измерения 
-	
-	
+		
 	if (rod_INIT() != 0) 
 	{
 		//men_SHOW_MESSAGE("Ошибка чтения","маршрутного файла",800);
 		//men_SHOW_MESSAGE("**","",100);
 		return;
 	}	 
- 
+ 	
 	rod_GET_NameElement(&NEl,1);
 	//Alex
 	//Road_Name = NEl.StringName_1;
@@ -2792,16 +2791,16 @@ void men_EN_MENU(void)
 									vga_UPDATE();
 								}
 								
-								if (res_t != 0x00 || iout != 50000)	
-								{
-									vga_CLEAR();					
-									vga_SET_POS_TEXT(1,1);
-									//vga_PRINT_STR("Ошибка: ", &FONT_6x8);										
-									vga_SET_POS_TEXT(55,1);
-									sprintf(temp,"%d", res_t);						
-									vga_PRINT_STR(temp, &FONT_6x8);	
-									vga_UPDATE();
-								}																
+//								if (res_t != 0x00 || iout != 50000)	
+//								{
+//									vga_CLEAR();					
+//									vga_SET_POS_TEXT(1,1);
+//									//vga_PRINT_STR("Ошибка: ", &FONT_6x8);										
+//									vga_SET_POS_TEXT(55,1);
+//									sprintf(temp,"%d", res_t);						
+//									vga_PRINT_STR(temp, &FONT_6x8);	
+//									vga_UPDATE();
+//								}																
 						
 								
 								/// Вычисляем ускорение и скорость
@@ -3209,14 +3208,10 @@ void men_EN_MENU(void)
 								 //REGW(NUMFILE,0); //ставим лок-байт
 								 //сохринить калибровочный параметр
 								 //BKP_WriteBackupRegister(BKP_DR2, REG(K_VIBRO));
-								 FORMAT();
-								 
-								 ShowPowerOffForm();
-								 Delay(700000); 
-								 vga_CLEAR();
-								 vga_UPDATE();	
-
-							
+									
+									FORMAT();
+									
+									JumpToApplication(0x8010000);						
 								}
 								else 
 						  	men_SHOW_MENU();
