@@ -726,7 +726,6 @@ void men_SHOW_REFRESH(void)
 //						sprintf(t_str,"%d", usb_charge_state);
 //						vga_PRINT_STR(t_str,&FONT_4x7);
 
-
 						
 						
 						/////////////////////////////////////////////////////
@@ -1880,143 +1879,7 @@ void men_SHOW_MENU(void)
 	}
 	
 	
-//	/// Удаление 
-//	
-//	if ((Items[men_POINTER].Data_reg == 0xFB)||(Items[men_POINTER].Data_reg == 0xFC))
-//	{
 
-
-//			IWDG_ReloadCounter();
-//		
-//			SET_CLOCK_SPEED(CLK_72MHz);
-//			
-//			f_mount(&fls, "0:", 1);
-
-//			///Определяем имя файла маршрута по курсору 
-//			pRFile = fopen ("Roads.txt","r");
-//			if (pRFile != NULL)
-//			{
-//				fseek(pRFile,9*road_pos,SEEK_SET);
-//				fscanf(pRFile, "%s", temp2);
-//				fclose(pRFile);
-//			}
-
-//			fdelete(temp2);
-//			//res = f_unlink(temp2); ///Удаляем файл маршрута
-//						
-//			strncpy(temp3,temp2+5,8-5); ///Выделяем первичный индекс папки с выборкой			
-//			b = atoi(&temp3); /// В int
-//			
-//					
-//			
-//			do ///Определяем количество выборок в удаляемом маршруте
-//			{
-//				sprintf(temppath,"%03u.%03u", b, d);	
-//				d++;
-//			} while ( (result = f_stat(temppath, &fno)) == FR_OK );
-//			f_mount(0, "0:", 0);
-//			
-//			
-//				vga_CLEAR();
-//				vga_SET_POS_TEXT(1,1);
-//				vga_PRINT_STR("Удаление...",&FONT_6x8);				
-//				vga_UPDATE();
-//			
-//			
-//			for (a=0;a<=d;a++) ///Выборка
-//			{
-//				for (c=0;c<=255;c++) ///Сигнал
-//				{
-//					sprintf(temp4,"M:\\%03u.%03u\\Signal %d.dat", b, a, c);
-//					//f_unlink(temp4);
-//					fdelete(temp4);
-//					
-//				}
-//				
-//				///Удаляем папку
-//				sprintf(temp5,"M:\\%03u.%03u\\", b, a);
-//				//f_unlink(temp4);
-//				fdelete(temp5);
-//							
-////				vga_CLEAR();
-////				vga_SET_POS_TEXT(1,1);
-////				vga_PRINT_STR("Удаление: ",&FONT_6x8);
-////				vga_SET_POS_TEXT(70,1);										
-////				vga_PRINT_STR(temp4,&FONT_6x8);
-////				vga_UPDATE();
-//				
-//			}
-//					
-
-//			
-//			
-//				
-//			///Обновляем Roads.txt
-//			f_mount(&fls, "0:", 1);											
-//			f_open(&FileTmp,"Roads.txt", FA_CREATE_ALWAYS | FA_WRITE);
-//					
-//			sprintf(FileName,"Road.%01u  ",0);
-//			f_printf(&FileTmp,FileName);
-//			f_putc('\n',&FileTmp);
-//			
-//			for(i=1;i<255;i++)
-//			{
-//					sprintf(FileName,"Road.%03u",i);
-//				
-//					if (f_stat(FileName, &fno) == FR_OK)
-//					{
-//							f_printf(&FileTmp,FileName);
-//							f_putc('\n',&FileTmp);
-//					}
-//						
-//			}
-//			
-//			f_close(&FileTmp);
-//			
-//			
-//			///Обновляем Roads.log
-//			
-//			f_open(&Fil,"0:Road.log", FA_CREATE_ALWAYS | FA_WRITE);
-//			f_printf(&Fil,"%s", "Road.0");
-//			f_close(&Fil);
-//			
-//						
-//			f_mount(0,"0:", 0);	
-
-//			
-//			vga_CLEAR();
-//			vga_SET_POS_TEXT(1,1);
-//			vga_PRINT_STR("Удаление завершено.",&FONT_6x8);				
-//			vga_UPDATE();
-//			
-//			Delay (10000000);
-//			
-////			vga_CLEAR();
-////			vga_SET_POS_TEXT(28,25);  
-////			vga_PRINT_STR("ВЫКЛЮЧЕНИЕ",&FONT_7x10_bold);
-////			vga_UPDATE();
-////	
-////			Delay(5500000);
-//			
-//			BKP_WriteBackupRegister(BKP_DR12, 0); ///Индикация A,V			
-//							
-//			SET_CLOCK_SPEED(CLK_8MHz);
-//			
-////			NVIC_SystemReset();
-
-//			
-
-////men_STATUS=men_MAIN;
-////men_SHOW_REFRESH();
-////men_SHOW_MAINFORMS(form_MESUARE);				
-////men_SETUP();		
-////men_ES_MENU();
-////men_CALLBACK(); 
-////men_SHOW_ITEMS();
-
-
-//		return;
-//	}
 	//*Alex
 	
  //men_START_POINTER = men_POINTER;
@@ -2791,18 +2654,14 @@ void men_EN_MENU(void)
 									vga_SET_POS_TEXT(1,1);
 									vga_PRINT_STR("Диск переполнен", &FONT_6x8);	
 									vga_UPDATE();
+									
+									GLOBAL_ERROR |= 0x10;
 								}
 								
-//								if (res_t != 0x00 || iout != 50000)	
-//								{
-//									vga_CLEAR();					
-//									vga_SET_POS_TEXT(1,1);
-//									//vga_PRINT_STR("Ошибка: ", &FONT_6x8);										
-//									vga_SET_POS_TEXT(55,1);
-//									sprintf(temp,"%d", res_t);						
-//									vga_PRINT_STR(temp, &FONT_6x8);	
-//									vga_UPDATE();
-//								}																
+								if (res_t != 0x00 || iout != 50000)	
+								{
+									//GLOBAL_ERROR |= 0x10;
+								}																
 						
 								
 								/// Вычисляем ускорение и скорость

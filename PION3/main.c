@@ -70,7 +70,7 @@ int GLOBAL_TIMER_1ms = 0;
 int POWER_OFF = TIME_POWER_OFF;
 
 
- u32 GLOBAL_ERROR;
+ unsigned int GLOBAL_ERROR;
  extern int USB_CONNECT=0;
  extern u8	measure_stat=0;
  extern u8	usb_stat=0; 
@@ -596,7 +596,7 @@ unsigned int FAT_Init(void)
 		}
 	}
 	
-	res = finit();   
+	finit();   
 
   return res;	 
 }
@@ -1079,12 +1079,10 @@ float CAPACITY ()
 
 
 int main(void)
-
 {
-
-
   unsigned int fl=0;
-  unsigned int temp_reg;  
+  volatile unsigned int temp_reg;  
+	volatile unsigned int temp_reg2;
   unsigned int i = 0, j = 0;
   char 		  FileName[25];
 	char temp[25];
@@ -1092,8 +1090,10 @@ int main(void)
   FILE * pRFile;
 	unsigned char persent_bat_char = 5;	
 	uint16_t Number,Num;	
-	measure_stat = 0;	
-			
+	unsigned char result;
+	TStatus Err;
+	
+	measure_stat = 0;		
 		
   GPIO_SETUP();
 
@@ -1118,20 +1118,53 @@ int main(void)
 	///Флаг первого включения
   first_flag = 1; 
 	
-	///Включаем чтение служебных регистров с SD карты
-	SD_SWITCH = 1;
+	///Инициализация часов
+	Err = rtc_SETUP();
+	if (Err == _ERR) GLOBAL_ERROR |= 0x01;
 	
+	///Инициализация sd карты
+	result = FAT_Init();	
+	if (result != 0) 
+	{
+			SD_SWITCH = 0;
+		
+			vga_CLEAR();					
+			vga_SET_POS_TEXT(5,10);
+			vga_PRINT_STR("Функционал работы", &FONT_6x8);
+			vga_SET_POS_TEXT(5,20);
+			vga_PRINT_STR("прибора ограничен.",&FONT_6x8);
+			vga_SET_POS_TEXT(5,40);
+			vga_PRINT_STR("Обратитесь в",&FONT_6x8);					
+			vga_SET_POS_TEXT(5,50);
+			vga_PRINT_STR("сервисный центр.",&FONT_6x8);					
+			vga_UPDATE();	
+			Delay(50000000);
+		
+			GLOBAL_ERROR |= 0x02;
+	}
+	else
+	{
+			///Включаем чтение служебных регистров с SD карты
+			SD_SWITCH = 1;
+	}
 	
-  //минимальная диагностика----------------------------------------------------------//
-  if (rtc_SETUP()==_ERR) GLOBAL_ERROR|=0x01;	//тест часов
-  if (FAT_Init() ==_ERR) GLOBAL_ERROR|=0x04;;	//тест фат
-  if (reg_SETUP()==_ERR) GLOBAL_ERROR|=0x02;	//начальная инициализация регистров
-  //GLOBAL_ERROR = 0;
-  
+	///Инициализация служебных регистров
+	Err = reg_SETUP();
+	if (Err == _ERR) GLOBAL_ERROR |= 0x04;
+		
+	///Коррекция точности хода
+	BKP->RTCCR = REG(TIME_EDIT);	
 	
-	/// Копируем параметры sd-карты в глоб. переменную для иниц. карты по usb 
-	sdinfo = get_mmc();
+	///Копируем параметры sd-карты в глоб. переменную для иниц. карты по usb 
+	sdinfo = get_mmc();	
 	
+
+	
+//  //минимальная диагностика----------------------------------------------------------//
+//  if (rtc_SETUP()==_ERR) GLOBAL_ERROR|=0x01;	//тест часов
+//  if (FAT_Init() ==_ERR) GLOBAL_ERROR|=0x04;;	//тест фат
+//  if (reg_SETUP()==_ERR) GLOBAL_ERROR|=0x02;	//начальная инициализация регистров
+//GLOBAL_ERROR = 0;
 	
 //	if (GLOBAL_ERROR>0) 	 //если есть ошибка
 //	{	   
@@ -1152,8 +1185,6 @@ int main(void)
 //	}
 
 		
-
-
 
 	MakeTIK();
 	vga_UPDATE();		

@@ -25,3 +25,16 @@
 .\realtime.o: RealTime.h
 .\realtime.o: .\OLED\vga_lib.h
 .\realtime.o: .\OLED\font.h
+.\realtime.o: Reg.h
+.\realtime.o: FM25V10.h
+.\realtime.o: .\USB\type.h
+.\realtime.o: main.h
+.\realtime.o: .\FAT\File_Config.h
+.\realtime.o: FLASH_AT45DB.h
+.\realtime.o: main.h
+.\realtime.o: .\FAT\File_Config.h
+.\realtime.o: regmap.h
+.\realtime.o: .\USB\mscuser.h
+.\realtime.o: ..\PION3\main.h
+.\realtime.o: .\FAT\File_Config.h
+.\realtime.o: params.h

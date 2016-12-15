@@ -75,6 +75,8 @@ void progressbar(unsigned int value);
 ///Выключатель функций обращения к SD карте, при чтении служебных регистров
 extern unsigned char SD_SWITCH; 
 
+extern unsigned int GLOBAL_ERROR;
+
 #define VER 361
 
 #endif

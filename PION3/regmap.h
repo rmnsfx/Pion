@@ -31,6 +31,7 @@
 	 #define AKB_EMK     			 	 29 // Текущая емкость акб
 	 #define AUTOPOWEROFF    		 30 // Автоотключение
 	 #define AKB_EMK_COUNT   		 31 // Изменение емкости
-	 #define COUNT_REG     			 32 // кол-во регистров
+	 #define TIME_EDIT		   		 32 // Калибровка часов
+	 #define COUNT_REG     			 33 // кол-во регистров
 
 	
