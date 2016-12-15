@@ -704,13 +704,14 @@ void READ_REG_FROM_SD (unsigned int adr_page, unsigned short offset, unsigned ch
 	unsigned char res;
 	FATFS fatfs;
 	
+	if (SD_SWITCH == 0) return;
+	
 	if (disk_status(0) != 0) res = f_mount(&fatfs, "0:", 1);	
 	
- //копируем страницу в буфер
- res = disk_read(0, &buf_temp[0], 1+adr_page, 1);
+  //копируем страницу в буфер
+  res = disk_read(0, &buf_temp[0], 1+adr_page, 1);
 
- if ((offset+size) <= 512) memcpy(buf, &buf_temp[offset], size);
-	
+  if ((offset+size) <= 512) memcpy(buf, &buf_temp[offset], size);	
 }
 
 
@@ -718,17 +719,19 @@ void READ_REG_FROM_SD (unsigned int adr_page, unsigned short offset, unsigned ch
 void WRITE_REG_TO_SD (unsigned int adr_page, unsigned short offset, unsigned char *buf, unsigned short size)
 {
  
- unsigned char res;
+  unsigned char res;
 	FATFS fatfs;
-		
- if (disk_status(0) != 0) res = f_mount(&fatfs, "0:", 1);	
+	
+  if (SD_SWITCH == 0) return;
+	
+  if (disk_status(0) != 0) res = f_mount(&fatfs, "0:", 1);	
 
- //копируем страницу в буфер
- res = disk_read(0, &buf_temp[0], 1+adr_page, 1);
+  ///копируем страницу в буфер
+  res = disk_read(0, &buf_temp[0], 1+adr_page, 1);
 
- if ((offset+size) <= 512) memcpy(&buf_temp[offset], buf, size);
+  if ((offset+size) <= 512) memcpy(&buf_temp[offset], buf, size);
 
- res = disk_write(0, &buf_temp[0], 1+adr_page, 1); 
+  res = disk_write(0, &buf_temp[0], 1+adr_page, 1); 
 
 }
 

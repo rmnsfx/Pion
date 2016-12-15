@@ -69,12 +69,12 @@ extern FATINFO sdinfo;
 
 void progressbar(unsigned int value);
 
-//Выключатель usb для отладки 
-#define USB_SWITCH 1
+///Выключатель usb для отладки 
+#define USB_SWITCH 0
 
+///Выключатель функций обращения к SD карте, при чтении служебных регистров
+extern unsigned char SD_SWITCH; 
 
-
-//extern float  k_reg_mul;
 #define VER 361
 
 #endif

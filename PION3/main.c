@@ -118,7 +118,7 @@ float akbemk_volt = 0;
 int akbstatus = -1;
 float akbemk_menu = 0;
 FATINFO sdinfo;
-
+unsigned char SD_SWITCH; 
 
 
 
@@ -1093,37 +1093,33 @@ int main(void)
 	unsigned char persent_bat_char = 5;	
 	uint16_t Number,Num;	
 	measure_stat = 0;	
-	
-	
-	
+			
 		
   GPIO_SETUP();
 
-  Delay(100000);
-  Delay(100000);
-  Delay(100000);	
-
-	
-
+  Delay(300000);
+  	
   //подать 13В
   pin_13V(HIGTH);
-  Delay(100000);
-  Delay(100000);
-  Delay(100000);
   
+	Delay(300000);
+    
   SystemInit();
-  SET_CLOCK_SPEED(CLK_72MHz); 
-  //инициализация внутреннего АЦП -----------------------------//
+  
+	SET_CLOCK_SPEED(CLK_72MHz); 
+  
+	//инициализация внутреннего АЦП -----------------------------//
   adc_SETUP();
   
-
-  USB_Init();                                        // USB Initialization
-  vga_INIT();
+  USB_Init(); // USB Initialization                                        
+  
+	vga_INIT();
 	
+	///Флаг первого включения
+  first_flag = 1; 
 	
-  first_flag = 1; /// Флаг первого включения
-	
-
+	///Включаем чтение служебных регистров с SD карты
+	SD_SWITCH = 1;
 	
 	
   //минимальная диагностика----------------------------------------------------------//
@@ -1156,101 +1152,39 @@ int main(void)
 //	}
 
 		
-					
 
-						
-//   if (REG(NUMFILE)==0) //установлен лок байт
-//    {
-//	 //форматируем
-//	 vga_SET_POS_TEXT(1,1);
-//	 vga_PRINT_STR("Ошибка записи FAT16",&FONT_6x8);
-//	 vga_SET_POS_TEXT(1,25);
-//	 vga_PRINT_STR("Форматировать...?",&FONT_6x8);
-//	 vga_UPDATE();
-//	 //сохринить калибровочный параметр
-//	 //BKP_WriteBackupRegister(BKP_DR2, REG(K_VIBRO));
-//		IWDG_ReloadCounter();
-//		SET_CLOCK_SPEED(CLK_8MHz);
-//			
-//		while(1)	
-//		if (key_CHECK_EV(key_EVENT_PRESSED_ENTER)) 
-//		{ 
-//			vga_CLEAR();
-//			vga_UPDATE();
-//			FORMAT();				   //нужно ли форматировать!!!!!!!! плохо это!!!!
-//			
-//			ShowPowerOffForm();
-//			Delay(700000); 
-//			vga_CLEAR();
-//			vga_UPDATE();	
-//			pin_OFF();
-//		}
-//		else
-//		{
-//			if (key_CHECK_EV(key_EVENT_PRESSED_ESC_MENU)) 
-//			{
-//				ShowPowerOffForm();
-//				Delay(700000); 
-//				vga_CLEAR();
-//				vga_UPDATE();	
-//				pin_OFF();
-//			}
-//		}
-//	
-
-//	}
-//   else
-//    {
-//	  REGW(NUMFILE_CURENT,REG(NUMFILE));
-//	}
-//  
-//	
-//	//---------------------------------------------------------------------------------//
-//	if (REG(LOCK_REG) != 100)
-//	{
-//	MakeTIK();
-//	vga_UPDATE();		
-//	for(i=0;i<0x2FFFFF;i++){__NOP();}
-//	}	
 
 
 	MakeTIK();
 	vga_UPDATE();		
 	for(i=0;i<0x2FFFFF;i++){__NOP();}
 
-  ext_adc_SETUP(20);//16 - 62.5 кГц//20 - 50кГц
-  
+  ext_adc_SETUP(20);//16 - 62.5 кГц//20 - 50кГц  
 	
-	men_SETUP();
-  
+	men_SETUP();  
 
   SET_CLOCK_SPEED(CLK_8MHz); 
 
-
   //задаем новую конфигурацию меню, если нажаты кнопки "верх","вниз"
   if ((key_CHECK_ST(key_UP))&&(key_CHECK_ST(key_DOWN))) 
-   men_SET_CONFIG(0x80);
-	
+   men_SET_CONFIG(0x80);	
 
   k_reg = ((float)REG(K_VIBRO)/1000);
-  k_reg = k_reg/(30*10); 
-
+  k_reg = k_reg/(30*10);
 
   //загружаем мотосекунды
-  Moto_Sec = BKP_ReadBackupRegister(BKP_DR3);	
-	
+  Moto_Sec = BKP_ReadBackupRegister(BKP_DR3);		
 		
 	/// Вспоминаем номер маршрута для отображения A и V	
 	road_indicator = BKP_ReadBackupRegister(BKP_DR12); 
 	
 	///Получаем идентификатор АКБ
-	id_akb = GPIO_ReadInputDataBit(GPIOB,GPIO_Pin_15);
-	
+	id_akb = GPIO_ReadInputDataBit(GPIOB,GPIO_Pin_15);	
 		
 	///Вспоминаем емкость АКБ	
 	akbemk_count = (float) BKP_ReadBackupRegister(BKP_DR10) * 0.00001831082;
 	
-	//Читаем значение емкости из регистра меню
+	///Читаем значение емкости из регистра меню
 	if (REG(AKB_EMK_COUNT) == 0) akbemk_menu = 0.6;
 	else akbemk_menu = 1.2;
 	
@@ -1260,8 +1194,6 @@ int main(void)
 	/// Индикация батарейки при первом включении
 	if (id_akb == 0) frzbat1 = akbemk_percent; 			
 	else frzbat1 = adc_BAT_PERCENT_edit(); 			
-
-
 	
 	///Если старый аккум., PA3 настраиваем на выход
 	if ( GPIO_ReadInputDataBit(GPIOB,GPIO_Pin_15) == 1) 
@@ -1311,7 +1243,8 @@ int main(void)
 	if (USB_SWITCH == 1)
 	{
 			
-		 usb_addr = USB_DeviceAddress; /// Адрес присвоенный хостом при подключении USB
+		 /// Адрес присвоенный хостом при подключении USB
+		 usb_addr = USB_DeviceAddress; 
 		
 		 //----------- USB ---------------------------------------------------------//
 		 if (USB_CONNECT != pin_USB_5V)

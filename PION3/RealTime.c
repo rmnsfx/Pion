@@ -73,7 +73,8 @@ TStatus rtc_SETUP(void)
 	
  PWR_BackupAccessCmd(ENABLE);
 
-	
+	///Коррекция точности хода
+	BKP->RTCCR |= 36;
 
 	
  if (BKP_ReadBackupRegister(BKP_DR1) != rtc_SIGNATURE)

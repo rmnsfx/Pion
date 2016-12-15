@@ -2100,12 +2100,13 @@ void men_UP_MENU(void)
 {
  unsigned int temp_reg;
  //if (mem_TIME_PAROL!=NIL) mem_TIME_PAROL = mem_TIME_RES_PAROL; 
-BeyondRoad = 0;
+ BeyondRoad = 0;
  switch (men_STATUS)
    {
     case men_MAIN:      
 //						if (Road_Number != 0)
-//						{	
+						if (REG(MODE_REG)==0x0800 && SD_SWITCH == 1)
+						{	
 								temp_reg = REG(NUMFILE_CURENT);
 								if (temp_reg<REG_MAX(NUMFILE_CURENT)) 
 									{
@@ -2122,7 +2123,7 @@ BeyondRoad = 0;
 										//*Alex	 
 										men_SHOW_REFRESH();
 									}; 
-//							}
+							}
 						
 							
 							
@@ -2159,7 +2160,8 @@ BeyondRoad = 0;
    {
     case men_MAIN:       
 //			if (Road_Number != 0)
-//			{
+			if (REG(MODE_REG)==0x0800 && SD_SWITCH == 1)
+			{
 								temp_reg = REG(NUMFILE_CURENT);
 								if (temp_reg>REG_MIN(NUMFILE_CURENT)) {
 									temp_reg--;
@@ -2175,7 +2177,7 @@ BeyondRoad = 0;
 									//*Alex
 									men_SHOW_REFRESH();
 								}; 
-//			}
+			}
 						 break;
     case men_MULTI_ITEM: 
    	 				     men_INC_POINT();
