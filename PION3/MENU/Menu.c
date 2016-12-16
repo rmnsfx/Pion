@@ -1465,7 +1465,7 @@ void men_SHOW_ITEM(unsigned short item_num,unsigned char str_num)
 		if (Items[item_num].Typedata == 26 || Items[item_num].Typedata == 27) vga_PRINT_TEXT(Items[item_num].Caption,14,men_FONT_DEFAULT);
 		else
 		//выводим краткое название параметра
-		vga_PRINT_TEXT(Items[item_num].Caption,9,men_FONT_DEFAULT);
+		vga_PRINT_TEXT(Items[item_num].Caption,12,men_FONT_DEFAULT); //9
 		//выводим разделяющий символ
   
 		if ((Items[item_num].Options&O_RW)==0) vga_PRINT_CHAR(men_SEPARATOR_1,men_FONT_DEFAULT);
@@ -1486,8 +1486,8 @@ void men_SHOW_ITEM(unsigned short item_num,unsigned char str_num)
 		}
 		else 
 		{
-			sprintf(temp,"         "); 
-			vga_PRINT_TEXT(temp,5,men_FONT_DEFAULT);	/// Выравнивание в меню "Сервис" 		
+			sprintf(temp,"     "); 
+			vga_PRINT_TEXT(temp,2,men_FONT_DEFAULT);	/// Выравнивание в меню "Сервис" 		//5
 		}
 		
 		

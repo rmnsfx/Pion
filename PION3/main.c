@@ -1185,7 +1185,7 @@ int main(void)
 //	}
 
 		
-
+	
 	MakeTIK();
 	vga_UPDATE();		
 	for(i=0;i<0x2FFFFF;i++){__NOP();}
@@ -1206,7 +1206,7 @@ int main(void)
   //загружаем мотосекунды
   Moto_Sec = BKP_ReadBackupRegister(BKP_DR3);		
 		
-	/// Вспоминаем номер маршрута для отображения A и V	
+	///Вспоминаем номер маршрута для отображения A и V	
 	road_indicator = BKP_ReadBackupRegister(BKP_DR12); 
 	
 	///Получаем идентификатор АКБ
