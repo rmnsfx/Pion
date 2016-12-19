@@ -158,7 +158,7 @@ void men_SET_CONFIG(unsigned char conf);
 	unsigned int old_state_usb = 0; 
 	unsigned int old_state_pa8 = 0;
 	unsigned char VALUE=0;
-
+	unsigned long count_menu_items = 0; ///Кол-во элементов в меню
 
 
 
@@ -388,9 +388,7 @@ void men_SHOW_BAT_edit(unsigned char X, unsigned char Y, unsigned char VAL)
  if (VAL>=70) vga_RECTANGLE(X+2,Y+2,X+9,Y+4,drRECT_FILL); 
  if (VAL>=80) vga_RECTANGLE(X+2,Y+2,X+10,Y+4,drRECT_FILL); 
  if (VAL>=90) vga_RECTANGLE(X+2,Y+2,X+11,Y+4,drRECT_FILL); 
- 
 	
-
 }
 
 
@@ -1305,6 +1303,31 @@ unsigned men_RETURN_SUB_ITEM(unsigned pp)   //вернуть номер 1-го элемента в масс
  return NIL;
 }
 
+
+//unsigned int men_COUNT_ITEM(void)
+//{	 
+// signed char 	w;
+// unsigned short q; 
+// unsigned int f=0;
+//	
+// 
+// w = men_s;
+// q = men_START_POINTER;
+
+// while (w<MAX_ITEMS)         
+// {	 
+//		if (q!=NIL)  
+//		{    
+//			f++;
+//			q = men_GET_NEXT_ITEM(q);	  
+//		}
+//		
+//		w++; 	
+// }
+// 
+// return f;
+//}
+
 //----------------------------------------------------------------//
 // Вызвать подменю
 //----------------------------------------------------------------//
@@ -1312,6 +1335,7 @@ void men_CALL_CUB_ITEM()
 {
  unsigned short pp;
  
+	
  pp = men_RETURN_SUB_ITEM(men_POINTER);
  
  if (pp==NIL) return ;
@@ -1323,6 +1347,9 @@ void men_CALL_CUB_ITEM()
  men_LEVEL++;
  men_POINTER = pp;
  men_CURSOR_STR = 0;
+	
+ 
+	
  men_SHOW_MENU();
  
      
@@ -1345,7 +1372,7 @@ void men_CALLBACK()
 	else if (Items[men_POINTER].Data_reg == 0xFB) men_POINTER = 40;
 	else if (Items[men_POINTER].Data_reg == 0xFC) men_POINTER = 40;
 	else if (Items[men_POINTER].Data_reg == 0xFF) men_POINTER = 0;	
-	else if (Items[men_POINTER].Data_reg == 0x14 || Items[men_POINTER].Data_reg == 0x11) men_POINTER = 0x0001;	///Ускорение
+	else if (Items[men_POINTER].Data_reg == 0x11 || Items[men_POINTER].Data_reg == 0x14) men_POINTER = 0x0001;	///Ускорение
 	else if (Items[men_POINTER].Data_reg == 0x12 || Items[men_POINTER].Data_reg == 0x15) men_POINTER = 0x0001;	///Скорость
 	else if (Items[men_POINTER].Data_reg == 0x13 || Items[men_POINTER].Data_reg == 0x16) men_POINTER = 0x0001;	///Перемещение
 	else men_POINTER = 0;//men_LEVEL_POINT[men_LEVEL];
@@ -1544,7 +1571,7 @@ void men_CLEAR_ITEM(unsigned char str_num)
 
 
 //----------------------------------------------------------------//
-// Рисуем стрелки scroll
+// Рисуем стрелки (скроллинг)
 //----------------------------------------------------------------//
 
 void men_SHOW_ARROW(int way)
@@ -1554,7 +1581,7 @@ void men_SHOW_ARROW(int way)
 	///0 - вниз, 1 - вверх
 	if (way == 0)
 	{		
-		vga_LINE(vga_GET_WIDTH_DISPLAY-10,0,vga_GET_WIDTH_DISPLAY-1,0);
+		//vga_LINE(vga_GET_WIDTH_DISPLAY-10,0,vga_GET_WIDTH_DISPLAY-1,0);
 		vga_LINE(vga_GET_WIDTH_DISPLAY-9,1,vga_GET_WIDTH_DISPLAY-2,1);
 		vga_LINE(vga_GET_WIDTH_DISPLAY-8,2,vga_GET_WIDTH_DISPLAY-3,2);
 		vga_LINE(vga_GET_WIDTH_DISPLAY-7,3,vga_GET_WIDTH_DISPLAY-4,3);
@@ -1562,14 +1589,16 @@ void men_SHOW_ARROW(int way)
 	}
 	else
 	{
-		vga_LINE(vga_GET_WIDTH_DISPLAY-10,4,vga_GET_WIDTH_DISPLAY-1,4);
+		//vga_LINE(vga_GET_WIDTH_DISPLAY-10,4,vga_GET_WIDTH_DISPLAY-1,4);
 		vga_LINE(vga_GET_WIDTH_DISPLAY-9,3,vga_GET_WIDTH_DISPLAY-2,3);
 		vga_LINE(vga_GET_WIDTH_DISPLAY-8,2,vga_GET_WIDTH_DISPLAY-3,2);
 		vga_LINE(vga_GET_WIDTH_DISPLAY-7,1,vga_GET_WIDTH_DISPLAY-4,1);
 		vga_LINE(vga_GET_WIDTH_DISPLAY-6,0,vga_GET_WIDTH_DISPLAY-5,0);
 	}
 	
-	vga_UPDATE();
+	//vga_LINE(120,63,128,63);
+	
+	//vga_UPDATE();
 }
 
 //----------------------------------------------------------------//
@@ -1752,16 +1781,19 @@ void men_SHOW_ONEITEM(unsigned item_num)
 //----------------------------------------------------------------//
 // Нарисовать меню
 //----------------------------------------------------------------//
-void men_SHOW_ITEMS(void)                   //вывести меню
+unsigned int men_SHOW_ITEMS(void)                   //вывести меню
 {
  
  signed char 	sn;
  signed char 	ss;
  unsigned short pp;
- //unsigned long v;
+ 
+		
  sn = men_s;
  ss = men_s;
  pp = men_START_POINTER;
+	
+ count_menu_items = 0;	
 
  while (sn>0) men_CLEAR_ITEM(--sn);
 
@@ -1771,18 +1803,34 @@ void men_SHOW_ITEMS(void)                   //вывести меню
     men_READ_VALUE_PARAM(pp);
     men_SHOW_ITEM(pp,ss);
     ss++;
-		pp = men_GET_NEXT_ITEM(pp);
-	 
-	  
+		pp = men_GET_NEXT_ITEM(pp);	 	
+		//count_menu_items++;	 
  }
  else
  {
-	 men_CLEAR_ITEM(ss++);
-	 
+	 men_CLEAR_ITEM(ss++);	 
  }
  
-	 
-	 
+ ///Считаем кол-во элементов вменю
+ ss = men_s;
+ pp = men_START_POINTER;
+ while (ss<MAX_ITEMS)              
+ if (pp!=NIL)  
+ {    
+    //men_READ_VALUE_PARAM(pp);
+    //men_SHOW_ITEM(pp,ss);
+    ss++;
+		pp = men_GET_NEXT_ITEM(pp);	 	
+		count_menu_items++;	 
+ }
+ else
+ {
+	 //men_CLEAR_ITEM(ss++);	 
+	 ss++;
+ } 
+ 
+
+  
 }
 
 //----------------------------------------------------------------//
@@ -1860,11 +1908,15 @@ void men_SHOW_MENU(void)
 	uint8_t NumberOfFiles = 8;
 	uint16_t AddPos = 0;
   FATFS f;
-	
+	unsigned int count;	
 	
 	men_STATUS 	   = men_MULTI_ITEM;
   men_s			   = men_CURSOR_STR;
 	
+
+
+ 
+
 
 //Alex
 	
@@ -1936,7 +1988,9 @@ void men_SHOW_MENU(void)
 	
  //men_START_POINTER = men_POINTER;
  while (!men_GET_CONFIG(men_POINTER))
- if ((men_POINTER = men_GET_NEXT_ITEM(men_POINTER))==NIL) break;
+ {		
+		if ((men_POINTER = men_GET_NEXT_ITEM(men_POINTER))==NIL) break;		
+ }
   
  men_START_POINTER = men_POINTER;
   
@@ -1945,7 +1999,7 @@ void men_SHOW_MENU(void)
 		men_START_POINTER = men_GET_PREV_ITEM(men_START_POINTER);
 		
 		if (men_START_POINTER==NIL) 
-		{
+		{ 
 			men_START_POINTER = men_POINTER;
 			break;
 		}
@@ -1955,11 +2009,22 @@ void men_SHOW_MENU(void)
 
  //lcd_SET_NON_CURSOR;//cursor(0,0);
  vga_CLEAR();
- if (men_LEVEL==0)	men_SHOW_RECT("Меню");
- else				men_SHOW_RECT(Items[men_LEVEL_POINT[men_LEVEL-1]].Text_0);
-	men_SHOW_ITEMS();//show_element();//(s,p);
+ 
+ if (men_LEVEL==0)
+ {
+	 men_SHOW_RECT("Меню");
+ } 
+ else
+ {
+	 men_SHOW_RECT(Items[men_LEVEL_POINT[men_LEVEL-1]].Text_0);
+ }
+ 
+ men_SHOW_ITEMS();//show_element();//(s,p);
  
  men_SHOW_CURSOR();
+ 
+ if (men_LEVEL > 0 && count_menu_items > 5 ) men_SHOW_ARROW(0);
+ 
  vga_UPDATE();
 }
 
