@@ -1345,7 +1345,9 @@ void men_CALLBACK()
 	else if (Items[men_POINTER].Data_reg == 0xFB) men_POINTER = 40;
 	else if (Items[men_POINTER].Data_reg == 0xFC) men_POINTER = 40;
 	else if (Items[men_POINTER].Data_reg == 0xFF) men_POINTER = 0;	
-	else if (Items[men_POINTER].Data_reg == 0x14 || Items[men_POINTER].Data_reg == 0x11) men_POINTER = 0x0001;	
+	else if (Items[men_POINTER].Data_reg == 0x14 || Items[men_POINTER].Data_reg == 0x11) men_POINTER = 0x0001;	///Ускорение
+	else if (Items[men_POINTER].Data_reg == 0x12 || Items[men_POINTER].Data_reg == 0x15) men_POINTER = 0x0001;	///Скорость
+	else if (Items[men_POINTER].Data_reg == 0x13 || Items[men_POINTER].Data_reg == 0x16) men_POINTER = 0x0001;	///Перемещение
 	else men_POINTER = 0;//men_LEVEL_POINT[men_LEVEL];
  
 	men_CURSOR_STR = 0;//men_LEVEL_CUR[men_LEVEL];
