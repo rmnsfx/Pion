@@ -2023,7 +2023,14 @@ void men_SHOW_MENU(void)
  ///–исуем стрелки скроллинга 
  if (men_LEVEL > 0 && count_menu_items > 5 ) men_SHOW_ARROW(0); ///¬низ 
  if (men_LEVEL > 0 && men_CURSOR_STR == 4) men_SHOW_ARROW(1); ///¬верх 
- if (men_LEVEL > 0 && men_START_POINTER != 0x001B && men_START_POINTER != 0x0001) men_SHOW_ARROW(1); ///¬верх в обратном направлении
+ if (men_LEVEL > 0 && men_START_POINTER != 0x001B 
+									 && men_START_POINTER != 0x0001 
+									 && men_START_POINTER != 0x0006 
+									 && men_START_POINTER != 0x000A
+									 && men_START_POINTER != 0x0014
+									 && men_START_POINTER != 0x000E
+									 && men_START_POINTER != 0x0018  
+									 && men_START_POINTER != 0x0010) men_SHOW_ARROW(1); ///¬верх в обратном направлении
   
  vga_UPDATE();
 }
