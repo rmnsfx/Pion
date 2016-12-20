@@ -3,9 +3,9 @@
 <title>Static Call Graph - [.\Main_project.axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image .\Main_project.axf</H1><HR>
-<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5050106: Last Updated: Tue Dec 20 12:13:45 2016
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5050106: Last Updated: Tue Dec 20 14:34:45 2016
 <BR><P>
-<H3>Maximum Stack Usage =       2572 bytes + Unknown(Functions without stacksize, Cycles, Untraceable Function Pointers)</H3><H3>
+<H3>Maximum Stack Usage =       2548 bytes + Unknown(Functions without stacksize, Cycles, Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
 __rt_entry_main &rArr; main &rArr; men_MENU_CONTROL &rArr; men_ES_MENU &rArr; men_SHOW_MAINFORMS &rArr; men_SHOW_REFRESH &rArr; men_EN_MENU &rArr; FORMAT &rArr; rod_CreateFile_edit &rArr; f_open &rArr; dir_register &rArr; dir_find &rArr; dir_next &rArr; create_chain &rArr; put_fat &rArr; move_window &rArr; sync_window &rArr; disk_write &rArr; send_cmd &rArr;  send_cmd (Cycle)
 <P>
@@ -281,7 +281,7 @@ Global Symbols
 <P><STRONG><a name="[33a]"></a>__rt_entry_postsh_1</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, __rtentry2.o(.ARM.Collect$$rtentry$$00000009))
 
 <P><STRONG><a name="[69]"></a>__rt_entry_main</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, __rtentry2.o(.ARM.Collect$$rtentry$$0000000D))
-<BR><BR>[Stack]<UL><LI>Max Depth = 2572 + Unknown Stack Size
+<BR><BR>[Stack]<UL><LI>Max Depth = 2548 + Unknown Stack Size
 <LI>Call Chain = __rt_entry_main &rArr; main &rArr; men_MENU_CONTROL &rArr; men_ES_MENU &rArr; men_SHOW_MAINFORMS &rArr; men_SHOW_REFRESH &rArr; men_EN_MENU &rArr; FORMAT &rArr; rod_CreateFile_edit &rArr; f_open &rArr; dir_register &rArr; dir_find &rArr; dir_next &rArr; create_chain &rArr; put_fat &rArr; move_window &rArr; sync_window &rArr; disk_write &rArr; send_cmd &rArr;  send_cmd (Cycle)
 </UL>
 <BR>[Calls]<UL><LI><a href="#[6a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
@@ -604,10 +604,11 @@ Global Symbols
 <LI><a href="#[8b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__2sprintf
 </UL>
 <BR>[Called By]<UL><LI><a href="#[6a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
+<LI><a href="#[25c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;men_EN_MENU
 </UL>
 
 <P><STRONG><a name="[6a]"></a>main</STRONG> (Thumb, 1298 bytes, Stack size 48 bytes, main_1.o(.text))
-<BR><BR>[Stack]<UL><LI>Max Depth = 2572 + Unknown Stack Size
+<BR><BR>[Stack]<UL><LI>Max Depth = 2548 + Unknown Stack Size
 <LI>Call Chain = main &rArr; men_MENU_CONTROL &rArr; men_ES_MENU &rArr; men_SHOW_MAINFORMS &rArr; men_SHOW_REFRESH &rArr; men_EN_MENU &rArr; FORMAT &rArr; rod_CreateFile_edit &rArr; f_open &rArr; dir_register &rArr; dir_find &rArr; dir_next &rArr; create_chain &rArr; put_fat &rArr; move_window &rArr; sync_window &rArr; disk_write &rArr; send_cmd &rArr;  send_cmd (Cycle)
 </UL>
 <BR>[Calls]<UL><LI><a href="#[81]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vga_UPDATE
@@ -4114,8 +4115,7 @@ Global Symbols
 <LI><a href="#[21f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vga_LINE
 <LI><a href="#[1f8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;strlen
 </UL>
-<BR>[Called By]<UL><LI><a href="#[25c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;men_EN_MENU
-<LI><a href="#[254]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;men_SHOW_MENU
+<BR>[Called By]<UL><LI><a href="#[254]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;men_SHOW_MENU
 <LI><a href="#[24c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;men_SHOW_ONEITEM
 </UL>
 
@@ -4149,7 +4149,6 @@ Global Symbols
 </UL>
 <BR>[Called By]<UL><LI><a href="#[266]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;men_DEC_POINT
 <LI><a href="#[265]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;men_INC_POINT
-<LI><a href="#[25c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;men_EN_MENU
 <LI><a href="#[254]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;men_SHOW_MENU
 </UL>
 
@@ -4205,7 +4204,7 @@ Global Symbols
 <LI><a href="#[254]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;men_SHOW_MENU
 </UL>
 
-<P><STRONG><a name="[254]"></a>men_SHOW_MENU</STRONG> (Thumb, 754 bytes, Stack size 136 bytes, menu.o(.text))
+<P><STRONG><a name="[254]"></a>men_SHOW_MENU</STRONG> (Thumb, 764 bytes, Stack size 136 bytes, menu.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 796 + Unknown Stack Size
 <LI>Call Chain = men_SHOW_MENU &rArr; fopen &rArr; freopen &rArr; _sys_open &rArr; __fopen &rArr; fat_find_file &rArr; fat_find_dir &rArr; write_entries &rArr; check_name &rArr; search_for_name &rArr; set_next_clus &rArr; cache_fat &rArr; mmc_read_sect &rArr; f_mount &rArr; find_volume &rArr; check_fs &rArr; move_window &rArr; sync_window &rArr; disk_write &rArr; send_cmd &rArr;  send_cmd (Cycle)
 </UL>
@@ -4239,7 +4238,7 @@ Global Symbols
 <LI><a href="#[258]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;men_CALL_CUB_ITEM
 </UL>
 
-<P><STRONG><a name="[257]"></a>men_RETURN_SUB_ITEM</STRONG> (Thumb, 158 bytes, Stack size 16 bytes, menu.o(.text))
+<P><STRONG><a name="[257]"></a>men_RETURN_SUB_ITEM</STRONG> (Thumb, 156 bytes, Stack size 16 bytes, menu.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 84<LI>Call Chain = men_RETURN_SUB_ITEM &rArr; men_GET_CONFIG &rArr; reg_READ &rArr; rtc_COPY_RTC_TO_BUFER &rArr; localtime &rArr; _localtime_r &rArr; __aeabi_memclr4
 </UL>
 <BR>[Calls]<UL><LI><a href="#[24f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;men_GET_CONFIG
@@ -4270,7 +4269,7 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[25c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;men_EN_MENU
 </UL>
 
-<P><STRONG><a name="[25b]"></a>SERVICE_ACC2</STRONG> (Thumb, 1466 bytes, Stack size 152 bytes, menu.o(.text))
+<P><STRONG><a name="[25b]"></a>SERVICE_ACC2</STRONG> (Thumb, 1474 bytes, Stack size 152 bytes, menu.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 1012 + Unknown Stack Size
 <LI>Call Chain = SERVICE_ACC2 &rArr; CONTROL_RTC &rArr; reg_WRITE &rArr; WRITE_REG_TO_SD &rArr; f_mount &rArr; find_volume &rArr; check_fs &rArr; move_window &rArr; sync_window &rArr; disk_write &rArr; send_cmd &rArr;  send_cmd (Cycle)
 </UL>
@@ -4298,8 +4297,8 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[25c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;men_EN_MENU
 </UL>
 
-<P><STRONG><a name="[25c]"></a>men_EN_MENU</STRONG> (Thumb, 3708 bytes, Stack size 224 bytes, menu.o(.text))
-<BR><BR>[Stack]<UL><LI>Max Depth = 2396 + Unknown Stack Size
+<P><STRONG><a name="[25c]"></a>men_EN_MENU</STRONG> (Thumb, 3276 bytes, Stack size 200 bytes, menu.o(.text))
+<BR><BR>[Stack]<UL><LI>Max Depth = 2372 + Unknown Stack Size
 <LI>Call Chain = men_EN_MENU &rArr; FORMAT &rArr; rod_CreateFile_edit &rArr; f_open &rArr; dir_register &rArr; dir_find &rArr; dir_next &rArr; create_chain &rArr; put_fat &rArr; move_window &rArr; sync_window &rArr; disk_write &rArr; send_cmd &rArr;  send_cmd (Cycle)
 </UL>
 <BR>[Calls]<UL><LI><a href="#[117]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;calc_from_dat_V
@@ -4316,6 +4315,7 @@ Global Symbols
 <LI><a href="#[c3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;f_mount
 <LI><a href="#[73]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;IWDG_ReloadCounter
 <LI><a href="#[9c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;BKP_WriteBackupRegister
+<LI><a href="#[c2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ROADS_COUNTING
 <LI><a href="#[b9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;JumpToApplication
 <LI><a href="#[98]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;FORMAT
 <LI><a href="#[77]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SET_CLOCK_SPEED
@@ -4326,7 +4326,6 @@ Global Symbols
 <LI><a href="#[13f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;f_close
 <LI><a href="#[235]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;typ_INC_DIGIT
 <LI><a href="#[25d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;strncpy
-<LI><a href="#[1d8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_memclr4
 <LI><a href="#[115]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;fclose
 <LI><a href="#[112]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;fopen
 <LI><a href="#[113]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;fseek
@@ -4341,19 +4340,16 @@ Global Symbols
 <LI><a href="#[259]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;men_SHOW_MESSAGE
 <LI><a href="#[258]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;men_CALL_CUB_ITEM
 <LI><a href="#[254]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;men_SHOW_MENU
-<LI><a href="#[24e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;men_SHOW_CURSOR
 <LI><a href="#[24c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;men_SHOW_ONEITEM
-<LI><a href="#[24b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;men_SHOW_RECT
 <LI><a href="#[245]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;men_WRITE_VALUE_PARAM
 <LI><a href="#[243]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;men_READ_VALUE_PARAM
-<LI><a href="#[114]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;fread
 </UL>
 <BR>[Called By]<UL><LI><a href="#[db]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;men_MENU_CONTROL
 <LI><a href="#[263]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;men_SHOW_REFRESH
 </UL>
 
-<P><STRONG><a name="[263]"></a>men_SHOW_REFRESH</STRONG> (Thumb, 4058 bytes, Stack size 104 bytes, menu.o(.text))
-<BR><BR>[Stack]<UL><LI>Max Depth = 2500 + Unknown Stack Size
+<P><STRONG><a name="[263]"></a>men_SHOW_REFRESH</STRONG> (Thumb, 4064 bytes, Stack size 104 bytes, menu.o(.text))
+<BR><BR>[Stack]<UL><LI>Max Depth = 2476 + Unknown Stack Size
 <LI>Call Chain = men_SHOW_REFRESH &rArr; men_EN_MENU &rArr; FORMAT &rArr; rod_CreateFile_edit &rArr; f_open &rArr; dir_register &rArr; dir_find &rArr; dir_next &rArr; create_chain &rArr; put_fat &rArr; move_window &rArr; sync_window &rArr; disk_write &rArr; send_cmd &rArr;  send_cmd (Cycle)
 </UL>
 <BR>[Calls]<UL><LI><a href="#[117]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;calc_from_dat_V
@@ -4413,7 +4409,7 @@ Global Symbols
 </UL>
 
 <P><STRONG><a name="[dc]"></a>men_SHOW_MAINFORMS</STRONG> (Thumb, 32 bytes, Stack size 8 bytes, menu.o(.text))
-<BR><BR>[Stack]<UL><LI>Max Depth = 2508 + Unknown Stack Size
+<BR><BR>[Stack]<UL><LI>Max Depth = 2484 + Unknown Stack Size
 <LI>Call Chain = men_SHOW_MAINFORMS &rArr; men_SHOW_REFRESH &rArr; men_EN_MENU &rArr; FORMAT &rArr; rod_CreateFile_edit &rArr; f_open &rArr; dir_register &rArr; dir_find &rArr; dir_next &rArr; create_chain &rArr; put_fat &rArr; move_window &rArr; sync_window &rArr; disk_write &rArr; send_cmd &rArr;  send_cmd (Cycle)
 </UL>
 <BR>[Calls]<UL><LI><a href="#[80]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vga_CLEAR
@@ -4423,7 +4419,7 @@ Global Symbols
 <LI><a href="#[267]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;men_ES_MENU
 </UL>
 
-<P><STRONG><a name="[264]"></a>men_CALLBACK</STRONG> (Thumb, 510 bytes, Stack size 8 bytes, menu.o(.text))
+<P><STRONG><a name="[264]"></a>men_CALLBACK</STRONG> (Thumb, 400 bytes, Stack size 8 bytes, menu.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 804 + Unknown Stack Size
 <LI>Call Chain = men_CALLBACK &rArr; men_SHOW_MENU &rArr; fopen &rArr; freopen &rArr; _sys_open &rArr; __fopen &rArr; fat_find_file &rArr; fat_find_dir &rArr; write_entries &rArr; check_name &rArr; search_for_name &rArr; set_next_clus &rArr; cache_fat &rArr; mmc_read_sect &rArr; f_mount &rArr; find_volume &rArr; check_fs &rArr; move_window &rArr; sync_window &rArr; disk_write &rArr; send_cmd &rArr;  send_cmd (Cycle)
 </UL>
@@ -4432,7 +4428,7 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[267]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;men_ES_MENU
 </UL>
 
-<P><STRONG><a name="[265]"></a>men_INC_POINT</STRONG> (Thumb, 274 bytes, Stack size 32 bytes, menu.o(.text))
+<P><STRONG><a name="[265]"></a>men_INC_POINT</STRONG> (Thumb, 410 bytes, Stack size 32 bytes, menu.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 828 + Unknown Stack Size
 <LI>Call Chain = men_INC_POINT &rArr; men_SHOW_MENU &rArr; fopen &rArr; freopen &rArr; _sys_open &rArr; __fopen &rArr; fat_find_file &rArr; fat_find_dir &rArr; write_entries &rArr; check_name &rArr; search_for_name &rArr; set_next_clus &rArr; cache_fat &rArr; mmc_read_sect &rArr; f_mount &rArr; find_volume &rArr; check_fs &rArr; move_window &rArr; sync_window &rArr; disk_write &rArr; send_cmd &rArr;  send_cmd (Cycle)
 </UL>
@@ -4461,7 +4457,7 @@ Global Symbols
 </UL>
 
 <P><STRONG><a name="[267]"></a>men_ES_MENU</STRONG> (Thumb, 94 bytes, Stack size 8 bytes, menu.o(.text))
-<BR><BR>[Stack]<UL><LI>Max Depth = 2516 + Unknown Stack Size
+<BR><BR>[Stack]<UL><LI>Max Depth = 2492 + Unknown Stack Size
 <LI>Call Chain = men_ES_MENU &rArr; men_SHOW_MAINFORMS &rArr; men_SHOW_REFRESH &rArr; men_EN_MENU &rArr; FORMAT &rArr; rod_CreateFile_edit &rArr; f_open &rArr; dir_register &rArr; dir_find &rArr; dir_next &rArr; create_chain &rArr; put_fat &rArr; move_window &rArr; sync_window &rArr; disk_write &rArr; send_cmd &rArr;  send_cmd (Cycle)
 </UL>
 <BR>[Calls]<UL><LI><a href="#[dc]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;men_SHOW_MAINFORMS
@@ -4472,7 +4468,7 @@ Global Symbols
 </UL>
 
 <P><STRONG><a name="[268]"></a>men_DW_MENU</STRONG> (Thumb, 170 bytes, Stack size 8 bytes, menu.o(.text))
-<BR><BR>[Stack]<UL><LI>Max Depth = 2508 + Unknown Stack Size
+<BR><BR>[Stack]<UL><LI>Max Depth = 2484 + Unknown Stack Size
 <LI>Call Chain = men_DW_MENU &rArr; men_SHOW_REFRESH &rArr; men_EN_MENU &rArr; FORMAT &rArr; rod_CreateFile_edit &rArr; f_open &rArr; dir_register &rArr; dir_find &rArr; dir_next &rArr; create_chain &rArr; put_fat &rArr; move_window &rArr; sync_window &rArr; disk_write &rArr; send_cmd &rArr;  send_cmd (Cycle)
 </UL>
 <BR>[Calls]<UL><LI><a href="#[81]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vga_UPDATE
@@ -4487,8 +4483,8 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[db]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;men_MENU_CONTROL
 </UL>
 
-<P><STRONG><a name="[269]"></a>men_UP_MENU</STRONG> (Thumb, 240 bytes, Stack size 8 bytes, menu.o(.text))
-<BR><BR>[Stack]<UL><LI>Max Depth = 2508 + Unknown Stack Size
+<P><STRONG><a name="[269]"></a>men_UP_MENU</STRONG> (Thumb, 166 bytes, Stack size 8 bytes, menu.o(.text))
+<BR><BR>[Stack]<UL><LI>Max Depth = 2484 + Unknown Stack Size
 <LI>Call Chain = men_UP_MENU &rArr; men_SHOW_REFRESH &rArr; men_EN_MENU &rArr; FORMAT &rArr; rod_CreateFile_edit &rArr; f_open &rArr; dir_register &rArr; dir_find &rArr; dir_next &rArr; create_chain &rArr; put_fat &rArr; move_window &rArr; sync_window &rArr; disk_write &rArr; send_cmd &rArr;  send_cmd (Cycle)
 </UL>
 <BR>[Calls]<UL><LI><a href="#[81]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vga_UPDATE
@@ -4504,7 +4500,7 @@ Global Symbols
 </UL>
 
 <P><STRONG><a name="[db]"></a>men_MENU_CONTROL</STRONG> (Thumb, 116 bytes, Stack size 8 bytes, menu.o(.text))
-<BR><BR>[Stack]<UL><LI>Max Depth = 2524 + Unknown Stack Size
+<BR><BR>[Stack]<UL><LI>Max Depth = 2500 + Unknown Stack Size
 <LI>Call Chain = men_MENU_CONTROL &rArr; men_ES_MENU &rArr; men_SHOW_MAINFORMS &rArr; men_SHOW_REFRESH &rArr; men_EN_MENU &rArr; FORMAT &rArr; rod_CreateFile_edit &rArr; f_open &rArr; dir_register &rArr; dir_find &rArr; dir_next &rArr; create_chain &rArr; put_fat &rArr; move_window &rArr; sync_window &rArr; disk_write &rArr; send_cmd &rArr;  send_cmd (Cycle)
 </UL>
 <BR>[Calls]<UL><LI><a href="#[d0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;key_CHECK_STATUS
@@ -5307,7 +5303,6 @@ Global Symbols
 <LI><a href="#[2b5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;_fclose_internal
 <LI><a href="#[112]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;fopen
 <LI><a href="#[263]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;men_SHOW_REFRESH
-<LI><a href="#[25c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;men_EN_MENU
 <LI><a href="#[254]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;men_SHOW_MENU
 <LI><a href="#[62]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;_initio
 </UL>
@@ -5774,7 +5769,6 @@ Global Symbols
 <LI><a href="#[111]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;calc_from_dat
 <LI><a href="#[13a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rod_GET_NameElement
 <LI><a href="#[263]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;men_SHOW_REFRESH
-<LI><a href="#[25c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;men_EN_MENU
 <LI><a href="#[254]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;men_SHOW_MENU
 </UL>
 

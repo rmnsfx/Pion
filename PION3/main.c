@@ -1211,6 +1211,7 @@ int main(void)
 	
 	men_SETUP();  
 
+	///Подсчет кол-ва маршрутов на карте
 	Num_of_Signals = ROADS_COUNTING();
 	
   SET_CLOCK_SPEED(CLK_8MHz); 

@@ -1344,7 +1344,8 @@ void men_CALLBACK()
 	men_LEVEL--;
 	if (Items[men_POINTER].Data_reg == 0xFE) men_POINTER = 27;	
 	//	else if (Items[men_POINTER].Data_reg == 0xF0) men_POINTER = 0x28;
-	else if (Items[men_POINTER].Data_reg == 0xF0) men_POINTER = 0x25;
+	else if (Items[men_POINTER].Data_reg == 0xF0) men_POINTER = 0x26;	
+	else if (Items[men_POINTER].Data_reg == 0xF2) men_POINTER = 0x26;	
 	else if (Items[men_POINTER].Data_reg == 0xFB) men_POINTER = 40;
 	else if (Items[men_POINTER].Data_reg == 0xFC) men_POINTER = 40;
 	else if (Items[men_POINTER].Data_reg == 0xFF) men_POINTER = 0;	
@@ -1971,7 +1972,7 @@ void men_SHOW_MENU(void)
 		count = AddPos + road_pos;
 		
 		///Стрелки скроллинга
-		if (NumberOfFiles >= 5 && road_pos != Num_of_Signals-1) men_SHOW_ARROW(0); ///Вниз 
+		if (Num_of_Signals > 5 && road_pos != Num_of_Signals) men_SHOW_ARROW(0); ///Вниз 		
 		if (road_pos >= 5) men_SHOW_ARROW(1); ///Вверх 
 		
 		vga_UPDATE();		
@@ -2030,6 +2031,7 @@ void men_SHOW_MENU(void)
 									 && men_START_POINTER != 0x0014
 									 && men_START_POINTER != 0x000E
 									 && men_START_POINTER != 0x0018  
+									 && men_START_POINTER != 0x002D 
 									 && men_START_POINTER != 0x0010) men_SHOW_ARROW(1); ///Вверх в обратном направлении
   
  vga_UPDATE();
@@ -3114,67 +3116,18 @@ void men_EN_MENU(void)
 			REGW(NUMFILE,1);
 			REGW(NUMFILE_CURENT,0);
 			REGW(ROUTE_NUM,0);
-			REGW(BEYOND_ROAD,1);
-							
-			SET_CLOCK_SPEED(CLK_8MHz);
+			REGW(BEYOND_ROAD,1);			
 			
 			men_SETUP();
-
-			
-			///Рисуем возврат в меню "выбор маршрута"
-			men_LEVEL--;
-			if (Items[men_POINTER].Data_reg == 0xFE) men_POINTER = 27;				
-			else if (Items[men_POINTER].Data_reg == 0xF0) men_POINTER = 0x25;
-			else if (Items[men_POINTER].Data_reg == 0xFB) men_POINTER = 40;
-			else if (Items[men_POINTER].Data_reg == 0xFC) men_POINTER = 40;
-			else if (Items[men_POINTER].Data_reg == 0xFF) men_POINTER = 0;
-			else men_POINTER = 0;
+			men_LEVEL = 0;
+			men_POINTER = 0x0;
 			men_CURSOR_STR = 0;
+			road_pos = 0;
+			road_cursor_pos = 0;
+			men_SHOW_MENU();
+			Num_of_Signals = ROADS_COUNTING();
+			SET_CLOCK_SPEED(CLK_8MHz);
 			
-			vga_CLEAR();
-			men_SHOW_RECT(Items[men_LEVEL_POINT[men_LEVEL-1]].Text_0);
-			if (road_pos>4) AddPos = road_pos-4;
-			else AddPos = 0;
-			ip = 0;
-			NumberOfFiles = 0;
-			while (ip<5)
-			{
-				vga_SET_POS_TEXT(men_X0, men_Y0 + men_OFFSET + (unsigned short)ip * men_HEIGHT_STR);												
-				pRFile = fopen ("Roads.txt","r");					
-				if (pRFile != NULL)
-				{
-					fseek(pRFile,9*(ip+AddPos),SEEK_SET);
-					fscanf(pRFile, "%s", temp);
-					fclose(pRFile);
-					if ((pRFile = fopen (temp,"r")) != NULL) 
-					{
-						memset(temp,0,20);
-						fread(temp,1,15,pRFile);
-						fclose(pRFile);
-						vga_PRINT_TEXT(temp,20,men_FONT_DEFAULT);
-						NumberOfFiles++;
-					}				
-				}
-				else 
-				{
-					memset(temp,0,20);
-					sprintf(temp,"Road.%03u",ip+AddPos);
-					pRFile = fopen (temp,"r");
-					if (pRFile != NULL) 
-					{
-						fread(temp,1,15,pRFile);
-						fclose(pRFile);
-						vga_PRINT_TEXT(temp,20,men_FONT_DEFAULT);
-						NumberOfFiles++;
-					}
-				}						
-				ip++;						
-			}
-			if (road_cursor_pos >= NumberOfFiles) road_cursor_pos--;
-			men_CURSOR_STR = road_cursor_pos;					
-			men_SHOW_CURSOR();		
-			vga_UPDATE();		
-
 			return;
 		}
 		 
