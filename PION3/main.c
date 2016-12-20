@@ -1074,7 +1074,24 @@ float CAPACITY ()
 						return akbemk_count;
 }
 
+///Подсчет кол-ва маршрутов на sd-карте
+unsigned int ROADS_COUNTING(void)
+{
+			unsigned int i = 0,j = 0;
+			char 		  FileName[25];
+			
+			f_mount(&fls, "0:", 1);
+							
+			for (j=0;j<=255;j++)
+			{
+				sprintf(FileName,"0:Road.%03u",j);						
+				if (f_stat(FileName, &fno) == FR_OK) i++;						
+			}
 
+			f_mount(0,"0:", 0);
+			
+			return i;
+}
 
 
 
@@ -1194,6 +1211,8 @@ int main(void)
 	
 	men_SETUP();  
 
+	Num_of_Signals = ROADS_COUNTING();
+	
   SET_CLOCK_SPEED(CLK_8MHz); 
 
   //задаем новую конфигурацию меню, если нажаты кнопки "верх","вниз"
@@ -1234,6 +1253,9 @@ int main(void)
 		GPIO_ResetBits(GPIOA,GPIO_Pin_3);	 
 		GPIO_Init(GPIOA, &GPIO_InitStructure);		
 	}
+	
+	
+	
 	
 	
 	
