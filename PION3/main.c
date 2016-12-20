@@ -1082,7 +1082,8 @@ unsigned int ROADS_COUNTING(void)
 			
 			f_mount(&fls, "0:", 1);
 							
-			for (j=0;j<=255;j++)
+			//for (j=0;j<=255;j++)
+			for (j=0; j<6; j++)
 			{
 				sprintf(FileName,"0:Road.%03u",j);						
 				if (f_stat(FileName, &fno) == FR_OK) i++;						
@@ -1090,12 +1091,13 @@ unsigned int ROADS_COUNTING(void)
 
 			f_mount(0,"0:", 0);
 			
-			return i;
+			return i + 1;
 }
 
 
 
 int main(void)
+
 {
   unsigned int fl=0;
   volatile unsigned int temp_reg;  
@@ -1211,8 +1213,11 @@ int main(void)
 	
 	men_SETUP();  
 
-	///Подсчет кол-ва маршрутов на карте
+	///Подсчет кол-ва маршрутов на sd
 	Num_of_Signals = ROADS_COUNTING();
+	///Установка флага для скрола
+	if (Num_of_Signals > 5) exist = 1;
+	else exist = 0;
 	
   SET_CLOCK_SPEED(CLK_8MHz); 
 
@@ -1344,7 +1349,8 @@ int main(void)
 						vga_PRINT_STR("Подождите...",&FONT_6x8);
 						vga_UPDATE();
 						temp_reg = 0;
-								
+						temp_reg2 = 0;
+							
 					
 						__disable_irq();
 						__disable_fiq();
@@ -1375,6 +1381,7 @@ int main(void)
 							{
 								f_printf(&FileTmp,FileName);
 								f_putc('\n',&FileTmp);
+								temp_reg2++;
 							}						
 
 							IWDG_ReloadCounter();							
@@ -1395,7 +1402,8 @@ int main(void)
 						__enable_fiq();
 							
 						
-						Num_of_Signals = temp_reg;
+						//Num_of_Signals = temp_reg;
+						Num_of_Signals = temp_reg2;
 						
 						REGW(BEYOND_ROAD,temp_reg+1);
 						i = 0;

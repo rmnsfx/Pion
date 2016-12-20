@@ -33,5 +33,6 @@ extern void FR_print_error( FRESULT fresult );
 extern unsigned int road_pos;
 extern unsigned int road_pos_int;
 extern unsigned int road_indicator;
+extern unsigned int exist;
 			 
 void DISPLAY_A_V(void);			 

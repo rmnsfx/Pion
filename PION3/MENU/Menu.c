@@ -159,6 +159,7 @@ void men_SET_CONFIG(unsigned char conf);
 	unsigned int old_state_pa8 = 0;
 	unsigned char VALUE=0;
 	unsigned long count_menu_items = 0; ///Кол-во элементов в меню
+	unsigned int exist; ///Проверка след. эл-та меню
 
 
 
@@ -1602,7 +1603,12 @@ FILE* pRFile;
 		if ((pRFile = fopen ("Roads.txt","r")) != NULL)
 			{
 				fseek(pRFile,9*(road_pos),SEEK_SET);
-				if (fscanf(pRFile, "%s", temp) != 1) road_pos--;
+				if (fscanf(pRFile, "%s", temp) != 1) 
+				{
+					road_pos--;
+					exist = 0;
+				}
+				else exist = 1;
 				fclose(pRFile);
 			}
 			
@@ -1668,6 +1674,12 @@ void men_DEC_POINT()
 		if (road_pos>0)road_pos--;
 		if ((road_pos<road_cursor_pos)&&(road_cursor_pos>0)) road_cursor_pos--; 
 
+		if (road_pos>5) exist = 1;
+		else
+		{
+			if (Num_of_Signals > 5) exist = 1;
+		}
+		
 		men_SHOW_MENU();
 		return;	
 	}
@@ -1720,11 +1732,7 @@ void men_SHOW_CURSOR(void)
 
  vga_SET_DRAW_MODE(drMODE_NORMAL);
 	
-	
-	
-	
-	//if (men_GET_NEXT_ITEM(men_POINTER)!= NIL) 
-	//if (men_LEVEL > 0 && road_pos > 5) men_SHOW_ARROW(0);
+
 }
 
 
@@ -1897,14 +1905,10 @@ void men_SHOW_MENU(void)
   FATFS f;
 	unsigned int count = 0;	
 	unsigned int total_road = 0;	
-	unsigned int end_f = 0; 
+	
 	
 	men_STATUS 	   = men_MULTI_ITEM;
   men_s			   = men_CURSOR_STR;
-	
-
-
- 
 
 
 //Alex
@@ -1913,16 +1917,18 @@ void men_SHOW_MENU(void)
 	{		
 		
 		vga_CLEAR();
+		
 		men_SHOW_RECT(Items[men_LEVEL_POINT[men_LEVEL-1]].Text_0);
-		//men_SHOW_ITEMS();
+		
 		if (road_pos>4) AddPos = road_pos-4;
 		else AddPos = 0;
+		
 		ip = 0;
 		NumberOfFiles = 0;
+		
 		while (ip<5)
 		{
-			vga_SET_POS_TEXT(men_X0, men_Y0 + men_OFFSET + (unsigned short)ip * men_HEIGHT_STR);
-			
+			vga_SET_POS_TEXT(men_X0, men_Y0 + men_OFFSET + (unsigned short)ip * men_HEIGHT_STR);			
 			
 			pRFile = fopen ("Roads.txt","r");
 						
@@ -1940,6 +1946,7 @@ void men_SHOW_MENU(void)
 					fclose(pRFile);
 					vga_PRINT_TEXT(temp,20,men_FONT_DEFAULT);
 					NumberOfFiles++;
+					
 				}				
 			}
 			else 
@@ -1948,31 +1955,34 @@ void men_SHOW_MENU(void)
 				sprintf(temp,"Road.%03u",ip+AddPos);
 				pRFile = fopen (temp,"r");
 				if (pRFile != NULL) 
-					{
+				{
 					fread(temp,1,15,pRFile);
 					fclose(pRFile);
 					vga_PRINT_TEXT(temp,20,men_FONT_DEFAULT);
 					//	road_cursor_pos--;
-						NumberOfFiles++;
-					}
+					NumberOfFiles++;						
+				}
+				
 			}
-
 			
 		ip++;
 			
 		}
 
-		if (road_cursor_pos >= NumberOfFiles) road_cursor_pos--;
+		if (road_cursor_pos >= NumberOfFiles) 
+		{
+			road_cursor_pos--;		
+		}
+		
+		
 		men_CURSOR_STR = road_cursor_pos;
 		
 		men_SHOW_CURSOR();		
-		
-		
-		
-		count = AddPos + road_pos;
+				
+		//count = AddPos + road_pos;
 		
 		///Стрелки скроллинга
-		if (Num_of_Signals > 5 && road_pos != Num_of_Signals) men_SHOW_ARROW(0); ///Вниз 		
+		if (Num_of_Signals > 5 && exist == 1) men_SHOW_ARROW(0); ///Вниз 		
 		if (road_pos >= 5) men_SHOW_ARROW(1); ///Вверх 
 		
 		vga_UPDATE();		

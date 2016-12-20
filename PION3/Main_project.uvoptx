@@ -144,6 +144,7 @@
         <SetRegEntry>
           <Number>0</Number>
           <Key>DLGUARM</Key>
+          <Name></Name>
         </SetRegEntry>
         <SetRegEntry>
           <Number>0</Number>
@@ -175,7 +176,7 @@
         <Bp>
           <Number>0</Number>
           <Type>0</Type>
-          <LineNumber>3186</LineNumber>
+          <LineNumber>1984</LineNumber>
           <EnabledFlag>1</EnabledFlag>
           <Address>0</Address>
           <ByteObject>0</ByteObject>
@@ -191,7 +192,7 @@
         <Bp>
           <Number>1</Number>
           <Type>0</Type>
-          <LineNumber>1977</LineNumber>
+          <LineNumber>1680</LineNumber>
           <EnabledFlag>1</EnabledFlag>
           <Address>0</Address>
           <ByteObject>0</ByteObject>
@@ -207,7 +208,7 @@
         <Bp>
           <Number>2</Number>
           <Type>0</Type>
-          <LineNumber>1345</LineNumber>
+          <LineNumber>1346</LineNumber>
           <EnabledFlag>1</EnabledFlag>
           <Address>0</Address>
           <ByteObject>0</ByteObject>
@@ -217,6 +218,22 @@
           <BreakByAccess>0</BreakByAccess>
           <BreakIfRCount>0</BreakIfRCount>
           <Filename>.\MENU\Menu.c</Filename>
+          <ExecCommand></ExecCommand>
+          <Expression></Expression>
+        </Bp>
+        <Bp>
+          <Number>3</Number>
+          <Type>0</Type>
+          <LineNumber>1095</LineNumber>
+          <EnabledFlag>1</EnabledFlag>
+          <Address>0</Address>
+          <ByteObject>0</ByteObject>
+          <HtxType>0</HtxType>
+          <ManyObjects>0</ManyObjects>
+          <SizeOfObject>0</SizeOfObject>
+          <BreakByAccess>0</BreakByAccess>
+          <BreakIfRCount>0</BreakIfRCount>
+          <Filename>.\main.c</Filename>
           <ExecCommand></ExecCommand>
           <Expression></Expression>
         </Bp>
@@ -252,17 +269,17 @@
         <Ww>
           <count>0</count>
           <WinNumber>2</WinNumber>
-          <ItemText>NumberOfFiles</ItemText>
+          <ItemText>pRFile</ItemText>
         </Ww>
         <Ww>
           <count>1</count>
           <WinNumber>2</WinNumber>
-          <ItemText>AddPos</ItemText>
+          <ItemText>temp</ItemText>
         </Ww>
         <Ww>
           <count>2</count>
           <WinNumber>2</WinNumber>
-          <ItemText>road_pos</ItemText>
+          <ItemText>NumberOfFiles</ItemText>
         </Ww>
         <Ww>
           <count>3</count>
@@ -272,12 +289,22 @@
         <Ww>
           <count>4</count>
           <WinNumber>2</WinNumber>
-          <ItemText>count</ItemText>
+          <ItemText>AddPos</ItemText>
         </Ww>
         <Ww>
           <count>5</count>
           <WinNumber>2</WinNumber>
-          <ItemText>Num_of_Signals</ItemText>
+          <ItemText>temp</ItemText>
+        </Ww>
+        <Ww>
+          <count>6</count>
+          <WinNumber>2</WinNumber>
+          <ItemText>road_pos</ItemText>
+        </Ww>
+        <Ww>
+          <count>7</count>
+          <WinNumber>2</WinNumber>
+          <ItemText>exist</ItemText>
         </Ww>
       </WatchWindow2>
       <Tracepoint>
