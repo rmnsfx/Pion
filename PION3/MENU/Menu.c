@@ -1651,7 +1651,7 @@ FILE* pRFile;
  }
  
  
- //if (men_GET_NEXT_ITEM(men_POINTER)==NIL) men_SHOW_ARROW(1);
+ 
  
 }
 
@@ -1711,7 +1711,7 @@ void men_DEC_POINT()
 		vga_UPDATE();		
  }	 
  
-  //if (pp == men_START_POINTER) men_SHOW_ARROW(1);
+  
 }
 
 
@@ -3083,10 +3083,11 @@ void men_EN_MENU(void)
 			//f_mount(&fls, "0:", 1);											
 			f_open(&FileTmp,"Roads.txt", FA_CREATE_ALWAYS | FA_WRITE);
 					
-			sprintf(FileName,"Road.%01u  ",0);
+			sprintf(FileName,"Road.0  ");
 			f_printf(&FileTmp,FileName);
 			f_putc('\n',&FileTmp);
 			
+			j = 1;
 			for(i=1;i<255;i++)
 			{
 					sprintf(FileName,"Road.%03u",i);
@@ -3095,6 +3096,7 @@ void men_EN_MENU(void)
 					{
 							f_printf(&FileTmp,FileName);
 							f_putc('\n',&FileTmp);
+							j++;
 					}
 						
 			}
@@ -3134,9 +3136,9 @@ void men_EN_MENU(void)
 			men_CURSOR_STR = 0;
 			road_pos = 0;
 			road_cursor_pos = 0;
-			men_SHOW_MENU();
-			Num_of_Signals = ROADS_COUNTING();
+			Num_of_Signals = j;
 			SET_CLOCK_SPEED(CLK_8MHz);
+			men_SHOW_MENU();			
 			
 			return;
 		}

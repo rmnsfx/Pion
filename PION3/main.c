@@ -1079,19 +1079,51 @@ unsigned int ROADS_COUNTING(void)
 {
 			unsigned int i = 0,j = 0;
 			char 		  FileName[25];
+			FIL Fil;
 			
-			f_mount(&fls, "0:", 1);
-							
-			//for (j=0;j<=255;j++)
-			for (j=0; j<6; j++)
-			{
-				sprintf(FileName,"0:Road.%03u",j);						
-				if (f_stat(FileName, &fno) == FR_OK) i++;						
-			}
+//			f_mount(&fls, "0:", 1);
+//							
+//			//for (j=0;j<=255;j++)
+//			for (j=0; j<10; j++)
+//			{
+//				sprintf(FileName,"0:Road.%03d",j);						
+//				if (f_stat(FileName, &fno) == FR_OK) i++;						
+//			}
 
+//			f_mount(0,"0:", 0);
+//			
+//			return i + 1;
+	
+//			if ((pRFile = fopen ("Roads.txt","r")) != NULL)
+//			{
+//				fseek(pRFile,9*(road_pos),SEEK_SET);
+//				if (fscanf(pRFile, "%s", temp) != 1) 
+//				{
+//					road_pos--;
+//					exist = 0;
+//				}
+//				else exist = 1;
+//				fclose(pRFile);
+//			}	
+	
+	
+			f_mount(&fls, "0:", 1);
+			res_t = f_open(&Fil,"Roads.txt", FA_OPEN_ALWAYS | FA_READ);
+			if (res_t == 0) 
+			{
+				for (j=0; j<10; j++)
+				{
+					res_t = f_lseek(&Fil, 9*j);
+					f_gets(FileName,9,&Fil);
+					if (f_stat(FileName, &fno) == FR_OK) i++;	
+				}
+			}
+			f_close(&Fil);			
 			f_mount(0,"0:", 0);
-			
-			return i + 1;
+	
+	
+			return i;
+	
 }
 
 
@@ -1101,7 +1133,7 @@ int main(void)
 {
   unsigned int fl=0;
   volatile unsigned int temp_reg;  
-	volatile unsigned int temp_reg2;
+	volatile unsigned int temp_reg2 = 0;
   unsigned int i = 0, j = 0;
   char 		  FileName[25];
 	char temp[25];
@@ -1376,7 +1408,7 @@ int main(void)
 						
 						for(i=1;i<255;i++)
 						{
-							sprintf(FileName,"Road.%03u",i);
+							sprintf(FileName,"Road.%03d",i);
 							if (f_stat(FileName, &fno) == FR_OK)
 							{
 								f_printf(&FileTmp,FileName);
@@ -1403,7 +1435,7 @@ int main(void)
 							
 						
 						//Num_of_Signals = temp_reg;
-						Num_of_Signals = temp_reg2;
+						Num_of_Signals = ROADS_COUNTING();
 						
 						REGW(BEYOND_ROAD,temp_reg+1);
 						i = 0;
