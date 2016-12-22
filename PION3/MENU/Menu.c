@@ -489,6 +489,20 @@ void men_SHOW_REFRESH(void)
 										vga_PRINT_STR(temp_str,&FONT_4x7);
 						}
 	
+//Проверка автоотключения						
+//										vga_SET_POS_TEXT(1, 7);						
+//										sprintf(t_str,"%d", REG(AUTOPOWEROFF));						
+//										vga_PRINT_STR(t_str,&FONT_4x7);
+//										vga_SET_POS_TEXT(20, 7);						
+//										sprintf(t_str,"%d", POWER_OFF);						
+//										vga_PRINT_STR(t_str,&FONT_4x7);
+//										vga_SET_POS_TEXT(55, 7);						
+//										sprintf(t_str,"%d", key_STATE);						
+//										vga_PRINT_STR(t_str,&FONT_4x7);
+						
+						
+						
+						
 					  
 						///Обновляем значение переменной по таймеру для индикации заряда					
 						//if (timer2 == 0 && measure_stat == 0) 
@@ -898,12 +912,12 @@ void men_SHOW_REFRESH(void)
 						vga_SET_POS_TEXT(21,1);	
 						vga_PRINT_STR(temp_str,&FONT_4x7);	
 	
-						if (id_akb == 0) men_SHOW_BAT_edit(1,1, frzbat1);	
+						if (id_akb == 0) men_SHOW_BAT_edit(1,1, akbemk_percent);	
 							else men_SHOW_BAT_edit(1,1,adc_BAT_PERCENT_edit_charge());	
 	
 						vga_SET_POS_TEXT(45,24);
 						vga_PRINT_STR("USB",&FONT_12x16);												
-						//vga_UPDATE();
+						vga_UPDATE();
 	
 						if (REG(AKB_EMK) == 1)
 						{

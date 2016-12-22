@@ -877,7 +877,8 @@ void CONTROL_POWER(u8 RESET)
 		 //if (pin_USB_5V) POWER_OFF = TIME_POWER_OFF; 	
 	
 		 ///if (measure_stat == 2) POWER_OFF = TIME_POWER_OFF; 
-			
+		
+		 if (REG(AUTOPOWEROFF) == 1) 	
 		 if (POWER_OFF <= 0) 	
 		 {
 				pin_OFF();
