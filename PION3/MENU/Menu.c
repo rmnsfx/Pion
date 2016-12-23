@@ -917,7 +917,7 @@ void men_SHOW_REFRESH(void)
 	
 						vga_SET_POS_TEXT(45,24);
 						vga_PRINT_STR("USB",&FONT_12x16);												
-						vga_UPDATE();
+						//vga_UPDATE();
 	
 						if (REG(AKB_EMK) == 1)
 						{
