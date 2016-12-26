@@ -119,6 +119,7 @@ int akbstatus = -1;
 float akbemk_menu = 0;
 FATINFO sdinfo;
 unsigned char SD_SWITCH; 
+unsigned char autooff = 0; 
 
 
 
@@ -167,7 +168,8 @@ void Timer_1ms_CallBack(void)
 				
 				timer4=0;	
 			}
-				
+			
+			if (autooff == 1)	
 			POWER_OFF--;
 				
 			 if (Sec_timer==0) {
@@ -468,9 +470,6 @@ void ShowPowerOffForm ( void )
   //vga_SET_POS_TEXT(28,25);
 	//vga_PRINT_STR("ВЫКЛЮЧЕНИЕ",&FONT_7x10_bold);
 	vga_UPDATE();
-	
-
-
 }
 
 void EXTI9_5_IRQHandler ( void )
@@ -878,7 +877,7 @@ void CONTROL_POWER(u8 RESET)
 	
 		 ///if (measure_stat == 2) POWER_OFF = TIME_POWER_OFF; 
 		
-		 if (REG(AUTOPOWEROFF) == 1) 	
+		 if (autooff == 1) 	
 		 if (POWER_OFF <= 0) 	
 		 {
 				pin_OFF();
@@ -1025,7 +1024,6 @@ void JumpToApplication(uint32_t addr)
 //Считаем емкость нового аккума (Ампер/часы).
 float CAPACITY ()
 {
-
 	
 						//Мгновенный ток, Ампер.
 						akbtemp = (float) adc_BAT_MEASURE_NEW_AMPER() / 4096 * 3.3;								
@@ -1294,10 +1292,6 @@ int main(void)
 	}
 	
 	
-	
-	
-	
-	
 	while (1) //начало основного цикла
   {		
 		
@@ -1330,7 +1324,9 @@ int main(void)
 		
 	///Считаем емкость АКБ
 	CAPACITY();	
-
+		
+	///Читаем регистр автоотключения
+	autooff = REG(AUTOPOWEROFF); 
 
 	if (USB_SWITCH == 1)
 	{
