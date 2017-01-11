@@ -159,7 +159,6 @@ void men_SET_CONFIG(unsigned char conf);
 	unsigned int old_state_pa8 = 0;
 	unsigned char VALUE=0;
 	unsigned long count_menu_items = 0; ///Кол-во элементов в меню
-	unsigned int exist; ///Проверка след. эл-та меню
 
 
 
@@ -489,20 +488,6 @@ void men_SHOW_REFRESH(void)
 										vga_PRINT_STR(temp_str,&FONT_4x7);
 						}
 	
-//Проверка автоотключения						
-//										vga_SET_POS_TEXT(1, 7);						
-//										sprintf(t_str,"%d", REG(AUTOPOWEROFF));						
-//										vga_PRINT_STR(t_str,&FONT_4x7);
-//										vga_SET_POS_TEXT(20, 7);						
-//										sprintf(t_str,"%d", POWER_OFF);						
-//										vga_PRINT_STR(t_str,&FONT_4x7);
-//										vga_SET_POS_TEXT(55, 7);						
-//										sprintf(t_str,"%d", key_STATE);						
-//										vga_PRINT_STR(t_str,&FONT_4x7);
-						
-						
-						
-						
 					  
 						///Обновляем значение переменной по таймеру для индикации заряда					
 						//if (timer2 == 0 && measure_stat == 0) 
@@ -912,7 +897,7 @@ void men_SHOW_REFRESH(void)
 						vga_SET_POS_TEXT(21,1);	
 						vga_PRINT_STR(temp_str,&FONT_4x7);	
 	
-						if (id_akb == 0) men_SHOW_BAT_edit(1,1, akbemk_percent);	
+						if (id_akb == 0) men_SHOW_BAT_edit(1,1, frzbat1);	
 							else men_SHOW_BAT_edit(1,1,adc_BAT_PERCENT_edit_charge());	
 	
 						vga_SET_POS_TEXT(45,24);
@@ -1617,12 +1602,7 @@ FILE* pRFile;
 		if ((pRFile = fopen ("Roads.txt","r")) != NULL)
 			{
 				fseek(pRFile,9*(road_pos),SEEK_SET);
-				if (fscanf(pRFile, "%s", temp) != 1) 
-				{
-					road_pos--;
-					exist = 0;
-				}
-				else exist = 1;
+				if (fscanf(pRFile, "%s", temp) != 1) road_pos--;
 				fclose(pRFile);
 			}
 			
@@ -1665,7 +1645,7 @@ FILE* pRFile;
  }
  
  
- 
+ //if (men_GET_NEXT_ITEM(men_POINTER)==NIL) men_SHOW_ARROW(1);
  
 }
 
@@ -1688,12 +1668,6 @@ void men_DEC_POINT()
 		if (road_pos>0)road_pos--;
 		if ((road_pos<road_cursor_pos)&&(road_cursor_pos>0)) road_cursor_pos--; 
 
-		if (road_pos>5) exist = 1;
-		else
-		{
-			if (Num_of_Signals > 5) exist = 1;
-		}
-		
 		men_SHOW_MENU();
 		return;	
 	}
@@ -1725,7 +1699,7 @@ void men_DEC_POINT()
 		vga_UPDATE();		
  }	 
  
-  
+  //if (pp == men_START_POINTER) men_SHOW_ARROW(1);
 }
 
 
@@ -1746,7 +1720,11 @@ void men_SHOW_CURSOR(void)
 
  vga_SET_DRAW_MODE(drMODE_NORMAL);
 	
-
+	
+	
+	
+	//if (men_GET_NEXT_ITEM(men_POINTER)!= NIL) 
+	//if (men_LEVEL > 0 && road_pos > 5) men_SHOW_ARROW(0);
 }
 
 
@@ -1919,10 +1897,14 @@ void men_SHOW_MENU(void)
   FATFS f;
 	unsigned int count = 0;	
 	unsigned int total_road = 0;	
-	
+	unsigned int exist = 0; 
 	
 	men_STATUS 	   = men_MULTI_ITEM;
   men_s			   = men_CURSOR_STR;
+	
+
+
+ 
 
 
 //Alex
@@ -1931,18 +1913,16 @@ void men_SHOW_MENU(void)
 	{		
 		
 		vga_CLEAR();
-		
 		men_SHOW_RECT(Items[men_LEVEL_POINT[men_LEVEL-1]].Text_0);
-		
+		//men_SHOW_ITEMS();
 		if (road_pos>4) AddPos = road_pos-4;
 		else AddPos = 0;
-		
 		ip = 0;
 		NumberOfFiles = 0;
-		
 		while (ip<5)
 		{
-			vga_SET_POS_TEXT(men_X0, men_Y0 + men_OFFSET + (unsigned short)ip * men_HEIGHT_STR);			
+			vga_SET_POS_TEXT(men_X0, men_Y0 + men_OFFSET + (unsigned short)ip * men_HEIGHT_STR);
+			
 			
 			pRFile = fopen ("Roads.txt","r");
 						
@@ -1960,7 +1940,7 @@ void men_SHOW_MENU(void)
 					fclose(pRFile);
 					vga_PRINT_TEXT(temp,20,men_FONT_DEFAULT);
 					NumberOfFiles++;
-					
+					exist = 1;
 				}				
 			}
 			else 
@@ -1969,34 +1949,33 @@ void men_SHOW_MENU(void)
 				sprintf(temp,"Road.%03u",ip+AddPos);
 				pRFile = fopen (temp,"r");
 				if (pRFile != NULL) 
-				{
+					{
 					fread(temp,1,15,pRFile);
 					fclose(pRFile);
 					vga_PRINT_TEXT(temp,20,men_FONT_DEFAULT);
 					//	road_cursor_pos--;
-					NumberOfFiles++;						
-				}
+						NumberOfFiles++;
+						
+					}
 				
 			}
+
 			
 		ip++;
 			
 		}
 
-		if (road_cursor_pos >= NumberOfFiles) 
-		{
-			road_cursor_pos--;		
-		}
-		
-		
+		if (road_cursor_pos >= NumberOfFiles) road_cursor_pos--;
 		men_CURSOR_STR = road_cursor_pos;
 		
 		men_SHOW_CURSOR();		
-				
-		//count = AddPos + road_pos;
+		
+		
+		
+		count = AddPos + road_pos;
 		
 		///Стрелки скроллинга
-		if (Num_of_Signals > 5 && exist == 1) men_SHOW_ARROW(0); ///Вниз 		
+		if (NumbersOfFiles >= 5 && exist == 1) men_SHOW_ARROW(0); ///Вниз 		
 		if (road_pos >= 5) men_SHOW_ARROW(1); ///Вверх 
 		
 		vga_UPDATE();		
@@ -2687,23 +2666,6 @@ BeyondRoad = 0;
   }  
 }
 
-void manufactor_reset(void)
-{
-	REGW(NUMFILE,1);
-	REGW(NUMFILE_CURENT,0);
-	REGW(ROUTE_NUM,0);
-	REGW(BEYOND_ROAD,1);			
-						
-	REGW(CHANEL_MESUARE, 0x01); 
-	REGW(FILTER_A, 0x01); 
-	REGW(DETECT_A, 0x01); 
-	
-	REGW(AUTOPOWEROFF, 1); ///Вкл.
-	REGW(AKB_EMK_COUNT, 0); ///0.6 мА/ч
-	REGW(TIME_EDIT, 61);
-			
-	JumpToApplication(0x8010000);
-}
 
 void men_EN_MENU(void)
 {
@@ -3114,11 +3076,10 @@ void men_EN_MENU(void)
 			//f_mount(&fls, "0:", 1);											
 			f_open(&FileTmp,"Roads.txt", FA_CREATE_ALWAYS | FA_WRITE);
 					
-			sprintf(FileName,"Road.0  ");
+			sprintf(FileName,"Road.%01u  ",0);
 			f_printf(&FileTmp,FileName);
 			f_putc('\n',&FileTmp);
 			
-			j = 1;
 			for(i=1;i<255;i++)
 			{
 					sprintf(FileName,"Road.%03u",i);
@@ -3127,7 +3088,6 @@ void men_EN_MENU(void)
 					{
 							f_printf(&FileTmp,FileName);
 							f_putc('\n',&FileTmp);
-							j++;
 					}
 						
 			}
@@ -3167,9 +3127,9 @@ void men_EN_MENU(void)
 			men_CURSOR_STR = 0;
 			road_pos = 0;
 			road_cursor_pos = 0;
-			Num_of_Signals = j;
+			men_SHOW_MENU();
+			//Num_of_Signals = ROADS_COUNTING();
 			SET_CLOCK_SPEED(CLK_8MHz);
-			men_SHOW_MENU();			
 			
 			return;
 		}
@@ -3201,19 +3161,8 @@ void men_EN_MENU(void)
 								}
 								else 
 						  	men_SHOW_MENU();
-								
-								if (Items[men_POINTER].Data_reg==0x63) ///Сброс настроек
-								if (men_SHOW_MESSAGE("Восстановить","заводские настройки?",15000)) //если нажали кнопку сохранить
-								{
-									manufactor_reset();								
-								}
-								else 
-						  	men_SHOW_MENU();
-							
 						  break;
 							}
-							
-
 	
 
              //вход в режим редактирования
