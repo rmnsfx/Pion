@@ -1359,7 +1359,7 @@ void men_CALLBACK()
 	men_LEVEL--;
 	if (Items[men_POINTER].Data_reg == 0xFE) men_POINTER = 27;	
 	//	else if (Items[men_POINTER].Data_reg == 0xF0) men_POINTER = 0x28;
-	else if (Items[men_POINTER].Data_reg == 0xF0) men_POINTER = 0x26;	
+	else if (Items[men_POINTER].Data_reg == 0xF0) men_POINTER = 0x27;		
 	else if (Items[men_POINTER].Data_reg == 0xF2) men_POINTER = 0x26;	
 	else if (Items[men_POINTER].Data_reg == 0xFB) men_POINTER = 40;
 	else if (Items[men_POINTER].Data_reg == 0xFC) men_POINTER = 40;
@@ -2056,6 +2056,7 @@ void men_SHOW_MENU(void)
 									 && men_START_POINTER != 0x000E
 									 && men_START_POINTER != 0x0018  
 									 && men_START_POINTER != 0x002D 
+									 && men_START_POINTER != 0x002E 
 									 && men_START_POINTER != 0x0010) men_SHOW_ARROW(1); ///¬верх в обратном направлении
   
  vga_UPDATE();

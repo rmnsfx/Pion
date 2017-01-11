@@ -77,7 +77,7 @@
         <tvExpOptDlg>0</tvExpOptDlg>
         <IsCurrentTarget>1</IsCurrentTarget>
       </OPTFL>
-      <CpuCode>18</CpuCode>
+      <CpuCode>255</CpuCode>
       <Books>
         <Book>
           <Number>0</Number>
@@ -143,6 +143,11 @@
       <TargetDriverDllRegistry>
         <SetRegEntry>
           <Number>0</Number>
+          <Key>DLGUARM</Key>
+          <Name></Name>
+        </SetRegEntry>
+        <SetRegEntry>
+          <Number>0</Number>
           <Key>ARMRTXEVENTFLAGS</Key>
           <Name>-L70 -Z18 -C0 -M0 -T1</Name>
         </SetRegEntry>
@@ -171,50 +176,50 @@
         <Bp>
           <Number>0</Number>
           <Type>0</Type>
-          <LineNumber>2002</LineNumber>
+          <LineNumber>2050</LineNumber>
           <EnabledFlag>1</EnabledFlag>
-          <Address>134341706</Address>
+          <Address>0</Address>
           <ByteObject>0</ByteObject>
           <HtxType>0</HtxType>
           <ManyObjects>0</ManyObjects>
           <SizeOfObject>0</SizeOfObject>
           <BreakByAccess>0</BreakByAccess>
-          <BreakIfRCount>1</BreakIfRCount>
+          <BreakIfRCount>0</BreakIfRCount>
           <Filename>.\MENU\Menu.c</Filename>
           <ExecCommand></ExecCommand>
-          <Expression>\\Main_project\MENU/Menu.c\2002</Expression>
+          <Expression></Expression>
         </Bp>
         <Bp>
           <Number>1</Number>
           <Type>0</Type>
-          <LineNumber>1988</LineNumber>
+          <LineNumber>1360</LineNumber>
           <EnabledFlag>1</EnabledFlag>
-          <Address>134341646</Address>
+          <Address>0</Address>
           <ByteObject>0</ByteObject>
           <HtxType>0</HtxType>
           <ManyObjects>0</ManyObjects>
           <SizeOfObject>0</SizeOfObject>
           <BreakByAccess>0</BreakByAccess>
-          <BreakIfRCount>1</BreakIfRCount>
+          <BreakIfRCount>0</BreakIfRCount>
           <Filename>.\MENU\Menu.c</Filename>
           <ExecCommand></ExecCommand>
-          <Expression>\\Main_project\MENU/Menu.c\1988</Expression>
+          <Expression></Expression>
         </Bp>
         <Bp>
           <Number>2</Number>
           <Type>0</Type>
-          <LineNumber>1360</LineNumber>
+          <LineNumber>1326</LineNumber>
           <EnabledFlag>1</EnabledFlag>
-          <Address>134351412</Address>
+          <Address>0</Address>
           <ByteObject>0</ByteObject>
           <HtxType>0</HtxType>
           <ManyObjects>0</ManyObjects>
           <SizeOfObject>0</SizeOfObject>
           <BreakByAccess>0</BreakByAccess>
-          <BreakIfRCount>1</BreakIfRCount>
+          <BreakIfRCount>0</BreakIfRCount>
           <Filename>.\MENU\Menu.c</Filename>
           <ExecCommand></ExecCommand>
-          <Expression>\\Main_project\MENU/Menu.c\1360</Expression>
+          <Expression></Expression>
         </Bp>
       </Breakpoint>
       <WatchWindow1>
@@ -246,7 +251,7 @@
         <Ww>
           <count>5</count>
           <WinNumber>1</WinNumber>
-          <ItemText>"Road.0"</ItemText>
+          <ItemText>men_CURSOR_STR</ItemText>
         </Ww>
       </WatchWindow1>
       <WatchWindow2>
