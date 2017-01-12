@@ -169,7 +169,7 @@ void Timer_1ms_CallBack(void)
 				timer4=0;	
 			}
 			
-			if (autooff == 1)	
+			if (autooff == 1 && pin_USB_5V == 0)	
 			POWER_OFF--;
 				
 			 if (Sec_timer==0) {
