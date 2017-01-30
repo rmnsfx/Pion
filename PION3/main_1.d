@@ -63,3 +63,4 @@
 .\main_1.o: params.h
 .\main_1.o: RealTime.h
 .\main_1.o: Road.h
+.\main_1.o: Flash.h

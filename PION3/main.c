@@ -53,6 +53,8 @@
 #include "Road.h"
 #include "ff.h"
 #include "diskio.h"
+#include "Flash.h"
+
 
 
 
@@ -1142,6 +1144,7 @@ int main(void)
 	uint16_t Number,Num;	
 	unsigned char result;
 	TStatus Err;
+	volatile unsigned int tempreg=0;
 	
 	measure_stat = 0;		
 		
@@ -1291,6 +1294,8 @@ int main(void)
 		GPIO_Init(GPIOA, &GPIO_InitStructure);		
 	}
 	
+	//tempreg = REG(K_VIBRO);
+ 
 	
 	while (1) //начало основного цикла
   {		

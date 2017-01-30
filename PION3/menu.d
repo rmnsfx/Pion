@@ -59,3 +59,4 @@
 .\menu.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\math.h
 .\menu.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\cerrno
 .\menu.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\errno.h
+.\menu.o: ..\PION3\Flash.h

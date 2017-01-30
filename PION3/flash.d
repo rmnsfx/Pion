@@ -36,3 +36,6 @@
 .\flash.o: .\DRIVER\inc\stm32f10x_iwdg.h
 .\flash.o: .\OLED\vga_lib.h
 .\flash.o: .\OLED\font.h
+.\flash.o: main.h
+.\flash.o: .\FAT\File_Config.h
+.\flash.o: Flash.h

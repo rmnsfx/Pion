@@ -14,12 +14,23 @@
 #include "diskio.h"
 #include "stm32f10x_iwdg.h"
 #include "vga_lib.h"
+#include "stm32f10x_rcc.h"
+#include "main.h"
+#include "Flash.h"
 
+#include "stm32f10x.h"
+
+
+#define FLASH_KEY1               ((uint32_t)0x45670123)
+#define FLASH_KEY2               ((uint32_t)0xCDEF89AB)
 
    extern FATFS   fls;            
    extern FIL     FileTmp;          
 	 extern FRESULT res_t; 
 	 extern	FILINFO fno;
+
+
+///Работа с SD-картой
 
 BOOL mmc_init (void)
 {
@@ -108,6 +119,50 @@ unsigned int mmc_format(void)
  return (res_format);
 }
 
+///Работа со встроенной flash памятью микроконтроллера ( 0x8000000 - 0x807FFFF )
+void flash_unlock(void) 
+{
+	FLASH->KEYR = FLASH_KEY1;
+	FLASH->KEYR = FLASH_KEY2;
+}
 
+void flash_lock() 
+{
+  FLASH->CR |= FLASH_CR_LOCK;
+}
 
-	  
+uint8_t flash_ready(void) 
+{
+  return !(FLASH->SR & FLASH_SR_BSY);
+}
+
+void flash_erase_page(uint32_t address) 
+{
+  FLASH->CR|= FLASH_CR_PER; 
+  FLASH->AR = address; 
+  FLASH->CR|= FLASH_CR_STRT; 
+  while(!flash_ready());  
+  FLASH->CR&= ~FLASH_CR_PER; 
+}
+
+uint32_t flash_read(uint32_t address) 
+{
+	return (*(__IO uint32_t*) address);
+}
+
+void flash_write(uint32_t address,uint32_t data) 
+{
+  FLASH->CR |= FLASH_CR_PG; 
+ 
+	//while(!flash_ready());
+  //*(__IO uint16_t*)address = (uint16_t)data; 
+  //while(!flash_ready());
+  //address+=2;
+  //data>>=16;
+
+	while((FLASH->SR&FLASH_SR_BSY));
+  *(__IO uint16_t*)address = (uint16_t)data; 
+  
+  FLASH->CR &= ~(FLASH_CR_PG); 
+	
+}

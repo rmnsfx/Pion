@@ -22,7 +22,7 @@
 #include "math.h"
 #include "diskio.h"		
 #include <cerrno>
-
+#include "Flash.h"	
 
 
 
@@ -342,20 +342,58 @@ void men_READ_VALUE_PARAM(unsigned int point)
 //----------------------------------------------------------------//
 void men_READ_PARAM(unsigned int num_reg)
 {
+	
+ uint32_t temp;
+	
  typVALUE_PARAM.val = REG(num_reg);
  typVALUE_PARAM.max = REG_MAX(num_reg);
  typVALUE_PARAM.min = REG_MIN(num_reg);
  typVALUE_PARAM.def = REG_DEF(num_reg);
+	
+ //temp = (uint16_t) flash_read( (uint32_t) 0x807FFC0 );
+ ///Читаем коэф. с флешки МК
+// if(num_reg == NUM) 
+//	 typVALUE_PARAM.val = (uint16_t) flash_read((uint32_t) 0x807FFC0);
+// 
+// if(num_reg == K_VIBRO) 
+//	 typVALUE_PARAM.val = (uint16_t) flash_read((uint32_t) 0x807FFE0);
+	
 }
 
 
 void men_WRITE_VALUE_PARAM(unsigned int point)
 {
+	
+ int temp = 0;
+	
  if (Items[point].Data_reg==CHANEL_MESUARE) 
-  {
+ {
    men_SET_CONFIG(typVALUE_PARAM.val&0xFF);		 //меняем конфигурацию меню если выбрали другой канал измерения
-  }
-
+ }
+	
+ ///Сохраняем "Номер датчика" и "Коэф. коррекции" на флеш МК (последнюю страницу)
+ if (Items[point].Data_reg==NUM)
+ {
+		flash_unlock();	  
+		temp = (uint16_t) flash_read((uint32_t) 0x807FFE0);
+		flash_erase_page(0x807FFC0);		
+		flash_erase_page(0x807FFE0);		
+		flash_write(0x807FFC0, typVALUE_PARAM.val); ///Номер датчика		
+		flash_write(0x807FFE0, temp); ///Коэф.		
+		flash_lock();
+ }
+ else
+ if (Items[point].Data_reg==K_VIBRO)
+ {
+		flash_unlock();	  		
+		temp = (uint16_t) flash_read((uint32_t) 0x807FFC0);
+		flash_erase_page(0x807FFC0);		
+		flash_erase_page(0x807FFE0);		
+	  flash_write(0x807FFE0, typVALUE_PARAM.val); ///Коэф. 
+	  flash_write(0x807FFC0, temp); ///Номер датчика			
+		flash_lock();
+ }
+ else 
  REGW(Items[point].Data_reg,typVALUE_PARAM.val);
 }
 
@@ -1339,11 +1377,8 @@ void men_CALL_CUB_ITEM()
  men_POINTER = pp;
  men_CURSOR_STR = 0;
 	
- 
-	
  men_SHOW_MENU();
- 
-     
+      
 }
 
 //----------------------------------------------------------------//
@@ -2057,6 +2092,7 @@ void men_SHOW_MENU(void)
 									 && men_START_POINTER != 0x0018  
 									 && men_START_POINTER != 0x002D 
 									 && men_START_POINTER != 0x002E 
+									 && men_START_POINTER != 0x002A 
 									 && men_START_POINTER != 0x0010) men_SHOW_ARROW(1); ///Вверх в обратном направлении
   
  vga_UPDATE();
@@ -2753,17 +2789,14 @@ void men_EN_MENU(void)
 				  
 								men_SHOW_MESSAGE("Сохранение...","",0);			
 
-									
+							
 								
 								SET_CLOCK_SPEED(CLK_72MHz); 			
 						
 								
 							  REGW(NUMFILE,0); //ставим лок-байт
 								
-
-								
-									
-																											
+																
 											///Определяем имя файла маршрута по курсору 
 											pRFile = fopen ("Roads.txt","r");
 											if (pRFile != NULL)

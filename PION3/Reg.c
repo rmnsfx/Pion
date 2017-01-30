@@ -26,6 +26,18 @@ unsigned short data;
   }
 
  if (num_reg==VERNUM) return VER;
+	
+ ///Считываем коэф. из флеш МК
+ if(num_reg == NUM)
+ {
+		///Номер DV
+		return (uint16_t) flash_read((uint32_t) 0x807FFC0);
+ }
+ if (num_reg == K_VIBRO)
+ {
+		///Коэф. усиления
+		return (uint16_t) flash_read((uint32_t) 0x807FFE0);
+ }
 
  return DATA_REG.Data[num_reg];
 }
@@ -105,6 +117,18 @@ TStatus reg_LOAD()
  {
 		adr = reg_OFFSET_DATA + i*reg_SIZE_REG;
 		_reg_READ(adr,&DATA_REG.Data[i],reg_SIZE_REG);
+	 
+		///Считываем коэф. из флеш МК
+		if(i == 23)
+		{
+			///Номер DV
+			DATA_REG.Data[i] = (uint16_t) flash_read((uint32_t) 0x807FFC0);
+		}
+		if (i == 25)
+		{
+			///Коэф. усиления
+			DATA_REG.Data[i] = (uint16_t) flash_read((uint32_t) 0x807FFE0);
+		}
 
 		if ((DATA_REG.Data[i] > PARAMS[i].Max)||(DATA_REG.Data[i] < PARAMS[i].Min))
 		{	  
@@ -142,3 +166,5 @@ TStatus reg_SETUP(void)
  
  return	reg_LOAD();
 }
+
+
