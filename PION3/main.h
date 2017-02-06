@@ -72,7 +72,7 @@ void progressbar(unsigned int value);
 ///Выключатель usb для отладки 
 #define USB_SWITCH 1
 
-///Выключатель функций обращения к SD карте, при чтении служебных регистров
+///Выключатель функций работы с SD-картой, при чтении служебных регистров
 extern unsigned char SD_SWITCH; 
 
 extern unsigned int GLOBAL_ERROR;

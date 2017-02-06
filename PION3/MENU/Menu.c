@@ -2083,7 +2083,7 @@ void men_SHOW_MENU(void)
  ///Рисуем стрелки скроллинга 
  if (men_LEVEL > 0 && count_menu_items > 5 ) men_SHOW_ARROW(0); ///Вниз 
  if (men_LEVEL > 0 && men_CURSOR_STR == 4) men_SHOW_ARROW(1); ///Вверх 
- if (men_LEVEL > 0 && men_START_POINTER != 0x001B 
+ if (men_LEVEL > 0 && men_START_POINTER != 0x001B ///Выключаем менюшки где стрелку рисовать не надо
 									 && men_START_POINTER != 0x0001 
 									 && men_START_POINTER != 0x0006 
 									 && men_START_POINTER != 0x000A
