@@ -353,7 +353,7 @@ GPIO_SetBits(GPIOA,GPIO_Pin_11);
 	else				 ext_adc_VALUE = (SAMPLE[0]+SAMPLE[1]+SAMPLE[2]+SAMPLE[3])>>2;
 
 	
-	
+		
 		if ((ext_adc_VALUE>32500)||(ext_adc_VALUE<-32500))  
 		///if ((ext_adc_VALUE>32500*k_reg_mul)||(ext_adc_VALUE<-32500*k_reg_mul)) 
     if (!ext_adc_DELAY) ext_adc_OVER = 1;   //выставляем признак перегруза канала
