@@ -26,19 +26,12 @@ unsigned short reg_READ(unsigned int num_reg)
 	
  ///Считываем коэф. из флеш МК
  if(num_reg == NUM)
- {	 
-		///Если на флеш МК пусто, читаем с SD карты
-		if ( (uint16_t)flash_read((uint32_t) 0x807FFC0) == 0xFFFF )	return DATA_REG.Data[num_reg];
-				
+ {
 		///Номер DV
 		return (uint16_t) flash_read((uint32_t) 0x807FFC0);
  }
- 
  if (num_reg == K_VIBRO)
- {	 
-	 	///Если на флеш МК пусто, читаем с SD карты
-		if ( (uint16_t)flash_read((uint32_t) 0x807FFE0) == 0xFFFF )	return DATA_REG.Data[num_reg];
-	 
+ {
 		///Коэф. усиления
 		return (uint16_t) flash_read((uint32_t) 0x807FFE0);
  }
@@ -112,7 +105,7 @@ void reg_RESET()
 
 TStatus reg_LOAD()
 {
- unsigned int 	i, temp;
+ unsigned int 	i;
  unsigned int 	adr;
  unsigned short temp_data;
  TStatus		result = _OK;
@@ -130,20 +123,7 @@ TStatus reg_LOAD()
 			DATA_REG.Data[i] = (uint16_t) flash_read((uint32_t) 0x807FFC0);
 			
 			///Если на флеш МК пусто, читаем с SD карты
-			if (DATA_REG.Data[i] == 0xFFFF) 
-			{
-				_reg_READ(adr,&DATA_REG.Data[i],reg_SIZE_REG);
-				
-				///Сохраняем данные на флеш МК
-				flash_unlock();	  
-				temp = (uint16_t) flash_read((uint32_t) 0x807FFE0);
-				flash_erase_page(0x807FFC0);		
-				flash_erase_page(0x807FFE0);		
-				flash_write(0x807FFC0, DATA_REG.Data[i]); ///Номер датчика		
-				flash_write(0x807FFE0, temp); ///Коэф.		
-				flash_lock();
-			}
-			
+			if (DATA_REG.Data[i] == 0xFF) _reg_READ(adr,&DATA_REG.Data[i],reg_SIZE_REG);
 		}
 		if (i == 25)
 		{
@@ -151,20 +131,7 @@ TStatus reg_LOAD()
 			DATA_REG.Data[i] = (uint16_t) flash_read((uint32_t) 0x807FFE0);
 			
 			///Если на флеш МК пусто, читаем с SD карты
-			if (DATA_REG.Data[i] == 0xFFFF)
-			{
-				_reg_READ(adr,&DATA_REG.Data[i],reg_SIZE_REG);
-				
-				///Сохраняем данные на флеш МК
-				flash_unlock();	  		
-				temp = (uint16_t) flash_read((uint32_t) 0x807FFC0); ///Сохраняем NUM, т.к. стираем всю страницу
-				flash_erase_page(0x807FFC0);		
-				flash_erase_page(0x807FFE0);		
-				flash_write(0x807FFE0, DATA_REG.Data[i]); ///Коэф. 
-				flash_write(0x807FFC0, temp); ///Номер датчика			
-				flash_lock();
-			}
-			
+			if (DATA_REG.Data[i] == 0xFF) _reg_READ(adr,&DATA_REG.Data[i],reg_SIZE_REG);
 		}
 
 		if ((DATA_REG.Data[i] > PARAMS[i].Max)||(DATA_REG.Data[i] < PARAMS[i].Min))

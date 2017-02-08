@@ -375,25 +375,26 @@ void men_WRITE_VALUE_PARAM(unsigned int point)
  if (Items[point].Data_reg==NUM)
  {
 		flash_unlock();	  
-		temp = (uint16_t) flash_read((uint32_t) 0x807FFE0);
+		temp = (uint16_t) flash_read((uint32_t) 0x807FFE0); ///Сохраняем K_VIBRO, т.к. стираем всю страницу
 		flash_erase_page(0x807FFC0);		
 		flash_erase_page(0x807FFE0);		
 		flash_write(0x807FFC0, typVALUE_PARAM.val); ///Номер датчика		
 		flash_write(0x807FFE0, temp); ///Коэф.		
 		flash_lock();
+
  }
  else
  if (Items[point].Data_reg==K_VIBRO)
  {
 		flash_unlock();	  		
-		temp = (uint16_t) flash_read((uint32_t) 0x807FFC0);
+		temp = (uint16_t) flash_read((uint32_t) 0x807FFC0); ///Сохраняем NUM, т.к. стираем всю страницу
 		flash_erase_page(0x807FFC0);		
 		flash_erase_page(0x807FFE0);		
 	  flash_write(0x807FFE0, typVALUE_PARAM.val); ///Коэф. 
 	  flash_write(0x807FFC0, temp); ///Номер датчика			
 		flash_lock();
  }
- else 
+ 
  REGW(Items[point].Data_reg,typVALUE_PARAM.val);
 }
 
