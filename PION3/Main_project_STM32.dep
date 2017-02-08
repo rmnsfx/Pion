@@ -43,7 +43,7 @@ I (..\PION3\Pin.h)(0x55DD4419)
 I (FM25V10.h)(0x5555C86E)
 I (main.h)(0x589077A1)
 I (FLASH_AT45DB.h)(0x5555C86E)
-I (EXT_ADC.h)(0x5555C86E)
+I (EXT_ADC.h)(0x589AAB73)
 I (.\OLED\vga_lib.h)(0x5555C86E)
 I (.\OLED\font.h)(0x5555C86E)
 I (.\MENU\Types.h)(0x5555C86E)
@@ -196,7 +196,7 @@ I (.\FAT\File_Config.h)(0x58230487)
 I (.\FAT\RTL.h)(0x5555C86E)
 I (SPI.h)(0x5555C86E)
 I (Pin.h)(0x55DD4419)
-F (.\EXT_ADC.c)(0x58996229)(-c --cpu Cortex-M3 -g -W -O0 --apcs=interwork -I..\PION3 -I.\CMSIS -I.\DRIVER\inc -I.\DRIVER\src -I.\USB -I.\FAT -I.\OLED -I.\MENU -I.\fatfs-I C:\Users\SavchenkoRS\Source\Repos\Pion\PION3\RTE-I C:\Keil_v5\ARM\PACK\Keil\STM32F1xx_DFP\2.1.0-I C:\Keil_v5\ARM\CMSIS\Include-I C:\Keil_v5\ARM\PACK\Keil\STM32F1xx_DFP\2.1.0\Device\Include-D__UVISION_VERSION="514" -DSTM32F10X_HD -DARM_MATH_CM3-o .\ext_adc.o --omf_browse .\ext_adc.crf --depend .\ext_adc.d)
+F (.\EXT_ADC.c)(0x589AAC3C)(-c --cpu Cortex-M3 -g -W -O0 --apcs=interwork -I..\PION3 -I.\CMSIS -I.\DRIVER\inc -I.\DRIVER\src -I.\USB -I.\FAT -I.\OLED -I.\MENU -I.\fatfs-I C:\Users\SavchenkoRS\Source\Repos\Pion\PION3\RTE-I C:\Keil_v5\ARM\PACK\Keil\STM32F1xx_DFP\2.1.0-I C:\Keil_v5\ARM\CMSIS\Include-I C:\Keil_v5\ARM\PACK\Keil\STM32F1xx_DFP\2.1.0\Device\Include-D__UVISION_VERSION="514" -DSTM32F10X_HD -DARM_MATH_CM3-o .\ext_adc.o --omf_browse .\ext_adc.crf --depend .\ext_adc.d)
 I (Pin.h)(0x55DD4419)
 I (stm32f10x.h)(0x5555C86E)
 I (.\CMSIS\core_cm3.h)(0x585139BD)
@@ -216,7 +216,7 @@ I (.\DRIVER\inc\stm32f10x_tim.h)(0x5555C86E)
 I (.\DRIVER\inc\stm32f10x_usart.h)(0x5555C86E)
 I (.\DRIVER\inc\misc.h)(0x5555C86E)
 I (IIR.h)(0x5555C86E)
-I (EXT_ADC.h)(0x5555C86E)
+I (EXT_ADC.h)(0x589AAB73)
 I (C:\Keil_v5\ARM\ARMCC\include\stdio.h)(0x581876ED)
 I (reg.h)(0x588995FB)
 I (FM25V10.h)(0x5555C86E)
@@ -963,7 +963,7 @@ I (C:\Keil_v5\ARM\ARMCC\include\string.h)(0x54761D30)
 I (C:\Keil_v5\ARM\ARMCC\include\stdio.H)(0x581876ED)
 F (.\MENU\Items.c)(0x5860B3AE)(-c --cpu Cortex-M3 -g -W -O0 --apcs=interwork -I..\PION3 -I.\CMSIS -I.\DRIVER\inc -I.\DRIVER\src -I.\USB -I.\FAT -I.\OLED -I.\MENU -I.\fatfs-I C:\Users\SavchenkoRS\Source\Repos\Pion\PION3\RTE-I C:\Keil_v5\ARM\PACK\Keil\STM32F1xx_DFP\2.1.0-I C:\Keil_v5\ARM\CMSIS\Include-I C:\Keil_v5\ARM\PACK\Keil\STM32F1xx_DFP\2.1.0\Device\Include-D__UVISION_VERSION="514" -DSTM32F10X_HD -DARM_MATH_CM3-o .\items.o --omf_browse .\items.crf --depend .\items.d)
 I (.\MENU\Items.h)(0x58526B1D)
-F (.\MENU\Menu.c)(0x5890785E)(-c --cpu Cortex-M3 -g -W -O0 --apcs=interwork -I..\PION3 -I.\CMSIS -I.\DRIVER\inc -I.\DRIVER\src -I.\USB -I.\FAT -I.\OLED -I.\MENU -I.\fatfs-I C:\Users\SavchenkoRS\Source\Repos\Pion\PION3\RTE-I C:\Keil_v5\ARM\PACK\Keil\STM32F1xx_DFP\2.1.0-I C:\Keil_v5\ARM\CMSIS\Include-I C:\Keil_v5\ARM\PACK\Keil\STM32F1xx_DFP\2.1.0\Device\Include-D__UVISION_VERSION="514" -DSTM32F10X_HD -DARM_MATH_CM3-o .\menu.o --omf_browse .\menu.crf --depend .\menu.d)
+F (.\MENU\Menu.c)(0x589ABEDB)(-c --cpu Cortex-M3 -g -W -O0 --apcs=interwork -I..\PION3 -I.\CMSIS -I.\DRIVER\inc -I.\DRIVER\src -I.\USB -I.\FAT -I.\OLED -I.\MENU -I.\fatfs-I C:\Users\SavchenkoRS\Source\Repos\Pion\PION3\RTE-I C:\Keil_v5\ARM\PACK\Keil\STM32F1xx_DFP\2.1.0-I C:\Keil_v5\ARM\CMSIS\Include-I C:\Keil_v5\ARM\PACK\Keil\STM32F1xx_DFP\2.1.0\Device\Include-D__UVISION_VERSION="514" -DSTM32F10X_HD -DARM_MATH_CM3-o .\menu.o --omf_browse .\menu.crf --depend .\menu.d)
 I (MENU\types.h)(0x5555C86E)
 I (MENU\Menu.h)(0x58591174)
 I (..\PION3\Pin.h)(0x55DD4419)
@@ -1004,7 +1004,7 @@ I (..\PION3\FLASH_AT45DB.h)(0x5555C86E)
 I (..\PION3\regmap.h)(0x58525BF7)
 I (.\USB\mscuser.h)(0x58131FBF)
 I (..\PION3\params.h)(0x5555C86E)
-I (..\PION3\EXT_ADC.h)(0x5555C86E)
+I (..\PION3\EXT_ADC.h)(0x589AAB73)
 I (..\PION3\IIR.h)(0x5555C86E)
 I (..\PION3\wav.h)(0x55951C5F)
 I (..\PION3\Road.h)(0x56554073)

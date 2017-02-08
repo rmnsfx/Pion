@@ -18,6 +18,9 @@ u16 ext_mode_reg;
 u32 ext_adc_DELAY;
 s32  ext_adc_VAL;
 
+s32 ADC_VALUE_test;
+s32 ADC_VALUE_COEF_test;
+
 u8	ext_adc_OVER = 0; //индикатор перегруза канала виброускорения
 
  float k_reg_mul = 1;
@@ -352,7 +355,8 @@ GPIO_SetBits(GPIOA,GPIO_Pin_11);
 	if (DECIMATOR==0x01) ext_adc_VALUE = (SAMPLE[0]+SAMPLE[1])>>1;
 	else				 ext_adc_VALUE = (SAMPLE[0]+SAMPLE[1]+SAMPLE[2]+SAMPLE[3])>>2;
 
-	
+ADC_VALUE_test = ext_adc_VALUE;
+ADC_VALUE_COEF_test = ext_adc_VALUE*k_reg_mul;	
 		
 		if ((ext_adc_VALUE>32500)||(ext_adc_VALUE<-32500))  
 		///if ((ext_adc_VALUE>32500*k_reg_mul)||(ext_adc_VALUE<-32500*k_reg_mul)) 

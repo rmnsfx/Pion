@@ -3,7 +3,7 @@
 <title>Static Call Graph - [.\Main_project.axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image .\Main_project.axf</H1><HR>
-<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5050106: Last Updated: Tue Feb 07 10:59:06 2017
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5050106: Last Updated: Wed Feb 08 11:46:53 2017
 <BR><P>
 <H3>Maximum Stack Usage =       2588 bytes + Unknown(Functions without stacksize, Cycles, Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
@@ -1067,7 +1067,7 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[30]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;TIM1_UP_IRQHandler
 </UL>
 
-<P><STRONG><a name="[30]"></a>TIM1_UP_IRQHandler</STRONG> (Thumb, 1006 bytes, Stack size 16 bytes, ext_adc.o(.text))
+<P><STRONG><a name="[30]"></a>TIM1_UP_IRQHandler</STRONG> (Thumb, 1052 bytes, Stack size 16 bytes, ext_adc.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 68<LI>Call Chain = TIM1_UP_IRQHandler &rArr; reg_READ &rArr; rtc_COPY_RTC_TO_BUFER &rArr; localtime &rArr; _localtime_r &rArr; __aeabi_memclr4
 </UL>
 <BR>[Calls]<UL><LI><a href="#[10e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;TIM_ClearITPendingBit
@@ -1131,7 +1131,7 @@ Global Symbols
 <BR><BR>[Calls]<UL><LI><a href="#[e6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ext_adc_GET_STATUS
 </UL>
 
-<P><STRONG><a name="[11e]"></a>calc_from_dat</STRONG> (Thumb, 588 bytes, Stack size 72 bytes, ext_adc.o(.text), UNUSED)
+<P><STRONG><a name="[11e]"></a>calc_from_dat</STRONG> (Thumb, 600 bytes, Stack size 72 bytes, ext_adc.o(.text), UNUSED)
 <BR><BR>[Calls]<UL><LI><a href="#[117]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;iir_DETECTOR
 <LI><a href="#[119]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;iir_DETECTOR_RESET
 <LI><a href="#[114]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;iir_DEC_FILTER_4ORD
@@ -1323,8 +1323,8 @@ Global Symbols
 <P><STRONG><a name="[12c]"></a>rtc_RESET</STRONG> (Thumb, 48 bytes, Stack size 8 bytes, realtime.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 72<LI>Call Chain = rtc_RESET &rArr; mktime &rArr; _tm_carry
 </UL>
-<BR>[Calls]<UL><LI><a href="#[12e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RTC_WaitForLastTask
-<LI><a href="#[12f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RTC_SetCounter
+<BR>[Calls]<UL><LI><a href="#[12f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RTC_SetCounter
+<LI><a href="#[12e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RTC_WaitForLastTask
 <LI><a href="#[12d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;mktime
 </UL>
 <BR>[Called By]<UL><LI><a href="#[cd]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rtc_SETUP
@@ -1333,9 +1333,7 @@ Global Symbols
 <P><STRONG><a name="[cd]"></a>rtc_SETUP</STRONG> (Thumb, 132 bytes, Stack size 8 bytes, realtime.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 80<LI>Call Chain = rtc_SETUP &rArr; rtc_RESET &rArr; mktime &rArr; _tm_carry
 </UL>
-<BR>[Calls]<UL><LI><a href="#[136]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RTC_WaitForSynchro
-<LI><a href="#[12e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RTC_WaitForLastTask
-<LI><a href="#[138]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RTC_SetPrescaler
+<BR>[Calls]<UL><LI><a href="#[138]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RTC_SetPrescaler
 <LI><a href="#[137]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RTC_ITConfig
 <LI><a href="#[134]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RCC_RTCCLKConfig
 <LI><a href="#[135]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RCC_RTCCLKCmd
@@ -1348,6 +1346,8 @@ Global Symbols
 <LI><a href="#[9c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;BKP_WriteBackupRegister
 <LI><a href="#[d6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;BKP_ReadBackupRegister
 <LI><a href="#[7f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Delay
+<LI><a href="#[136]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RTC_WaitForSynchro
+<LI><a href="#[12e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RTC_WaitForLastTask
 </UL>
 <BR>[Called By]<UL><LI><a href="#[6a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 </UL>
@@ -1368,9 +1368,9 @@ Global Symbols
 <P><STRONG><a name="[129]"></a>rtc_COPY_BUFER_TO_RTC</STRONG> (Thumb, 30 bytes, Stack size 8 bytes, realtime.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 72<LI>Call Chain = rtc_COPY_BUFER_TO_RTC &rArr; mktime &rArr; _tm_carry
 </UL>
-<BR>[Calls]<UL><LI><a href="#[12e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RTC_WaitForLastTask
-<LI><a href="#[12f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RTC_SetCounter
+<BR>[Calls]<UL><LI><a href="#[12f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RTC_SetCounter
 <LI><a href="#[a6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rtc_COPY_RTC_TO_BUFER
+<LI><a href="#[12e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RTC_WaitForLastTask
 <LI><a href="#[12d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;mktime
 </UL>
 <BR>[Called By]<UL><LI><a href="#[9a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;reg_WRITE
@@ -4425,7 +4425,7 @@ Global Symbols
 <LI><a href="#[26c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;men_SHOW_REFRESH
 </UL>
 
-<P><STRONG><a name="[26c]"></a>men_SHOW_REFRESH</STRONG> (Thumb, 4082 bytes, Stack size 104 bytes, menu.o(.text))
+<P><STRONG><a name="[26c]"></a>men_SHOW_REFRESH</STRONG> (Thumb, 4394 bytes, Stack size 104 bytes, menu.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 2476 + Unknown Stack Size
 <LI>Call Chain = men_SHOW_REFRESH &rArr; men_EN_MENU &rArr; FORMAT &rArr; rod_CreateFile_edit &rArr; f_open &rArr; dir_register &rArr; dir_find &rArr; dir_next &rArr; create_chain &rArr; put_fat &rArr; move_window &rArr; sync_window &rArr; disk_write &rArr; send_cmd &rArr;  send_cmd (Cycle)
 </UL>
@@ -4497,7 +4497,7 @@ Global Symbols
 <LI><a href="#[270]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;men_ES_MENU
 </UL>
 
-<P><STRONG><a name="[26d]"></a>men_CALLBACK</STRONG> (Thumb, 534 bytes, Stack size 8 bytes, menu.o(.text))
+<P><STRONG><a name="[26d]"></a>men_CALLBACK</STRONG> (Thumb, 542 bytes, Stack size 8 bytes, menu.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 804 + Unknown Stack Size
 <LI>Call Chain = men_CALLBACK &rArr; men_SHOW_MENU &rArr; fopen &rArr; freopen &rArr; _sys_open &rArr; __fopen &rArr; fat_find_file &rArr; fat_find_dir &rArr; write_entries &rArr; check_name &rArr; search_for_name &rArr; set_next_clus &rArr; cache_fat &rArr; mmc_read_sect &rArr; f_mount &rArr; find_volume &rArr; check_fs &rArr; move_window &rArr; sync_window &rArr; disk_write &rArr; send_cmd &rArr;  send_cmd (Cycle)
 </UL>
@@ -4545,7 +4545,7 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[e8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;men_MENU_CONTROL
 </UL>
 
-<P><STRONG><a name="[271]"></a>men_DW_MENU</STRONG> (Thumb, 170 bytes, Stack size 8 bytes, menu.o(.text))
+<P><STRONG><a name="[271]"></a>men_DW_MENU</STRONG> (Thumb, 240 bytes, Stack size 8 bytes, menu.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 2484 + Unknown Stack Size
 <LI>Call Chain = men_DW_MENU &rArr; men_SHOW_REFRESH &rArr; men_EN_MENU &rArr; FORMAT &rArr; rod_CreateFile_edit &rArr; f_open &rArr; dir_register &rArr; dir_find &rArr; dir_next &rArr; create_chain &rArr; put_fat &rArr; move_window &rArr; sync_window &rArr; disk_write &rArr; send_cmd &rArr;  send_cmd (Cycle)
 </UL>
@@ -4561,7 +4561,7 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[e8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;men_MENU_CONTROL
 </UL>
 
-<P><STRONG><a name="[272]"></a>men_UP_MENU</STRONG> (Thumb, 240 bytes, Stack size 8 bytes, menu.o(.text))
+<P><STRONG><a name="[272]"></a>men_UP_MENU</STRONG> (Thumb, 166 bytes, Stack size 8 bytes, menu.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 2484 + Unknown Stack Size
 <LI>Call Chain = men_UP_MENU &rArr; men_SHOW_REFRESH &rArr; men_EN_MENU &rArr; FORMAT &rArr; rod_CreateFile_edit &rArr; f_open &rArr; dir_register &rArr; dir_find &rArr; dir_next &rArr; create_chain &rArr; put_fat &rArr; move_window &rArr; sync_window &rArr; disk_write &rArr; send_cmd &rArr;  send_cmd (Cycle)
 </UL>
@@ -5398,12 +5398,12 @@ Global Symbols
 </UL>
 <BR>[Called By]<UL><LI><a href="#[1dd]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;init_dev
 <LI><a href="#[1c6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;fs_find_iob
-<LI><a href="#[2c4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;_localtime_r
 <LI><a href="#[2bc]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;_fclose_internal
 <LI><a href="#[e1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;fopen
 <LI><a href="#[26c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;men_SHOW_REFRESH
 <LI><a href="#[25d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;men_SHOW_MENU
 <LI><a href="#[62]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;_initio
+<LI><a href="#[2c4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;_localtime_r
 </UL>
 
 <P><STRONG><a name="[42e]"></a>__aeabi_memclr8</STRONG> (Thumb, 0 bytes, Stack size 4 bytes, rt_memclr_w.o(.text), UNUSED)

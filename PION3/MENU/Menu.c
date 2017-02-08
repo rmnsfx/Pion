@@ -80,6 +80,13 @@ extern unsigned int	Num_of_Signals;
 
 unsigned int Num_of_Road = 0;
 
+unsigned int i1=1;	
+unsigned int i2=0;	
+unsigned int i3=0;	
+unsigned int i4=0;	
+unsigned int i5=0;	
+unsigned int i6=0;	
+unsigned int i7=0;	
 
 Tmen_status				men_STATUS;
 Tmen_status				men_SAVE_STATUS;
@@ -483,7 +490,8 @@ void men_SHOW_REFRESH(void)
  float* result;
  unsigned int sch=0;
  unsigned int flag_charge = 0;
-	
+
+
 
 	
  switch (men_ID_FORM)
@@ -539,9 +547,45 @@ void men_SHOW_REFRESH(void)
 //										vga_PRINT_STR(t_str,&FONT_4x7);
 						
 						
-						
-						
-					  
+	
+if (i1 == 10)
+{						
+	i3=i2;
+	i7 = i5;
+	i1=0;
+	i2 = 0;
+	i5 = 0;
+}	
+else
+{
+	i1++;
+	i2 += ADC_VALUE_test/10; 	
+	i5 += ADC_VALUE_COEF_test/10;
+}
+
+sprintf(t_str,"%d", i3);
+vga_SET_POS_TEXT(1,10);	
+vga_PRINT_STR(t_str,&FONT_4x7);
+
+sprintf(t_str,"%d", i7);
+vga_SET_POS_TEXT(70,10);	
+vga_PRINT_STR(t_str,&FONT_4x7);
+
+
+if (abs(ADC_VALUE_test) > i4) i4 = abs(ADC_VALUE_test);
+if (abs(ADC_VALUE_COEF_test) > i6) i6 = abs(ADC_VALUE_COEF_test);
+
+sprintf(t_str,"%d", i4);
+vga_SET_POS_TEXT(30,10);	
+vga_PRINT_STR(t_str,&FONT_4x7);
+
+sprintf(t_str,"%d", i6);
+vga_SET_POS_TEXT(100,10);	
+vga_PRINT_STR(t_str,&FONT_4x7);
+
+
+
+
 						///Обновляем значение переменной по таймеру для индикации заряда					
 						//if (timer2 == 0 && measure_stat == 0) 
 						if (timer2 == 0) 

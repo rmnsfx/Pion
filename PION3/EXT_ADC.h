@@ -26,3 +26,6 @@ uint16_t* calc_from_dat ( const char *FileName, uint16_t* A, uint16_t* V );
 uint16_t calc_from_dat_V ( const char *FileName);
 uint16_t calc_from_dat_A ( const char *FileName);
 uint16_t calc_from_dat_S ( const char *FileName);
+
+extern s32 ADC_VALUE_test;
+extern s32 ADC_VALUE_COEF_test;
