@@ -54,6 +54,8 @@
 #include "ff.h"
 #include "diskio.h"
 #include "Flash.h"
+#include "stm32f10x_flash.h"
+#include "stm32f10x_crc.h"
 
 
 
@@ -1128,6 +1130,151 @@ unsigned int ROADS_COUNTING(void)
 }
 
 
+void flashing_bootloader(void)
+{
+	
+		unsigned int i = 0, j = 0, res = 0, a, carry_flag, f_res;
+		FATFS fatfs;
+		FIL Fil;
+		uint8_t bf[2];
+		unsigned int br = 1;
+		uint16_t crc = 0xffff;
+		uint32_t bt[4];
+		char t_str[20];
+		uint32_t calculated_crc;
+		
+	
+		vga_CLEAR();
+		vga_SET_POS_TEXT(1,1);			
+		vga_PRINT_STR("Обновление",&FONT_6x8);			
+		vga_SET_POS_TEXT(1,15);
+		vga_PRINT_STR("загрузчика...",&FONT_6x8);
+		vga_SET_POS_TEXT(1,30);
+		vga_PRINT_STR("Подключите",&FONT_6x8);
+		vga_SET_POS_TEXT(1,45);
+		vga_PRINT_STR("зарядное устройство.",&FONT_6x8);
+		vga_UPDATE();							
+					
+		__disable_fiq();
+		__disable_irq();
+					
+		while (1)
+		{
+				if (key_CHECK_EV(key_EVENT_PRESSED_ESC_MENU)) JumpToApplication(0x8000000);
+				if (pin_USB_5V == 1) break; 															
+				IWDG_ReloadCounter();	
+		}
+					
+		
+		res = f_mount(&fatfs, "0:", 1);		
+		res = f_open(&Fil, "boot1.bin", FA_OPEN_ALWAYS | FA_READ);
+		
+		while (1)
+		{			
+			res = f_read(&Fil, bf, sizeof(uint8_t), &br);
+			if (br == 0) break;
+				
+			crc = crc^bf[0];
+				
+			for (j = 0; j < 8; j++)
+			{
+					a = crc;
+					carry_flag = a & 0x0001;
+					crc = crc >> 1;
+					if (carry_flag == 1) crc = crc ^ 0xA001;
+			}			
+
+			IWDG_ReloadCounter();				
+		}			
+			
+
+		if (crc != 0) 
+		{
+				vga_CLEAR();
+				vga_SET_POS_TEXT(1,1);
+				vga_PRINT_STR("Файл поврежден, ",&FONT_6x8);
+				vga_SET_POS_TEXT(1,15);
+				vga_PRINT_STR("ошибка CRC.",&FONT_6x8);
+				vga_SET_POS_TEXT(1,30);
+				vga_PRINT_STR("Отключите зарядное",&FONT_6x8);
+				vga_SET_POS_TEXT(1,45);
+				vga_PRINT_STR("устройство.",&FONT_6x8);			
+				vga_UPDATE();								
+				
+				while(pin_USB_5V) IWDG_ReloadCounter();	
+				
+				JumpToApplication(0x8000000);						
+					
+		}						
+		else
+		{			
+			
+			vga_CLEAR();
+			vga_SET_POS_TEXT(1,1);			
+			vga_PRINT_STR("Обновление",&FONT_6x8);			
+			vga_SET_POS_TEXT(1,20);
+			vga_PRINT_STR("загрузчика...",&FONT_6x8);
+			vga_UPDATE();							
+			
+			FLASH_Unlock();		
+
+			
+			for(i = 0; i < 32; i++)
+			{			
+				FLASH_ErasePage(0x8000000+i*0x800);
+			}			
+			
+			
+			res = f_open(&Fil, "boot1.bin", FA_OPEN_ALWAYS | FA_READ);
+			
+			if (res == 0)
+			{
+				i = 0;
+				
+				while (1)
+				{						
+						res = f_read( &Fil, bt, sizeof(unsigned int), &br );		
+						
+						if (br == 0) break;
+					
+						if  (f_res = FLASH_ProgramWord(0x8000000+i*4,bt[0]) == FLASH_COMPLETE)	i++;						
+						else break;
+						
+						IWDG_ReloadCounter();	
+				}
+			}
+			
+			res = f_close(&Fil);				
+						
+			FLASH_Lock();				
+			
+			vga_CLEAR();
+			vga_SET_POS_TEXT(1,1);
+			vga_PRINT_STR("Обновление завершено.",&FONT_6x8);
+			vga_SET_POS_TEXT(1,20);
+			vga_PRINT_STR("Отключите зарядное",&FONT_6x8);
+			vga_SET_POS_TEXT(1,35);
+			vga_PRINT_STR("устройство.",&FONT_6x8);			
+			vga_UPDATE();	
+			
+			while (pin_USB_5V) IWDG_ReloadCounter(); 
+						
+			res = f_unlink("boot1.bin");						
+			res = f_mount(0, "0:", 0);		
+			
+			JumpToApplication(0x8000000);			
+
+		}
+		
+		__enable_fiq();
+		__enable_irq();	
+			
+		res = f_mount(0, "0:", 0);		
+}
+
+
+
+
 
 int main(void)
 
@@ -1145,6 +1292,7 @@ int main(void)
 	unsigned char result;
 	TStatus Err;
 	volatile unsigned int tempreg=0;
+	unsigned int res = 1;
 	
 	measure_stat = 0;		
 		
@@ -1452,7 +1600,18 @@ int main(void)
 						road_cursor_pos = 0;
 				}	
 
-						
+				
+				f_mount(&fls, "0:", 1);		
+				res = f_stat("boot1.bin", &fno);
+				if (res == 0)
+				{		
+						road_pos = 0;
+						road_cursor_pos = 0;												
+						res = f_mount(0, "0:", 0);			
+						flashing_bootloader();	
+				}
+				
+				f_mount(0, "0:", 0);				
 		
 				SET_CLOCK_SPEED(CLK_8MHz); 
 				Delay(200000);				   //антидребезговая задержка

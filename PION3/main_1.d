@@ -64,3 +64,5 @@
 .\main_1.o: RealTime.h
 .\main_1.o: Road.h
 .\main_1.o: Flash.h
+.\main_1.o: .\DRIVER\inc\stm32f10x_flash.h
+.\main_1.o: .\DRIVER\inc\stm32f10x_crc.h
