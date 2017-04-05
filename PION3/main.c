@@ -1155,8 +1155,6 @@ void flashing_bootloader(void)
 		vga_PRINT_STR("зарядное устройство.",&FONT_6x8);
 		vga_UPDATE();							
 					
-		__disable_fiq();
-		__disable_irq();
 					
 		while (1)
 		{
@@ -1164,7 +1162,9 @@ void flashing_bootloader(void)
 				if (pin_USB_5V == 1) break; 															
 				IWDG_ReloadCounter();	
 		}
-					
+		
+		__disable_fiq();
+		__disable_irq();		
 		
 		res = f_mount(&fatfs, "0:", 1);		
 		res = f_open(&Fil, "boot1.bin", FA_OPEN_ALWAYS | FA_READ);
