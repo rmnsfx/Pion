@@ -929,10 +929,10 @@ void men_SHOW_REFRESH(void)
 						  if ((REG(PION_STATUS) & ST_OVER)>0)
 						   {
 									//выводим индикатор перегруз
-									vga_SET_POS_TEXT(vga_GET_WIDTH_DISPLAY-25,14);
+									vga_SET_POS_TEXT(vga_GET_WIDTH_DISPLAY-35,14);
 									vga_PRINT_STR("*",&FONT_6x8);
 									vga_SET_DRAW_MODE(drMODE_XOR);
-									vga_RECTANGLE(vga_GET_WIDTH_DISPLAY-25,14,vga_GET_WIDTH_DISPLAY-19,20,drRECT_ARC_FILL);
+									vga_RECTANGLE(vga_GET_WIDTH_DISPLAY-35,14,vga_GET_WIDTH_DISPLAY-29,20,drRECT_ARC_FILL);
 									vga_SET_DRAW_MODE(drMODE_NORMAL);
 						   }
 						  
