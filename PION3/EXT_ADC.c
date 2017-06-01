@@ -348,14 +348,14 @@ GPIO_SetBits(GPIOA,GPIO_Pin_11);
   INDEX++;
 
   if ((INDEX&DECIMATOR)==0)
-  {
+   {
 	if (DECIMATOR==0x01) ext_adc_VALUE = (SAMPLE[0]+SAMPLE[1])>>1;
 	else				 ext_adc_VALUE = (SAMPLE[0]+SAMPLE[1]+SAMPLE[2]+SAMPLE[3])>>2;
 
 	
 		
-		//if ((ext_adc_VALUE>32500)||(ext_adc_VALUE<-32500))  
-		if ((ext_adc_VALUE * k_reg_mul > 32500)||(ext_adc_VALUE * k_reg_mul < -32500)) 
+		if ((ext_adc_VALUE>32500)||(ext_adc_VALUE<-32500))  
+		///if ((ext_adc_VALUE>32500*k_reg_mul)||(ext_adc_VALUE<-32500*k_reg_mul)) 
     if (!ext_adc_DELAY) ext_adc_OVER = 1;   //выставляем признак перегруза канала
 		
     //обработка сигнала в зависимости от выбраного канала и фильтра
@@ -487,15 +487,14 @@ GPIO_SetBits(GPIOA,GPIO_Pin_11);
   iir_DETECTOR(&DETECTOR,ext_adc_VALUE);	
 
   if (ext_adc_COUNT>0) 
-  {
+   {
     ext_adc_COUNT--;
-		
 		ext_adc_VAL = ext_adc_VALUE*k_reg_mul;
-		 
-	  *ext_adc_DATA++ = ((ext_adc_VAL+16384)>>15);			
-  }
+	  *ext_adc_DATA++ = ((ext_adc_VAL+16384)>>15);
+	
+   }
 
- }
+  }
 
    
   //pin_KEY(LOW);	

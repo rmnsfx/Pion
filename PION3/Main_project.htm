@@ -3,7 +3,7 @@
 <title>Static Call Graph - [.\Main_project.axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image .\Main_project.axf</H1><HR>
-<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5050106: Last Updated: Thu Jun 01 09:04:09 2017
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5050106: Last Updated: Wed Apr 05 13:26:39 2017
 <BR><P>
 <H3>Maximum Stack Usage =       2588 bytes + Unknown(Functions without stacksize, Cycles, Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
@@ -637,7 +637,7 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[6a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 </UL>
 
-<P><STRONG><a name="[6a]"></a>main</STRONG> (Thumb, 2078 bytes, Stack size 88 bytes, main_1.o(.text))
+<P><STRONG><a name="[6a]"></a>main</STRONG> (Thumb, 2074 bytes, Stack size 88 bytes, main_1.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 2588 + Unknown Stack Size
 <LI>Call Chain = main &rArr; men_MENU_CONTROL &rArr; men_ES_MENU &rArr; men_SHOW_MAINFORMS &rArr; men_SHOW_REFRESH &rArr; men_EN_MENU &rArr; FORMAT &rArr; rod_CreateFile_edit &rArr; f_open &rArr; dir_register &rArr; dir_find &rArr; dir_next &rArr; create_chain &rArr; put_fat &rArr; move_window &rArr; sync_window &rArr; disk_write &rArr; send_cmd &rArr;  send_cmd (Cycle)
 </UL>
@@ -1097,7 +1097,7 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[30]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;TIM1_UP_IRQHandler
 </UL>
 
-<P><STRONG><a name="[30]"></a>TIM1_UP_IRQHandler</STRONG> (Thumb, 1052 bytes, Stack size 16 bytes, ext_adc.o(.text))
+<P><STRONG><a name="[30]"></a>TIM1_UP_IRQHandler</STRONG> (Thumb, 1006 bytes, Stack size 16 bytes, ext_adc.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 68<LI>Call Chain = TIM1_UP_IRQHandler &rArr; reg_READ &rArr; rtc_COPY_RTC_TO_BUFER &rArr; localtime &rArr; _localtime_r &rArr; __aeabi_memclr4
 </UL>
 <BR>[Calls]<UL><LI><a href="#[115]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;TIM_ClearITPendingBit
@@ -1109,9 +1109,7 @@ Global Symbols
 <LI><a href="#[a3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;reg_READ
 <LI><a href="#[7c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;GPIO_SetBits
 <LI><a href="#[7e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;GPIO_ResetBits
-<LI><a href="#[9e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_cfrcmple
 <LI><a href="#[b1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_fmul
-<LI><a href="#[93]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_cfcmple
 <LI><a href="#[af]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_ui2f
 <LI><a href="#[92]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_i2f
 <LI><a href="#[df]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_f2iz
@@ -1163,7 +1161,7 @@ Global Symbols
 <BR><BR>[Calls]<UL><LI><a href="#[ed]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ext_adc_GET_STATUS
 </UL>
 
-<P><STRONG><a name="[125]"></a>calc_from_dat</STRONG> (Thumb, 600 bytes, Stack size 72 bytes, ext_adc.o(.text), UNUSED)
+<P><STRONG><a name="[125]"></a>calc_from_dat</STRONG> (Thumb, 588 bytes, Stack size 72 bytes, ext_adc.o(.text), UNUSED)
 <BR><BR>[Calls]<UL><LI><a href="#[11e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;iir_DETECTOR
 <LI><a href="#[120]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;iir_DETECTOR_RESET
 <LI><a href="#[11b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;iir_DEC_FILTER_4ORD
@@ -6561,8 +6559,7 @@ Global Symbols
 <P><STRONG><a name="[93]"></a>__aeabi_cfcmple</STRONG> (Thumb, 0 bytes, Stack size 16 bytes, fleqf.o(x$fpl$fleqf))
 <BR><BR>[Stack]<UL><LI>Max Depth = 16<LI>Call Chain = __aeabi_cfcmple
 </UL>
-<BR>[Called By]<UL><LI><a href="#[30]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;TIM1_UP_IRQHandler
-<LI><a href="#[ae]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MESUARE_PROCESS
+<BR>[Called By]<UL><LI><a href="#[ae]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MESUARE_PROCESS
 <LI><a href="#[9d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;CONTROL_BAT
 <LI><a href="#[8c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;progressbar
 </UL>
@@ -6616,8 +6613,7 @@ Global Symbols
 </UL>
 
 <P><STRONG><a name="[9e]"></a>__aeabi_cfrcmple</STRONG> (Thumb, 0 bytes, Stack size 0 bytes, frleqf.o(x$fpl$frleqf))
-<BR><BR>[Called By]<UL><LI><a href="#[30]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;TIM1_UP_IRQHandler
-<LI><a href="#[ae]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MESUARE_PROCESS
+<BR><BR>[Called By]<UL><LI><a href="#[ae]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MESUARE_PROCESS
 <LI><a href="#[9d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;CONTROL_BAT
 </UL>
 

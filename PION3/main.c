@@ -1543,8 +1543,7 @@ int main(void)
 						for (j=0;j<=255;j++)
 						{
 							sprintf(FileName,"0:%03u.%03u/Signal %d.dat",0,0,j);						
-							if (f_stat(FileName, &fno) == FR_OK) temp_reg++;	
-							IWDG_ReloadCounter();							
+							if (f_stat(FileName, &fno) == FR_OK) temp_reg++;						
 						}
 						
 						
