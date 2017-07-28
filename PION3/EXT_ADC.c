@@ -13,7 +13,7 @@ s16 *ext_adc_DATA;
 u16 ext_adc_COUNT;
 u16 ext_adc_XCOUNT;
 s16	ext_adc_SIM[ext_SAMPLING_SIZE];
-s32 ext_adc_VALUE;
+int64_t ext_adc_VALUE;
 u16 ext_mode_reg;
 u32 ext_adc_DELAY;
 s32  ext_adc_VAL;
@@ -362,7 +362,7 @@ void TIM1_UP_IRQHandler(void)
 				if (!ext_adc_DELAY) ext_adc_OVER = 1;   //выставляем признак перегруза канала
 				
 				//Умножаем на настроечный коэф.	 
-				ext_adc_VALUE = ((ext_adc_VALUE * dec_koef) / 1000);
+//				ext_adc_VALUE = ((ext_adc_VALUE * dec_koef) / 1000);
 				
 				//обработка сигнала в зависимости от выбраного канала и фильтра
 
@@ -468,6 +468,8 @@ void TIM1_UP_IRQHandler(void)
 					if (ext_adc_COUNT>0) 
 					{
 							ext_adc_COUNT--;		
+						
+							ext_adc_VALUE = ((ext_adc_VALUE * dec_koef) / 1000);
 									
 							*ext_adc_DATA++ = ((ext_adc_VALUE + 16384)>>15);			
 					}
