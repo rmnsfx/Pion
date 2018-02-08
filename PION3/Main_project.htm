@@ -3,7 +3,7 @@
 <title>Static Call Graph - [.\Main_project.axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image .\Main_project.axf</H1><HR>
-<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5050106: Last Updated: Fri Jul 28 11:47:17 2017
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5050106: Last Updated: Thu Feb 08 10:24:45 2018
 <BR><P>
 <H3>Maximum Stack Usage =       2588 bytes + Unknown(Functions without stacksize, Cycles, Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
@@ -469,7 +469,7 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[279]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;men_EN_MENU
 </UL>
 
-<P><STRONG><a name="[9e]"></a>CONTROL_BAT</STRONG> (Thumb, 406 bytes, Stack size 16 bytes, main_1.o(.text))
+<P><STRONG><a name="[9e]"></a>CONTROL_BAT</STRONG> (Thumb, 416 bytes, Stack size 16 bytes, main_1.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 68<LI>Call Chain = CONTROL_BAT &rArr; vga_PRINT_TEXT &rArr; vga_PRINT_CHAR &rArr; vga_DRAW_DATA8
 </UL>
 <BR>[Calls]<UL><LI><a href="#[83]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vga_UPDATE
@@ -478,6 +478,7 @@ Global Symbols
 <LI><a href="#[82]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vga_CLEAR
 <LI><a href="#[a2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;adc_BAT_PERCENT_edit
 <LI><a href="#[7f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;GPIO_ResetBits
+<LI><a href="#[9d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;BKP_WriteBackupRegister
 <LI><a href="#[80]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Delay
 <LI><a href="#[9f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_cfrcmple
 <LI><a href="#[94]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_cfcmple
@@ -539,7 +540,7 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[6b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 </UL>
 
-<P><STRONG><a name="[af]"></a>MESUARE_PROCESS</STRONG> (Thumb, 1644 bytes, Stack size 48 bytes, main_1.o(.text))
+<P><STRONG><a name="[af]"></a>MESUARE_PROCESS</STRONG> (Thumb, 1642 bytes, Stack size 48 bytes, main_1.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 892<LI>Call Chain = MESUARE_PROCESS &rArr; reg_WRITE &rArr; WRITE_REG_TO_SD &rArr; f_mount &rArr; find_volume &rArr; check_fs &rArr; move_window &rArr; sync_window &rArr; disk_write &rArr; send_cmd &rArr;  send_cmd (Cycle)
 </UL>
 <BR>[Calls]<UL><LI><a href="#[9b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;reg_WRITE
@@ -2333,6 +2334,7 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[d6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rtc_SETUP
 <LI><a href="#[6b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 <LI><a href="#[bd]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;CAPACITY
+<LI><a href="#[9e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;CONTROL_BAT
 <LI><a href="#[99]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;FORMAT
 <LI><a href="#[27e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;men_SHOW_REFRESH
 <LI><a href="#[279]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;men_EN_MENU

@@ -732,6 +732,9 @@ void CONTROL_BAT(unsigned char MIN_VAL_BAT)
 							vga_PRINT_STR("ВЫКЛЮЧЕНИЕ",&FONT_7x10_bold);
 							vga_UPDATE();
 						
+							//Принудительно сбрасываем счетчик емкости, если прибор отключился по напряжению 
+							BKP_WriteBackupRegister(BKP_DR10, 0);
+						 
 							Delay(2500000);						
 
 
