@@ -1,5 +1,5 @@
 Dependencies for Project 'Main_project', Target 'STM32': (DO NOT MODIFY !)
-F (.\main.c)(0x5A816145)(-c --cpu Cortex-M3 -g -W -O0 --apcs=interwork -I..\PION3 -I.\CMSIS -I.\DRIVER\inc -I.\DRIVER\src -I.\USB -I.\FAT -I.\OLED -I.\MENU -I.\fatfs-I D:\Repos\Pion\PION3\RTE-I C:\Keil_v5\ARM\PACK\Keil\STM32F1xx_DFP\2.2.0-I C:\Keil_v5\ARM\CMSIS\Include-I C:\Keil_v5\ARM\PACK\Keil\STM32F1xx_DFP\2.2.0\Device\Include-D__UVISION_VERSION="514" -DSTM32F10X_HD -DARM_MATH_CM3-o .\main_1.o --omf_browse .\main_1.crf --depend .\main_1.d)
+F (.\main.c)(0x5A816BC3)(-c --cpu Cortex-M3 -g -W -O0 --apcs=interwork -I..\PION3 -I.\CMSIS -I.\DRIVER\inc -I.\DRIVER\src -I.\USB -I.\FAT -I.\OLED -I.\MENU -I.\fatfs-I D:\Repos\Pion\PION3\RTE-I C:\Keil_v5\ARM\PACK\Keil\STM32F1xx_DFP\2.2.0-I C:\Keil_v5\ARM\CMSIS\Include-I C:\Keil_v5\ARM\PACK\Keil\STM32F1xx_DFP\2.2.0\Device\Include-D__UVISION_VERSION="514" -DSTM32F10X_HD -DARM_MATH_CM3-o .\main_1.o --omf_browse .\main_1.crf --depend .\main_1.d)
 I (stm32f10x.h)(0x5555BA60)
 I (.\CMSIS\core_cm3.h)(0x58512BAE)
 I (C:\Keil_v5\ARM\ARMCC\include\stdint.h)(0x54760F20)
@@ -1001,7 +1001,7 @@ I (C:\Keil_v5\ARM\ARMCC\include\string.h)(0x54760F20)
 I (C:\Keil_v5\ARM\ARMCC\include\stdio.H)(0x54760F20)
 F (.\MENU\Items.c)(0x598158CD)(-c --cpu Cortex-M3 -g -W -O0 --apcs=interwork -I..\PION3 -I.\CMSIS -I.\DRIVER\inc -I.\DRIVER\src -I.\USB -I.\FAT -I.\OLED -I.\MENU -I.\fatfs-I D:\Repos\Pion\PION3\RTE-I C:\Keil_v5\ARM\PACK\Keil\STM32F1xx_DFP\2.2.0-I C:\Keil_v5\ARM\CMSIS\Include-I C:\Keil_v5\ARM\PACK\Keil\STM32F1xx_DFP\2.2.0\Device\Include-D__UVISION_VERSION="514" -DSTM32F10X_HD -DARM_MATH_CM3-o .\items.o --omf_browse .\items.crf --depend .\items.d)
 I (.\MENU\Items.h)(0x593143EE)
-F (.\MENU\Menu.c)(0x598158CD)(-c --cpu Cortex-M3 -g -W -O0 --apcs=interwork -I..\PION3 -I.\CMSIS -I.\DRIVER\inc -I.\DRIVER\src -I.\USB -I.\FAT -I.\OLED -I.\MENU -I.\fatfs-I D:\Repos\Pion\PION3\RTE-I C:\Keil_v5\ARM\PACK\Keil\STM32F1xx_DFP\2.2.0-I C:\Keil_v5\ARM\CMSIS\Include-I C:\Keil_v5\ARM\PACK\Keil\STM32F1xx_DFP\2.2.0\Device\Include-D__UVISION_VERSION="514" -DSTM32F10X_HD -DARM_MATH_CM3-o .\menu.o --omf_browse .\menu.crf --depend .\menu.d)
+F (.\MENU\Menu.c)(0x5A817ED2)(-c --cpu Cortex-M3 -g -W -O0 --apcs=interwork -I..\PION3 -I.\CMSIS -I.\DRIVER\inc -I.\DRIVER\src -I.\USB -I.\FAT -I.\OLED -I.\MENU -I.\fatfs-I D:\Repos\Pion\PION3\RTE-I C:\Keil_v5\ARM\PACK\Keil\STM32F1xx_DFP\2.2.0-I C:\Keil_v5\ARM\CMSIS\Include-I C:\Keil_v5\ARM\PACK\Keil\STM32F1xx_DFP\2.2.0\Device\Include-D__UVISION_VERSION="514" -DSTM32F10X_HD -DARM_MATH_CM3-o .\menu.o --omf_browse .\menu.crf --depend .\menu.d)
 I (MENU\types.h)(0x5555BA60)
 I (MENU\Menu.h)(0x593143EE)
 I (..\PION3\Pin.h)(0x55DD360A)

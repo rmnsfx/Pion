@@ -750,7 +750,7 @@ void CONTROL_BAT(unsigned char MIN_VAL_BAT)
 	else
 	{	
 	
-					 if (adc_BAT_PERCENT_edit() <= 10 && adc_BAT_PERCENT_edit() > 2 && message_status == 0 && measure_stat == 0)   //если заряд меньше 10		
+					 if (adc_BAT_PERCENT_edit() <= 10 && adc_BAT_PERCENT_edit() > 1 && message_status == 0 && measure_stat == 0)   //если заряд меньше 10		
 
 					 {
 								 

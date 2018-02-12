@@ -160,7 +160,7 @@ void men_SET_CONFIG(unsigned char conf);
 	unsigned char VALUE=0;
 	unsigned long count_menu_items = 0; ///Кол-во элементов в меню
 	unsigned int exist; ///Проверка след. эл-та меню
-
+  unsigned int dreb_counter = 0;	
 
 
 
@@ -484,7 +484,7 @@ void men_SHOW_REFRESH(void)
  float* result;
  unsigned int sch=0;
  unsigned int flag_charge = 0;
-	
+ 
 
 	
  switch (men_ID_FORM)
@@ -981,8 +981,12 @@ void men_SHOW_REFRESH(void)
 										vga_PRINT_STR(t_str,&FONT_4x7);
 							
 										vga_SET_POS_TEXT(110, 1);						
-										sprintf(t_str,"%d", usb_charge_state);						
+										sprintf(t_str,"%d", usb_charge_state);																
 										vga_PRINT_STR(t_str,&FONT_4x7);																	
+										
+										vga_SET_POS_TEXT(120, 1);																
+										sprintf(t_str,"%d", dreb_counter);						
+										vga_PRINT_STR(t_str,&FONT_4x7);			
 							
 						}
 						
@@ -994,13 +998,23 @@ void men_SHOW_REFRESH(void)
 						{												
 							LED_CHARGE_ON();
 							usb_charge_state = 1;															
-						}	
+							dreb_counter=0;
+							
+						}
+						else if ( GPIO_ReadInputDataBit(GPIOA,GPIO_Pin_8) == 1 )
+						{
+							dreb_counter++;
+						}
+
+						
 						
 						CHARGE_ON();
 						
 						Delay(100000);
 						
-						if ( GPIO_ReadInputDataBit(GPIOA,GPIO_Pin_8) == 1 && old_state_pa8 == 0 && pin_USB_5V == 1 && old_state_usb == 1 )
+						
+						//if ( GPIO_ReadInputDataBit(GPIOA,GPIO_Pin_8) == 1 && old_state_pa8 == 0 && pin_USB_5V == 1 && old_state_usb == 1 )
+						if ( dreb_counter > 100 && old_state_pa8 == 0 && pin_USB_5V == 1 && old_state_usb == 1 )
 						{							
 								LED_CHARGE_OFF();	
 							
@@ -1008,7 +1022,9 @@ void men_SHOW_REFRESH(void)
 								akbemk_count = akbemk_menu;
 								akbemk_percent = 100;	
 
-								usb_charge_state = 2;										
+								usb_charge_state = 2;												
+							
+								dreb_counter=0;
 						}			
 						
 						
@@ -1017,6 +1033,7 @@ void men_SHOW_REFRESH(void)
 						old_state_pa8 = GPIO_ReadInputDataBit(GPIOA,GPIO_Pin_8);
 												
 						frzbat1 = akbemk_percent;
+						
 						
 						
 						break;
@@ -1077,6 +1094,7 @@ void men_SHOW_REFRESH(void)
 								akbemk_count = akbemk_menu;
 								akbemk_percent = 100;	
 
+														
 								usb_charge_state = 2;	
 							
 								vga_CLEAR();
