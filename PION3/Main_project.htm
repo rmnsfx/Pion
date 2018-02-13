@@ -3,7 +3,7 @@
 <title>Static Call Graph - [.\Main_project.axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image .\Main_project.axf</H1><HR>
-<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5050106: Last Updated: Mon Feb 12 16:47:31 2018
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5050106: Last Updated: Tue Feb 13 13:15:37 2018
 <BR><P>
 <H3>Maximum Stack Usage =       2588 bytes + Unknown(Functions without stacksize, Cycles, Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
@@ -577,11 +577,10 @@ Global Symbols
 <LI><a href="#[275]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;manufactor_reset
 </UL>
 
-<P><STRONG><a name="[bd]"></a>CAPACITY</STRONG> (Thumb, 400 bytes, Stack size 40 bytes, main_1.o(.text))
-<BR><BR>[Stack]<UL><LI>Max Depth = 92<LI>Call Chain = CAPACITY &rArr; reg_READ &rArr; rtc_COPY_RTC_TO_BUFER &rArr; localtime &rArr; _localtime_r &rArr; __aeabi_memclr4
+<P><STRONG><a name="[bd]"></a>CAPACITY</STRONG> (Thumb, 378 bytes, Stack size 40 bytes, main_1.o(.text))
+<BR><BR>[Stack]<UL><LI>Max Depth = 80<LI>Call Chain = CAPACITY &rArr; ceil &rArr; __aeabi_cdrcmple
 </UL>
-<BR>[Calls]<UL><LI><a href="#[a4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;reg_READ
-<LI><a href="#[bf]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;adc_BAT_MEASURE_NEW_VOLT
+<BR>[Calls]<UL><LI><a href="#[bf]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;adc_BAT_MEASURE_NEW_VOLT
 <LI><a href="#[be]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;adc_BAT_MEASURE_NEW_AMPER
 <LI><a href="#[9d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;BKP_WriteBackupRegister
 <LI><a href="#[c1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ceil
@@ -614,7 +613,7 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[6b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 </UL>
 
-<P><STRONG><a name="[ca]"></a>flashing_bootloader</STRONG> (Thumb, 896 bytes, Stack size 1168 bytes, main_1.o(.text))
+<P><STRONG><a name="[ca]"></a>flashing_bootloader</STRONG> (Thumb, 886 bytes, Stack size 1168 bytes, main_1.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 1644<LI>Call Chain = flashing_bootloader &rArr; f_unlink &rArr; follow_path &rArr; dir_find &rArr; dir_next &rArr; create_chain &rArr; put_fat &rArr; move_window &rArr; sync_window &rArr; disk_write &rArr; send_cmd &rArr;  send_cmd (Cycle)
 </UL>
 <BR>[Calls]<UL><LI><a href="#[83]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vga_UPDATE
@@ -1280,7 +1279,6 @@ Global Symbols
 <LI><a href="#[dc]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;men_SETUP
 <LI><a href="#[aa]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ext_adc_START
 <LI><a href="#[6b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
-<LI><a href="#[bd]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;CAPACITY
 <LI><a href="#[af]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MESUARE_PROCESS
 <LI><a href="#[ac]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;STOP_MESUARE
 <LI><a href="#[a9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;START_MESUARE
@@ -4557,7 +4555,7 @@ Global Symbols
 <LI><a href="#[27e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;men_SHOW_REFRESH
 </UL>
 
-<P><STRONG><a name="[27e]"></a>men_SHOW_REFRESH</STRONG> (Thumb, 4152 bytes, Stack size 104 bytes, menu.o(.text))
+<P><STRONG><a name="[27e]"></a>men_SHOW_REFRESH</STRONG> (Thumb, 4146 bytes, Stack size 104 bytes, menu.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 2476 + Unknown Stack Size
 <LI>Call Chain = men_SHOW_REFRESH &rArr; men_EN_MENU &rArr; FORMAT &rArr; rod_CreateFile_edit &rArr; f_open &rArr; dir_register &rArr; dir_find &rArr; dir_next &rArr; create_chain &rArr; put_fat &rArr; move_window &rArr; sync_window &rArr; disk_write &rArr; send_cmd &rArr;  send_cmd (Cycle)
 </UL>
@@ -4629,7 +4627,7 @@ Global Symbols
 <LI><a href="#[282]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;men_ES_MENU
 </UL>
 
-<P><STRONG><a name="[27f]"></a>men_CALLBACK</STRONG> (Thumb, 536 bytes, Stack size 8 bytes, menu.o(.text))
+<P><STRONG><a name="[27f]"></a>men_CALLBACK</STRONG> (Thumb, 538 bytes, Stack size 8 bytes, menu.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 804 + Unknown Stack Size
 <LI>Call Chain = men_CALLBACK &rArr; men_SHOW_MENU &rArr; fopen &rArr; freopen &rArr; _sys_open &rArr; __fopen &rArr; fat_find_file &rArr; fat_find_dir &rArr; write_entries &rArr; check_name &rArr; search_for_name &rArr; set_next_clus &rArr; cache_fat &rArr; mmc_read_sect &rArr; f_mount &rArr; find_volume &rArr; check_fs &rArr; move_window &rArr; sync_window &rArr; disk_write &rArr; send_cmd &rArr;  send_cmd (Cycle)
 </UL>

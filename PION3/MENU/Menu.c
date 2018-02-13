@@ -1014,7 +1014,7 @@ void men_SHOW_REFRESH(void)
 						
 						
 						//if ( GPIO_ReadInputDataBit(GPIOA,GPIO_Pin_8) == 1 && old_state_pa8 == 0 && pin_USB_5V == 1 && old_state_usb == 1 )
-						if ( dreb_counter > 100 && old_state_pa8 == 0 && pin_USB_5V == 1 && old_state_usb == 1 )
+						if ( dreb_counter > 100 && pin_USB_5V == 1 && usb_charge_state == 1 )
 						{							
 								LED_CHARGE_OFF();	
 							

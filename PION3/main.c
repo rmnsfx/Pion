@@ -1059,12 +1059,12 @@ float CAPACITY ()
 						//if (akbemk_count <= 0) akbemk_count = 0;
 
 						//Читаем значение емкости из регистра меню
-						if (REG(AKB_EMK_COUNT) == 0) akbemk_menu = 0.6;
-						else akbemk_menu = 1.2;
+						//if (REG(AKB_EMK_COUNT) == 0) akbemk_menu = 0.6;
+						//else akbemk_menu = 1.2;
 						
 						//Проценты с учетом напряжения
 						if (akbemk_volt <= 2.6) akbemk_percent = 0;
-							else akbemk_percent = (akbemk_count * 100) / (float) akbemk_menu;
+						else akbemk_percent = (akbemk_count * 100) / (float) akbemk_menu;
 		
 		
 						//Разрешить запись в область BKP 
@@ -1427,8 +1427,8 @@ int main(void)
 	
 	///Читаем значение емкости из регистра меню
 	akbemk_menu = 0.6;
-//	if (REG(AKB_EMK_COUNT) == 0) akbemk_menu = 0.6;
-//	else akbemk_menu = 1.2;
+	//if (REG(AKB_EMK_COUNT) == 0) akbemk_menu = 0.6; //возникали сбои в показаниях при разряде акб
+	//else akbemk_menu = 1.2;
 	
 	///Расчитываем проценты для индикации батарейки
 	akbemk_percent = (akbemk_count * 100) / (float) akbemk_menu;	
