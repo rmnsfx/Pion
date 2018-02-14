@@ -519,6 +519,14 @@ void men_SHOW_REFRESH(void)
 										vga_SET_POS_TEXT(55, 7);						
 										sprintf(t_str,"%d", BKP_ReadBackupRegister(BKP_DR10));						
 										vga_PRINT_STR(t_str,&FONT_4x7);
+										
+										vga_SET_POS_TEXT(75, 7);						
+										sprintf(t_str,"%0.1f", akbemk_menu);						
+										vga_PRINT_STR(t_str,&FONT_4x7);
+										
+										
+										
+										
 						}
 						else
 						{

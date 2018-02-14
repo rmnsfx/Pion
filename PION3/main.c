@@ -1071,8 +1071,8 @@ float CAPACITY ()
 						//PWR->CR |=  PWR_CR_DBP;
 		
 						//Запоминаем емкость, масштабируем для записи в BKP через коэф. преобразования (1,2 / 65535 = 0.00001831082)
-						BKP_WriteBackupRegister(BKP_DR10, (int) ceil(akbemk_count / 0.00001831082)); 						
-									
+						if (akbemk_count > 0) BKP_WriteBackupRegister(BKP_DR10, (int) ceil(akbemk_count / 0.00001831082)); 						
+						
 
 						//Запретить запись в BKP
 						//PWR->CR &= ~PWR_CR_DBP;
