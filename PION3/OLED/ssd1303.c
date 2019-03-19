@@ -180,8 +180,9 @@ void ssd_INIT(void)
 						0xD9,
 						0x22,
 						0xA4,
-						0xAF,					
-                        0xff};
+						0xAF,				
+						0xA1,	//Только новый телевизор
+            0xff};
         
         //genconfig_shadow |= IO_MASK(R_GEN_CONFIG,g8_15dir);     
         //*R_GEN_CONFIG = genconfig_shadow;                       
