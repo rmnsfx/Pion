@@ -151,7 +151,51 @@ void ssd_CLS(unsigned char fon)
 
  
 
-void ssd_INIT(void)
+void ssd_INIT_OLD(void)
+{
+ 		unsigned char i = 0;
+ 		unsigned char init_sequence[] = {
+						0x00,
+						0x10,
+						0xAD,
+						0x8E,
+						0xA8,
+						0x3F,
+						0x40,
+						0xA6,
+						0xA0,
+						0xC8,
+						0xD3,
+						0x00,
+						0xD8,
+						0x00,
+						0xDA,
+						0x12,
+						0x81,
+						0xFE,
+						0x82,
+						0xFE,
+						0xD5,
+						0x70,//0x70,
+						0xD9,
+						0x22,
+						0xA4,
+						0xAF,				
+						
+            0xff};
+        
+        //genconfig_shadow |= IO_MASK(R_GEN_CONFIG,g8_15dir);     
+        //*R_GEN_CONFIG = genconfig_shadow;                       
+        
+        while(init_sequence[i] != 0xff){
+                ssd_SEND(init_sequence[i], SSD_CMD);
+                i++;
+        };
+       // sd1303_cls();
+
+}
+
+void ssd_INIT_NEW(void)
 {
  		unsigned char i = 0;
  		unsigned char init_sequence[] = {
@@ -198,7 +242,10 @@ void ssd_INIT(void)
 void ssd_OLED_INIT(void)
 {
  		ssd_RESET();
- 		ssd_INIT();
+	
+		if ( GPIO_ReadInputDataBit(GPIOA,GPIO_Pin_10) == 1 ) ssd_INIT_OLD();
+		else ssd_INIT_NEW();
+	
  		ssd_CLEAR_OLED();
 }
 
