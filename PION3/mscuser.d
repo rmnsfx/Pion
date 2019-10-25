@@ -25,4 +25,7 @@
 .\mscuser.o: USB\usbhw.h
 .\mscuser.o: USB\usbcore.h
 .\mscuser.o: USB\mscuser.h
+.\mscuser.o: ..\PION3\main.h
+.\mscuser.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdio.h
+.\mscuser.o: .\FAT\File_Config.h
 .\mscuser.o: USB\memory.h

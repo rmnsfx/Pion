@@ -30,6 +30,8 @@
 ".\stm32f10x_exti.o"
 ".\stm32f10x_wwdg.o"
 ".\stm32f10x_iwdg.o"
+".\stm32f10x_flash.o"
+".\stm32f10x_crc.o"
 ".\startup_stm32f10x_md.o"
 ".\diskimg.o"
 ".\usbuser.o"
@@ -74,9 +76,9 @@
 ".\items.o"
 ".\menu.o"
 ".\CMSIS\arm_cortexM3l_math.lib"
-".\diskio.o"
 ".\ff.o"
 ".\ccsbcs.o"
+".\mmc_32f1.o"
 --strict --scatter ".\Main_project.sct"
 --summary_stderr --info summarysizes --map --xref --callgraph --symbols
 --info sizes --info totals --info unused --info veneers

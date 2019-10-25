@@ -46,6 +46,10 @@ MSC_CBW CBW;                   /* Command Block Wrapper */
 MSC_CSW CSW;                   /* Command Status Wrapper */
 
 
+unsigned int MSC_MemorySize; 
+unsigned int MSC_BlockSize;
+unsigned int MSC_BlockCount;
+
 /*
  *  MSC Mass Storage Reset Request Callback
  *   Called automatically on Mass Storage Reset Request
@@ -85,6 +89,10 @@ BOOL MSC_GetMaxLUN (void) {
 void MSC_MemoryRead (void) {
   DWORD n;
 
+	
+	MSC_MemorySize  = sdinfo.DskSize*512;
+	
+	
    //GPIO_ResetBits(GPIOC,GPIO_Pin_12);
 
   if (Length > MSC_MAX_PACKET) {
@@ -126,7 +134,11 @@ void MSC_MemoryRead (void) {
  */
  
 void MSC_MemoryWrite (void) {
-  //DWORD n;
+  
+	
+	MSC_MemorySize  = sdinfo.DskSize*512;
+	
+	//DWORD n;
 
   //GPIO_ResetBits(GPIOC,GPIO_Pin_12);
 
@@ -355,18 +367,18 @@ void MSC_Inquiry (void) {
   BulkBuf[ 6] = 0x00;
   BulkBuf[ 7] = 0x00;
 
-  BulkBuf[ 8] = 'M';           /* Vendor Identification */
-  BulkBuf[ 9] = 'i';
-  BulkBuf[10] = 'c';
-  BulkBuf[11] = 'r';
-  BulkBuf[12] = 'o';
-  BulkBuf[13] = 'd';
-  BulkBuf[14] = 'r';
-  BulkBuf[15] = 'i';
-  BulkBuf[16] = 'v';           /* Product Identification */
-  BulkBuf[17] = 'e';
+  BulkBuf[ 8] = ' ';           /* Vendor Identification */
+  BulkBuf[ 9] = ' ';
+  BulkBuf[10] = ' ';
+  BulkBuf[11] = ' ';
+  BulkBuf[12] = ' ';
+  BulkBuf[13] = ' ';
+  BulkBuf[14] = ' ';
+  BulkBuf[15] = ' ';
+  BulkBuf[16] = ' ';           /* Product Identification */
+  BulkBuf[17] = ' ';
   BulkBuf[18] = ' ';
-  BulkBuf[19] = '*';
+  BulkBuf[19] = ' ';
   /*BulkBuf[20] = ' ';
   BulkBuf[21] = 'M';
   BulkBuf[22] = '3';
@@ -442,6 +454,10 @@ void MSC_ModeSense10 (void) {
 
 void MSC_ReadCapacity (void) {
 
+	
+	MSC_BlockCount = sdinfo.DskSize;
+	MSC_BlockSize = sdinfo.BytesPerSec;
+	
   if (!DataInFormat()) return;
 
   /* Last Logical Block */
@@ -469,6 +485,10 @@ void MSC_ReadCapacity (void) {
 
 void MSC_ReadFormatCapacity (void) {
 
+	
+	MSC_BlockCount = sdinfo.DskSize;
+	MSC_BlockSize = sdinfo.BytesPerSec;
+	
   if (!DataInFormat()) return;
 
   BulkBuf[ 0] = 0x00;

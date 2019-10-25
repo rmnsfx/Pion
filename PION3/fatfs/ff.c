@@ -3989,6 +3989,8 @@ FRESULT f_mkfs (
 	DWORD n_vol, n_rsv, n_fat, n_dir;	/* Size */
 	FATFS *fs;
 	DSTATUS stat;
+	UINT perc;
+
 
 
 	/* Check mounted drive and clear work area */
@@ -4001,6 +4003,8 @@ FRESULT f_mkfs (
 	fs->fs_type = 0;
 	pdrv = LD2PD(vol);	/* Physical drive */
 	part = LD2PT(vol);	/* Partition (0:auto detect, 1-4:get from partition table)*/
+
+
 
 	/* Get disk statics */
 	stat = disk_initialize(pdrv);
@@ -4026,6 +4030,8 @@ FRESULT f_mkfs (
 		n_vol -= b_vol;				/* Volume size */
 	}
 
+
+	
 	if (!au) {				/* AU auto selection */
 		vs = n_vol / (2000 / (SS(fs) / 512));
 		for (i = 0; vs < vst[i]; i++) ;
@@ -4041,6 +4047,8 @@ FRESULT f_mkfs (
 	if (n_clst >= MIN_FAT16) fmt = FS_FAT16;
 	if (n_clst >= MIN_FAT32) fmt = FS_FAT32;
 
+
+	
 	/* Determine offset and size of FAT structure */
 	if (fmt == FS_FAT32) {
 		n_fat = ((n_clst * 4) + 8 + SS(fs) - 1) / SS(fs);
@@ -4062,7 +4070,7 @@ FRESULT f_mkfs (
 	n = (b_data + n - 1) & ~(n - 1);	/* Next nearest erase block from current data start */
 	n = (n - b_data) / N_FATS;
 	if (fmt == FS_FAT32) {		/* FAT32: Move FAT offset */
-		n_rsv += n;
+		n_rsv += n;		
 		b_fat += n;
 	} else {					/* FAT12/16: Expand FAT size */
 		n_fat += n;
@@ -4175,9 +4183,13 @@ FRESULT f_mkfs (
 		if (disk_write(pdrv, tbl, wsect++, 1))
 			return FR_DISK_ERR;
 		mem_set(tbl, 0, SS(fs));			/* Fill following FAT entries with zero */
+		
 		for (n = 1; n < n_fat; n++) {		/* This loop may take a time on FAT32 volume due to many single sector writes */
 			if (disk_write(pdrv, tbl, wsect++, 1))
 				return FR_DISK_ERR;
+			IWDG_ReloadCounter();
+			perc = (unsigned int) (n * 60) / n_fat;
+			progressbar( perc ); 
 		}
 	}
 

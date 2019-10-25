@@ -24,8 +24,13 @@
 .\ext_adc.o: FM25V10.h
 .\ext_adc.o: .\USB\type.h
 .\ext_adc.o: main.h
+.\ext_adc.o: .\FAT\File_Config.h
+.\ext_adc.o: .\FAT\RTL.h
 .\ext_adc.o: FLASH_AT45DB.h
 .\ext_adc.o: main.h
+.\ext_adc.o: .\FAT\File_Config.h
 .\ext_adc.o: regmap.h
 .\ext_adc.o: .\USB\mscuser.h
+.\ext_adc.o: ..\PION3\main.h
+.\ext_adc.o: .\FAT\File_Config.h
 .\ext_adc.o: params.h

@@ -24,6 +24,10 @@
 .\usbuser.o: USB\usbcore.h
 .\usbuser.o: USB\usbuser.h
 .\usbuser.o: USB\mscuser.h
+.\usbuser.o: ..\PION3\main.h
+.\usbuser.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdio.h
+.\usbuser.o: .\FAT\File_Config.h
+.\usbuser.o: .\FAT\RTL.h
 .\usbuser.o: USB\memory.h
 .\usbuser.o: .\MENU\menu.h
 .\usbuser.o: ..\PION3\Pin.h

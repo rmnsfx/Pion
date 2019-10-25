@@ -1,5 +1,6 @@
 
 #include "stdio.h"
+#include "File_Config.h"
 
 #ifndef _main_h
 #define _main_h
@@ -64,13 +65,20 @@ extern float akbemk_menu;
 
 extern unsigned int usb_charge_state;
 
+extern FATINFO sdinfo;
 
-//Выключатель usb для отладки 
+void progressbar(unsigned int value);
+
+///Выключатель usb для отладки 
 #define USB_SWITCH 1
 
+///Выключатель функций работы с SD-картой, при чтении служебных регистров
+extern unsigned char SD_SWITCH; 
 
+extern unsigned int GLOBAL_ERROR;
 
-//extern float  k_reg_mul;
-#define VER 352
+extern unsigned int ROADS_COUNTING(void);
+
+#define VER 373
 
 #endif

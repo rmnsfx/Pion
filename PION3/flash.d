@@ -21,9 +21,12 @@
 .\flash.o: .\DRIVER\inc\misc.h
 .\flash.o: .\USB\mscuser.h
 .\flash.o: .\USB\type.h
+.\flash.o: ..\PION3\main.h
+.\flash.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdio.h
+.\flash.o: .\FAT\File_Config.h
 .\flash.o: FM25V10.h
 .\flash.o: main.h
-.\flash.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdio.h
+.\flash.o: .\FAT\File_Config.h
 .\flash.o: FLASH_AT45DB.h
 .\flash.o: .\USB\memory.h
 .\flash.o: .\fatfs\ff.h
@@ -33,3 +36,6 @@
 .\flash.o: .\DRIVER\inc\stm32f10x_iwdg.h
 .\flash.o: .\OLED\vga_lib.h
 .\flash.o: .\OLED\font.h
+.\flash.o: main.h
+.\flash.o: .\FAT\File_Config.h
+.\flash.o: Flash.h

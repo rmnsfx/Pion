@@ -14,166 +14,155 @@
 #include "diskio.h"
 #include "stm32f10x_iwdg.h"
 #include "vga_lib.h"
+#include "stm32f10x_rcc.h"
+#include "main.h"
+#include "Flash.h"
 
+#include "stm32f10x.h"
+
+
+#define FLASH_KEY1               ((uint32_t)0x45670123)
+#define FLASH_KEY2               ((uint32_t)0xCDEF89AB)
 
    extern FATFS   fls;            
    extern FIL     FileTmp;          
 	 extern FRESULT res_t; 
 	 extern	FILINFO fno;
 
+
+///Работа с SD-картой
+
 BOOL mmc_init (void)
 {
-	u8 i = 0;
-//	while ((AT45DB_INIT() != 0) || (i < 10)) i++;
-	while (i++ < 10)
-		if (AT45DB_INIT() == 0) break;
-	
- //AT45DB_INIT();
+
  return (__TRUE);
 }
 
 BOOL mmc_write_sect (U32 sect, U8 *buf, U32 cnt)
 {
- if (sect<MSC_BlockCount)
-  {
-   //memcpy(&Memory[sect*512],buf,cnt*512);
-		GPIO_SetBits(GPIOA,GPIO_Pin_12);
+		unsigned int res;
+	
+		res = disk_status(0);	
+		if (res != 0) res = f_mount(&fls, "0:", 1);	
 										
 		__disable_irq();
 		__disable_fiq();
-   AT45DB_WRITE_PAGE(sect+DISK_OFFSET,buf);
+   
+		res = disk_write(0, buf, sect, 1);
+		
 		__enable_irq();
 		__enable_fiq();
-		GPIO_ResetBits(GPIOA,GPIO_Pin_12);										
-   //fram_WRITE(sect*MSC_BlockSize + MSC_Offset,buf,cnt*MSC_BlockSize);
-   return (__TRUE);
-  }
- else 
-  return (__FALSE);
+
+		res = f_mount(0,"0:", 0);
+		
+		return (__TRUE);
+
 }
 
 BOOL mmc_read_sect (U32 sect, U8 *buf, U32 cnt)
 {
- if (sect<MSC_BlockCount)
-  {
+	
+		unsigned int res;
+	
+		res = disk_status(0);
+		if (res != 0) res = f_mount(&fls, "0:", 1);	
+		
 		__disable_irq();
 		__disable_fiq();
-   AT45DB_READ_PAGE(sect+DISK_OFFSET,buf);
+
+		res = disk_read(0, buf, sect, 1);
+	
 		__enable_irq();
 		__enable_fiq();
-   //fram_READ(sect*MSC_BlockSize + MSC_Offset,buf,cnt*MSC_BlockSize);
-   return (__TRUE);
-  }
- else
-  return (__FALSE);///memset(buf,0,cnt*512);
+		
+		res = f_mount(0,"0:", 0);	
 
+		return (__TRUE);
 }
 
 BOOL mmc_read_config (MMCFG *cfg)
 { 
+	
+ cfg->blocknr = sdinfo.DskSize;
+ cfg->read_blen = sdinfo.BytesPerSec;
+ cfg->write_blen = sdinfo.BytesPerSec;  
+	
  return (__TRUE);
 }	
 
-BOOL mmc_format(void)
+unsigned int mmc_format(void)
 {
- U32 i;
-
-
- //AT45DB_CHIP_ERASE();
- //AT45DB_CHIP_SET(0);
- //AT45DB_PAGE_ERASE(0); 
-
- //*(unsigned short *)(DiskImage+19) = ClusterPerDisk;  //число кластеров в диске
- //*(unsigned short *)(DiskImage+22) = ClusterPerFat;  //дисло сектаров на фат
-	 //*(uint32_t *)(DiskImage+32) = 3839480;  //дисло сектаров на фат	
+	
+	U32 i;
+	unsigned int res;
+	unsigned int res_format;
+	//unsigned int disk_size = sdinfo.DskSize;
  
-IWDG_ReloadCounter();
-	
-__disable_irq();
-__disable_fiq();
-	
-IWDG_ReloadCounter();
-	
-	AT45DB_WRITE_PAGE(DISK_OFFSET,&DiskImage[0]);				 //пишем бутрекорд
- 	
-__enable_irq();
-__enable_fiq(); 
-
-IWDG_ReloadCounter();
-
- i = 1000;
-	
- while (i--)
- {
-	 
-	 IWDG_ReloadCounter();
-	 
-__disable_irq();
-__disable_fiq();
-	 
-	 IWDG_ReloadCounter();
-	 
-		AT45DB_WRITE_PAGE(FAT_OFFSET+i,&DiskImage[512]);	  //стераем таблицу фат
-__enable_irq();
-__enable_fiq(); 
-	 
-//	vga_CLEAR();
-//  vga_SET_POS_TEXT(1,1);
-//  vga_PRINT_STR("Форматирование...",&FONT_6x8);
-//												
-//  vga_SET_POS_TEXT(1,20);
-//								sprintf(str_out,"%.1f%%", (1000 - i)/10.0);		 								
-//								vga_PRINT_STR(str_out,&FONT_6x8);
-//								
-//								vga_UPDATE();			
-	 
-	 
 	IWDG_ReloadCounter();
-	 
- }
 	
-		 
+	__disable_irq();
+	__disable_fiq(); 
  
-__disable_irq();
-__disable_fiq(); 
- IWDG_ReloadCounter();
- f_mount(&fls, "0:", 1);
- f_mkfs("0:", 0, 0);
- IWDG_ReloadCounter();
- f_setlabel("PION-3");
- IWDG_ReloadCounter();
- f_mount(0,"0:", 0);
-__enable_irq();
-__enable_fiq(); 
+	Delay(100000);
+			
+	res = finit();
+	
+	res = f_mount(&fls, "0:", 1);
+	res_format = f_mkfs("0:", 0, 0); 	
+	IWDG_ReloadCounter();	
+	res = f_setlabel("PION"); 
+	res = f_mount(0,"0:",0);
+	
+	__enable_irq();
+	__enable_fiq(); 
  
-/*	vga_CLEAR();
-  vga_SET_POS_TEXT(1,1);
-  vga_PRINT_STR("Done",&FONT_6x8);
-												
-								
-								vga_UPDATE();*/			
- /*if (ClusterPerFat>0)
-  {
-   //FAT12
-   //DiskImage[512+0]=0xF8;	   //первые 2 кластера всегда заняты
-   //DiskImage[512+1]=0xFF;	   //первые 2 кластера всегда заняты
-   //DiskImage[512+2]=0xFF;	   //первые 2 кластера всегда заняты
-   //FAT16
-   DiskImage[512+0]=0xF8;	   //первые 2 кластера всегда заняты
-   DiskImage[512+1]=0xFF;	   //первые 2 кластера всегда заняты
-   DiskImage[512+2]=0xFF;	   //первые 2 кластера всегда заняты
-   DiskImage[512+3]=0xFF;	    //первые 2 кластера всегда заняты
-
-   
-   AT45DB_WRITE_PAGE(FAT_OFFSET,&DiskImage[512]);
-  }*/
- //корневая директория
- //AT45DB_WRITE_PAGE(473,&BlockName[0]);
-//	write_label("TTTT",3);
- 
- return (__TRUE);
+ return (res_format);
 }
 
+///Работа со встроенной flash памятью микроконтроллера ( 0x8000000 - 0x807FFFF )
+void flash_unlock(void) 
+{
+	FLASH->KEYR = FLASH_KEY1;
+	FLASH->KEYR = FLASH_KEY2;
+}
 
+void flash_lock() 
+{
+  FLASH->CR |= FLASH_CR_LOCK;
+}
 
-	  
+uint8_t flash_ready(void) 
+{
+  return !(FLASH->SR & FLASH_SR_BSY);
+}
+
+void flash_erase_page(uint32_t address) 
+{
+  FLASH->CR|= FLASH_CR_PER; 
+  FLASH->AR = address; 
+  FLASH->CR|= FLASH_CR_STRT; 
+  while(!flash_ready());  
+  FLASH->CR&= ~FLASH_CR_PER; 
+}
+
+uint32_t flash_read(uint32_t address) 
+{
+	return (*(__IO uint32_t*) address);
+}
+
+void flash_write(uint32_t address,uint32_t data) 
+{
+  FLASH->CR |= FLASH_CR_PG; 
+ 
+	//while(!flash_ready());
+  //*(__IO uint16_t*)address = (uint16_t)data; 
+  //while(!flash_ready());
+  //address+=2;
+  //data>>=16;
+
+	while((FLASH->SR&FLASH_SR_BSY));
+  *(__IO uint16_t*)address = (uint16_t)data; 
+  
+  FLASH->CR &= ~(FLASH_CR_PG); 
+	
+}

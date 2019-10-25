@@ -22,8 +22,12 @@
 .\fs_time.o: .\USB\type.h
 .\fs_time.o: ..\PION3\main.h
 .\fs_time.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdio.h
+.\fs_time.o: .\FAT\File_Config.h
 .\fs_time.o: ..\PION3\FLASH_AT45DB.h
 .\fs_time.o: ..\PION3\main.h
+.\fs_time.o: .\FAT\File_Config.h
 .\fs_time.o: ..\PION3\regmap.h
 .\fs_time.o: .\USB\mscuser.h
+.\fs_time.o: ..\PION3\main.h
+.\fs_time.o: .\FAT\File_Config.h
 .\fs_time.o: ..\PION3\params.h

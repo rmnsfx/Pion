@@ -13,14 +13,16 @@ s16 *ext_adc_DATA;
 u16 ext_adc_COUNT;
 u16 ext_adc_XCOUNT;
 s16	ext_adc_SIM[ext_SAMPLING_SIZE];
-s32 ext_adc_VALUE;
+int64_t ext_adc_VALUE;
 u16 ext_mode_reg;
 u32 ext_adc_DELAY;
 s32  ext_adc_VAL;
 
 u8	ext_adc_OVER = 0; //индикатор перегруза канала виброускорения
 
- float k_reg_mul = 1;
+float k_reg_mul = 1;
+s16 dec_koef = 1;
+
 //переменные дециматора
 s32 SAMPLE[4];
 u8  INDEX;
@@ -284,6 +286,8 @@ void ext_adc_SETUP(u16 period_sample)
   //iir_DETECTOR_RESET(&DETECTOR,25000);//50000
 
   
+//	dec_koef = REG(K_VIBRO);
+//	k_reg_mul = (float)dec_koef/1000;
 
 
 }
@@ -331,175 +335,150 @@ void ext_adc_START(s16 *data_in, u16 count_sample)
 void TIM1_UP_IRQHandler(void)
 {
 	
-GPIO_SetBits(GPIOA,GPIO_Pin_11);
-
-	
-
-	
-  //pin_KEY(HIGTH);
-	k_reg_mul = (float)REG(K_VIBRO)/1000;
-	//k_reg_mul = (float)REG(K_VIBRO)/300000;
-  TIM_ClearITPendingBit(TIM1, TIM_IT_Update);
-
-  ext_adc_VALUE = ext_adc_READ()-0x8000;
-
-  SAMPLE[INDEX&DECIMATOR] = ext_adc_VALUE;
-
-  INDEX++;
-
-  if ((INDEX&DECIMATOR)==0)
-   {
-	if (DECIMATOR==0x01) ext_adc_VALUE = (SAMPLE[0]+SAMPLE[1])>>1;
-	else				 ext_adc_VALUE = (SAMPLE[0]+SAMPLE[1]+SAMPLE[2]+SAMPLE[3])>>2;
-
-	
-	
-		if ((ext_adc_VALUE>32500)||(ext_adc_VALUE<-32500))  
-		///if ((ext_adc_VALUE>32500*k_reg_mul)||(ext_adc_VALUE<-32500*k_reg_mul)) 
-    if (!ext_adc_DELAY) ext_adc_OVER = 1;   //выставляем признак перегруза канала
-		
-    //обработка сигнала в зависимости от выбраного канала и фильтра
-
-    //домножаем
-		ext_adc_VALUE = ext_adc_VALUE<<15;	  //не менять!!!
-
-    switch (ext_mode_reg)
-		   {
-		    case 0x0101: //канал ускорения, 2-1000Гц
-						 ext_adc_VALUE  = iir_DEC_FILTER_4ORD(pHPF_1section,pHPF_2section,ext_adc_VALUE);  //фильтр НЧ
-						 ext_adc_VALUE  = iir_DEC_FILTER_4ORD(pLPF_1section,pLPF_2section,ext_adc_VALUE);  //фильтр ВЧ
-						 		 
-						 break; 
-			case 0x0102: //канал ускорения, 10-1000Гц
-						 ext_adc_VALUE  = iir_DEC_FILTER_4ORD(pHPF_1section,pHPF_2section,ext_adc_VALUE);  //фильтр НЧ
-						 ext_adc_VALUE  = iir_DEC_FILTER_4ORD(pLPF_1section,pLPF_2section,ext_adc_VALUE);  //фильтр ВЧ
-						 		 
-						 break; 
-			case 0x0104: //канал ускорения, 10-2000Гц
-						 ext_adc_VALUE  = iir_DEC_FILTER_4ORD(pHPF_1section,pHPF_2section,ext_adc_VALUE);  //фильтр НЧ
-						 ext_adc_VALUE  = iir_DEC_FILTER_4ORD(pLPF_1section,pLPF_2section,ext_adc_VALUE);  //фильтр ВЧ
-						 		 
-						 break; 
-			case 0x0108: //канал ускорения, 10-5000Гц
-						 ext_adc_VALUE  = iir_DEC_FILTER_4ORD(pHPF_1section,pHPF_2section,ext_adc_VALUE);  //фильтр НЧ
-						 ext_adc_VALUE  = iir_DEC_FILTER_4ORD(pLPF_1section,pLPF_2section,ext_adc_VALUE);  //фильтр ВЧ
-						 		 
-						 break; 
-			case 0x0110: //канал ускорения, 10-10000Гц
-						 //ext_adc_VALUE  = iir_DEC_FILTER_4ORD(pHPF_1section,pHPF_2section,ext_adc_VALUE);  //фильтр НЧ
-						 ext_adc_VALUE  = iir_DEC_FILTER_4ORD(pLPF_1section,pLPF_2section,ext_adc_VALUE);  //фильтр ВЧ
-						 		 
-						 break; 
-			case 0x0201: //канал скорости, 2-1000Гц
-						 //фильтр на 1000гц	
-						 ext_adc_VALUE  = iir_DEC_FILTER_4ORD(pHPF_1section,pHPF_2section,ext_adc_VALUE);	
+		dec_koef = REG(K_VIBRO);
 			
-			  						 ext_adc_VALUE = iir_DEC_FILTER_2ORD(pINTEGRAL_1section,ext_adc_VALUE);
-
-						 //фильтр высоких частот батерворта	 10 гц
-						 ext_adc_VALUE  = iir_DEC_FILTER_4ORD(pLPF_1section,pLPF_2section,ext_adc_VALUE);  //фильтр ВЧ
-			/*
-						 ext_adc_VALUE+=(SINUS[i++]<<14); //добавляем синус 1/50 частоты дискретизации
-  						
-  						 if (i==50) i=0;
-  						 //интегратор 1-го порядка + фильтр 
-  						 ext_adc_VALUE = iir_DEC_FILTER_2ORD(pINTEGRAL_1section,ext_adc_VALUE);
-*/
-
-						 break;
-			case 0x0202: //канал скорости, 10-1000Гц
-						 //фильтр на 1000гц	
-						 ext_adc_VALUE  = iir_DEC_FILTER_4ORD(pHPF_1section,pHPF_2section,ext_adc_VALUE);	
-			
-  						 //интегратор 1-го порядка + фильтр 
-  						 ext_adc_VALUE = iir_DEC_FILTER_2ORD(pINTEGRAL_1section,ext_adc_VALUE);
-
-						 //фильтр высоких частот батерворта	 10 гц
-						 ext_adc_VALUE = iir_DEC_FILTER_1ORD(pLPF_1section,ext_adc_VALUE);
-
-						 break;
-			case 0x0204: //канал скорости, 10-2000Гц
-						 //фильтр на 2000гц	
-						 ext_adc_VALUE  = iir_DEC_FILTER_4ORD(pHPF_1section,pHPF_2section,ext_adc_VALUE);	
-			
-  						 //интегратор 1-го порядка + фильтр 
-  						 ext_adc_VALUE = iir_DEC_FILTER_2ORD(pINTEGRAL_1section,ext_adc_VALUE);
-
-						 //фильтр высоких частот батерворта	 10 гц
-						 ext_adc_VALUE = iir_DEC_FILTER_1ORD(pLPF_1section,ext_adc_VALUE);
-
-						 break;
-			case 0x0208: //канал скорости, 10-5000Гц
-						 //фильтр на 5000гц	
-						 ext_adc_VALUE  = iir_DEC_FILTER_4ORD(pHPF_1section,pHPF_2section,ext_adc_VALUE);	
-			
-  						 //интегратор 1-го порядка + фильтр 
-  						 ext_adc_VALUE = iir_DEC_FILTER_2ORD(pINTEGRAL_1section,ext_adc_VALUE);
-
-						 //фильтр высоких частот батерворта	 10 гц
-						 ext_adc_VALUE = iir_DEC_FILTER_1ORD(pLPF_1section,ext_adc_VALUE);
-
-						 break;
-			case 0x0401: //канал перемещения, 10-1000Гц
-						 //фильтр на 300гц	
-						 ext_adc_VALUE  = iir_DEC_FILTER_4ORD(pHPF_1section,pHPF_2section,ext_adc_VALUE);	
-						 //ext_adc_VALUE = iir_DEC_FILTER_1ORD(pLPF_1section,ext_adc_VALUE);
-							ext_adc_VALUE  = iir_DEC_FILTER_4ORD(pLPF_1section,pLPF_2section,ext_adc_VALUE);  //фильтр ВЧ
-  						 //интегратор 2-го порядка + фильтр 
-  					 ext_adc_VALUE = iir_DEC_FILTER_4ORD(pINTEGRAL_1section,pINTEGRAL_2section,ext_adc_VALUE);
-
-						 break;
-			case 0x0800: //канал выборки, 2-10000Гц
-						 ext_adc_VALUE  = iir_DEC_FILTER_4ORD(pLPF_1section,pLPF_2section,ext_adc_VALUE);  //фильтр ВЧ
-
-						 break;
-			default: 	 break;		
-   		  }
-  //ext_adc_VALUE = -32000;//-0x8000;
- 
-  //фильтр 2Гц
-  //ext_adc_VALUE  = iir_DEC_FILTER_4ORD(pDF3,pDF4,ext_adc_VALUE);
-  //фильтр 12000Гц
-  //ext_adc_VALUE  = iir_DEC_FILTER_4ORD(pDF1,pDF2,ext_adc_VALUE);
-  //интегратор
-  //ext_adc_VALUE = iir_DEC_FILTER_2ORD(pINTEGRAL,ext_adc_VALUE);
-  //ext_adc_VALUE = 200;
-  //ext_adc_VALUE  = iir_DEC_FILTER_4ORD(pDF1,pDF2,ext_adc_VALUE);
-  //ext_adc_VALUE = 200;
-
-  /*if (f==0) 
-   if (i<20) i++;
-   else		  f = 1;
-  else
-   if (i>0) i--;
-   else f = 0;		  
-
-  ext_adc_VALUE+=i*10;*/
-
-  //ext_adc_VALUE  = iir_DEC_FILTER_4ORD(pDF3,pDF4,ext_adc_VALUE);
-  //ext_adc_VALUE =  iir_DEC_FILTER_2ORD(pINTEGRAL,ext_adc_VALUE);
-
-  //задержка 
-  if (ext_adc_DELAY>0) {ext_adc_DELAY--;return;}  
+		GPIO_SetBits(GPIOA,GPIO_Pin_11);
 	
-	//ext_adc_DELAY = 25000;
-  //вызов детектора
-  iir_DETECTOR(&DETECTOR,ext_adc_VALUE);	
-
-  if (ext_adc_COUNT>0) 
-   {
-    ext_adc_COUNT--;
-		ext_adc_VAL = ext_adc_VALUE*k_reg_mul;
-	  *ext_adc_DATA++ = ((ext_adc_VAL+16384)>>15);
+		//pin_KEY(HIGTH);
+		//k_reg_mul = (float)REG(K_VIBRO)/1000;
+		//k_reg_mul = (float)REG(K_VIBRO)/300000;
 	
-   }
+		TIM_ClearITPendingBit(TIM1, TIM_IT_Update);
 
-  }
+		ext_adc_VALUE = ext_adc_READ()-0x8000;
+
+		SAMPLE[INDEX&DECIMATOR] = ext_adc_VALUE;
+
+		INDEX++;
+
+		if ((INDEX&DECIMATOR)==0)
+		{
+				if (DECIMATOR==0x01) ext_adc_VALUE = (SAMPLE[0]+SAMPLE[1])>>1;
+				else				 ext_adc_VALUE = (SAMPLE[0]+SAMPLE[1]+SAMPLE[2]+SAMPLE[3])>>2;
+
+								
+				//if ((ext_adc_VALUE * dec_koef > 32500000) || (ext_adc_VALUE * k_reg_mul < -32500000))  		
+				if ((ext_adc_VALUE > 32500) || (ext_adc_VALUE < -32500))  		
+				if (!ext_adc_DELAY) ext_adc_OVER = 1;   //выставляем признак перегруза канала
+				
+				//Умножаем на настроечный коэф.	 
+//				ext_adc_VALUE = ((ext_adc_VALUE * dec_koef) / 1000);
+				
+				//обработка сигнала в зависимости от выбраного канала и фильтра
+
+				//домножаем
+				ext_adc_VALUE = ext_adc_VALUE<<15;	  //не менять!!!
+
+				switch (ext_mode_reg)
+				{
+					
+					case 0x0101: //канал ускорения, 2-1000Гц
+								 ext_adc_VALUE  = iir_DEC_FILTER_4ORD(pHPF_1section,pHPF_2section,ext_adc_VALUE);  //фильтр НЧ
+								 ext_adc_VALUE  = iir_DEC_FILTER_4ORD(pLPF_1section,pLPF_2section,ext_adc_VALUE);  //фильтр ВЧ
+										 
+								 break; 
+					case 0x0102: //канал ускорения, 10-1000Гц
+								 ext_adc_VALUE  = iir_DEC_FILTER_4ORD(pHPF_1section,pHPF_2section,ext_adc_VALUE);  //фильтр НЧ
+								 ext_adc_VALUE  = iir_DEC_FILTER_4ORD(pLPF_1section,pLPF_2section,ext_adc_VALUE);  //фильтр ВЧ
+										 
+								 break; 
+					case 0x0104: //канал ускорения, 10-2000Гц
+								 ext_adc_VALUE  = iir_DEC_FILTER_4ORD(pHPF_1section,pHPF_2section,ext_adc_VALUE);  //фильтр НЧ
+								 ext_adc_VALUE  = iir_DEC_FILTER_4ORD(pLPF_1section,pLPF_2section,ext_adc_VALUE);  //фильтр ВЧ
+										 
+								 break; 
+					case 0x0108: //канал ускорения, 10-5000Гц
+								 ext_adc_VALUE  = iir_DEC_FILTER_4ORD(pHPF_1section,pHPF_2section,ext_adc_VALUE);  //фильтр НЧ
+								 ext_adc_VALUE  = iir_DEC_FILTER_4ORD(pLPF_1section,pLPF_2section,ext_adc_VALUE);  //фильтр ВЧ
+										 
+								 break; 
+					case 0x0110: //канал ускорения, 10-10000Гц
+								 //ext_adc_VALUE  = iir_DEC_FILTER_4ORD(pHPF_1section,pHPF_2section,ext_adc_VALUE);  //фильтр НЧ
+								 ext_adc_VALUE  = iir_DEC_FILTER_4ORD(pLPF_1section,pLPF_2section,ext_adc_VALUE);  //фильтр ВЧ
+										 
+								 break; 
+					case 0x0201: //канал скорости, 2-1000Гц
+								 //фильтр на 1000гц	
+								 ext_adc_VALUE  = iir_DEC_FILTER_4ORD(pHPF_1section,pHPF_2section,ext_adc_VALUE);	
+					
+												 ext_adc_VALUE = iir_DEC_FILTER_2ORD(pINTEGRAL_1section,ext_adc_VALUE);
+
+								 //фильтр высоких частот батерворта	 10 гц
+								 ext_adc_VALUE  = iir_DEC_FILTER_4ORD(pLPF_1section,pLPF_2section,ext_adc_VALUE);  //фильтр ВЧ
+					
+
+								 break;
+					case 0x0202: //канал скорости, 10-1000Гц
+								 //фильтр на 1000гц	
+								 ext_adc_VALUE  = iir_DEC_FILTER_4ORD(pHPF_1section,pHPF_2section,ext_adc_VALUE);	
+					
+									 //интегратор 1-го порядка + фильтр 
+									 ext_adc_VALUE = iir_DEC_FILTER_2ORD(pINTEGRAL_1section,ext_adc_VALUE);
+
+								 //фильтр высоких частот батерворта	 10 гц
+								 ext_adc_VALUE = iir_DEC_FILTER_1ORD(pLPF_1section,ext_adc_VALUE);
+
+								 break;
+					case 0x0204: //канал скорости, 10-2000Гц
+								 //фильтр на 2000гц	
+								 ext_adc_VALUE  = iir_DEC_FILTER_4ORD(pHPF_1section,pHPF_2section,ext_adc_VALUE);	
+					
+									 //интегратор 1-го порядка + фильтр 
+									 ext_adc_VALUE = iir_DEC_FILTER_2ORD(pINTEGRAL_1section,ext_adc_VALUE);
+
+								 //фильтр высоких частот батерворта	 10 гц
+								 ext_adc_VALUE = iir_DEC_FILTER_1ORD(pLPF_1section,ext_adc_VALUE);
+
+								 break;
+					case 0x0208: //канал скорости, 10-5000Гц
+								 //фильтр на 5000гц	
+								 ext_adc_VALUE  = iir_DEC_FILTER_4ORD(pHPF_1section,pHPF_2section,ext_adc_VALUE);	
+					
+									 //интегратор 1-го порядка + фильтр 
+									 ext_adc_VALUE = iir_DEC_FILTER_2ORD(pINTEGRAL_1section,ext_adc_VALUE);
+
+								 //фильтр высоких частот батерворта	 10 гц
+								 ext_adc_VALUE = iir_DEC_FILTER_1ORD(pLPF_1section,ext_adc_VALUE);
+
+								 break;
+					case 0x0401: //канал перемещения, 10-1000Гц
+								 //фильтр на 300гц	
+								 ext_adc_VALUE  = iir_DEC_FILTER_4ORD(pHPF_1section,pHPF_2section,ext_adc_VALUE);	
+								 //ext_adc_VALUE = iir_DEC_FILTER_1ORD(pLPF_1section,ext_adc_VALUE);
+									ext_adc_VALUE  = iir_DEC_FILTER_4ORD(pLPF_1section,pLPF_2section,ext_adc_VALUE);  //фильтр ВЧ
+									 //интегратор 2-го порядка + фильтр 
+								 ext_adc_VALUE = iir_DEC_FILTER_4ORD(pINTEGRAL_1section,pINTEGRAL_2section,ext_adc_VALUE);
+
+								 break;
+					case 0x0800: //канал выборки, 2-10000Гц
+								 ext_adc_VALUE  = iir_DEC_FILTER_4ORD(pLPF_1section,pLPF_2section,ext_adc_VALUE);  //фильтр ВЧ
+
+								 break;
+					default: 	 break;		
+					}
+			
+
+					//задержка 
+					if (ext_adc_DELAY>0) {ext_adc_DELAY--;return;}  
+					
+					
+					//вызов детектора
+					iir_DETECTOR(&DETECTOR,ext_adc_VALUE);	
+
+					if (ext_adc_COUNT>0) 
+					{
+							ext_adc_COUNT--;		
+						
+							ext_adc_VALUE = ((ext_adc_VALUE * dec_koef) / 1000);
+									
+							*ext_adc_DATA++ = ((ext_adc_VALUE + 16384)>>15);			
+					}
+
+		}
 
    
-  //pin_KEY(LOW);	
-	GPIO_ResetBits(GPIOA,GPIO_Pin_11);	
-	
+		//pin_KEY(LOW);	
+		GPIO_ResetBits(GPIOA,GPIO_Pin_11);		
 	
 }
 
@@ -514,16 +493,7 @@ void ext_adc_SAMPLING(s16 *data_in, u16 count_sample)
 
  ext_adc_COUNT = ext_adc_XCOUNT;
 }
-/*
-void ext_adc_SAMPLING_RESET(s16 *data_in, u16 count_sample)
-{
- ext_adc_DATA   = data_in;
- ext_adc_COUNT  = 0;
- ext_adc_XCOUNT = 0;
 
- while (count_sample--)
-  data_in[count_sample]	= 0;
-}  */
 
 
  

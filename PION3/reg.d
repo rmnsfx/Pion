@@ -23,9 +23,15 @@
 .\reg.o: .\USB\type.h
 .\reg.o: main.h
 .\reg.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdio.h
+.\reg.o: .\FAT\File_Config.h
+.\reg.o: .\FAT\RTL.h
 .\reg.o: FLASH_AT45DB.h
 .\reg.o: main.h
+.\reg.o: .\FAT\File_Config.h
 .\reg.o: regmap.h
 .\reg.o: .\USB\mscuser.h
+.\reg.o: ..\PION3\main.h
+.\reg.o: .\FAT\File_Config.h
 .\reg.o: main.h
+.\reg.o: .\FAT\File_Config.h
 .\reg.o: RealTime.h

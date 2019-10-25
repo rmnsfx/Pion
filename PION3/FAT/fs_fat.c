@@ -131,28 +131,28 @@ unsigned char n=0;
 char str_out[5];
 int ii=0;	
 						
-	
-	m11:
-	
-	mmc_init ();		
-	
-  /* Initialize Flash Card interface. */
-  if (mmc_init () == __FALSE) 
-	{
-    
-//						vga_CLEAR();
-//						vga_SET_POS_TEXT(1,50);
-//						sprintf(str_out,"%d", ii++);						
-//						vga_PRINT_STR(str_out,&FONT_6x8);
-//						vga_UPDATE();	
-						
-		
-		/* Failed to Initialize or No Card error. */
-    if(++n>=4) return (1);
-		else 
-			goto m11;
-					
-  }
+//	
+//	m11:
+//	
+//	mmc_init ();		
+//	
+//  /* Initialize Flash Card interface. */
+//  if (mmc_init () == __FALSE) 
+//	{
+//    
+////						vga_CLEAR();
+////						vga_SET_POS_TEXT(1,50);
+////						sprintf(str_out,"%d", ii++);						
+////						vga_PRINT_STR(str_out,&FONT_6x8);
+////						vga_UPDATE();	
+//						
+//		
+//		/* Failed to Initialize or No Card error. */
+//    if(++n>=4) return (1);
+//		else 
+//			goto m11;
+//					
+//  }
 
   /* Initialize FAT file system. */
   return (init_dev ());
@@ -222,6 +222,11 @@ static int init_dev (void) {
 }
 
 
+FATINFO get_mmc(void)
+{
+	return mmc;
+}
+
 /*--------------------------- fat_format ------------------------------------*/
 
 BOOL fat_format (const char *label) {
@@ -249,6 +254,11 @@ BOOL fat_format (const char *label) {
     case 2048:
       /* 4 GB cards. */
       mcfg.blocknr *= 4;
+      break;
+		
+		case 4096:
+      /* 8 GB cards. */
+      mcfg.blocknr *= 8;
       break;
 
     default:
@@ -1970,7 +1980,8 @@ static BOOL is_fat_valid (void) {
     case 8:
     case 16:
     case 32:
-    case 64: break;
+    case 64: 
+		case 128: break;
     default: return (__FALSE);
   }
   /* There should be at least 1 reserved sector. */

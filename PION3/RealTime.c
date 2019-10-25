@@ -4,6 +4,7 @@
 #include "main.h"
 #include "RealTime.h"
 #include "vga_lib.h"
+#include "Reg.h"
 
 
 #define rtc_SIGNATURE 0xAAAA
@@ -65,16 +66,15 @@ void rtc_Configuration(void)
 //---------------------------------------------------------------------------------//
 TStatus rtc_SETUP(void)
 {
- /* Enable PWR and BKP clocks */
- RCC_APB1PeriphClockCmd(RCC_APB1Periph_PWR | RCC_APB1Periph_BKP, ENABLE);
- /* Allow access to BKP Domain */
+	char t_str[20];
+	
+  /* Enable PWR and BKP clocks */
+  RCC_APB1PeriphClockCmd(RCC_APB1Periph_PWR | RCC_APB1Periph_BKP, ENABLE);
+  /* Allow access to BKP Domain */
 	
 	Delay(200000);
 	
- PWR_BackupAccessCmd(ENABLE);
-
-	
-
+  PWR_BackupAccessCmd(ENABLE);
 	
  if (BKP_ReadBackupRegister(BKP_DR1) != rtc_SIGNATURE)
   {

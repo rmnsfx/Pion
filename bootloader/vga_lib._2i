@@ -1,7 +1,0 @@
--c --cpu Cortex-M3 -g -W -O0 --apcs=interwork -I.\CMSIS -I.\DRIVER\inc -I.\DRIVER\src -I..\bootloader -I.\USB -I.\FAT -I.\OLED -I.\MENU
--I C:\Users\SavchenkoRS\Desktop\SVN\bootloader\RTE
--I C:\Keil_v5\ARM\PACK\Keil\STM32F1xx_DFP\2.0.0
--I C:\Keil_v5\ARM\CMSIS\Include
--I C:\Keil_v5\ARM\PACK\Keil\STM32F1xx_DFP\2.0.0\Device\Include
--D__UVISION_VERSION="514" -DSTM32F10X_HD
--o .\vga_lib.o --depend .\vga_lib.d --feedback ".\Main_project.fed" "OLED\vga_lib.c"

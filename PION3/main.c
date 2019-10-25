@@ -53,6 +53,10 @@
 #include "Road.h"
 #include "ff.h"
 #include "diskio.h"
+#include "Flash.h"
+#include "stm32f10x_flash.h"
+#include "stm32f10x_crc.h"
+
 
 
 
@@ -70,7 +74,7 @@ int GLOBAL_TIMER_1ms = 0;
 int POWER_OFF = TIME_POWER_OFF;
 
 
- u32 GLOBAL_ERROR;
+ unsigned int GLOBAL_ERROR;
  extern int USB_CONNECT=0;
  extern u8	measure_stat=0;
  extern u8	usb_stat=0; 
@@ -95,6 +99,7 @@ int timer1=0;
 int timer2=0;
 int timer3=0;
 int timer4=0;
+int timer5=0;
  
 int frzbat1=0;
 int frzbat2=0; 
@@ -116,7 +121,9 @@ float akbemk_percent = 0;
 float akbemk_volt = 0;
 int akbstatus = -1;
 float akbemk_menu = 0;
-
+FATINFO sdinfo;
+unsigned char SD_SWITCH; 
+unsigned char autooff = 0; 
 
 
 
@@ -165,8 +172,9 @@ void Timer_1ms_CallBack(void)
 				
 				timer4=0;	
 			}
-				
-			if (REG(AUTOPOWEROFF) == 1) POWER_OFF--;
+			
+			if (autooff == 1 && pin_USB_5V == 0)	
+			POWER_OFF--;
 				
 			 if (Sec_timer==0) {
 								Sec_timer = 1000; 
@@ -188,7 +196,12 @@ void Timer_1ms_CallBack(void)
 			if (timer3 == 900000) timer3 = 0; ///15 мин.
 			timer4++;
 									
-			
+			if(timer5 == 10)
+			{
+				disk_timerproc();
+				timer5=0;	
+			}
+			else timer5++;
 			
 }
 
@@ -283,6 +296,14 @@ void GPIO_SETUP()
    GPIO_Init(GPIOA, &GPIO_InitStructure);
 
    //входы A8-A15 пропускаем
+	 
+	 //PA10 (вход с подтяжкой к питанию, 0 - новый / 1- старый дисплей)
+	 GPIO_InitStructure.GPIO_Pin = GPIO_Pin_10;
+   GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IPU;
+   GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
+   GPIO_SetBits(GPIOA,GPIO_Pin_10);
+   GPIO_Init(GPIOA, &GPIO_InitStructure);
+	 
 
    //включаем порт B
    RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOB | RCC_APB2Periph_AFIO, ENABLE);
@@ -445,13 +466,13 @@ void GPIO_SETUP()
 	 
 	// RCC_APB1PeriphResetCmd(RCC_APB1Periph_BKP,ENABLE);
 	
-	//Если старый аккум., настраиваем на выход
-	if ( GPIO_ReadInputDataBit(GPIOB,GPIO_Pin_15) == 1) 
-	{		
-		GPIO_InitStructure.GPIO_Pin = GPIO_Pin_3;		
-		GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;
-		GPIO_Init(GPIOA, &GPIO_InitStructure);		
-	}
+//	//Если старый аккум., настраиваем на выход
+//	if ( GPIO_ReadInputDataBit(GPIOB,GPIO_Pin_15) == 1) 
+//	{		
+//		GPIO_InitStructure.GPIO_Pin = GPIO_Pin_3;		
+//		GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;
+//		GPIO_Init(GPIOA, &GPIO_InitStructure);		
+//	}
 	
 }
 
@@ -461,9 +482,6 @@ void ShowPowerOffForm ( void )
   //vga_SET_POS_TEXT(28,25);
 	//vga_PRINT_STR("ВЫКЛЮЧЕНИЕ",&FONT_7x10_bold);
 	vga_UPDATE();
-	
-
-
 }
 
 void EXTI9_5_IRQHandler ( void )
@@ -534,7 +552,7 @@ void progressbar_percent(void)
 			vga_SET_POS_TEXT(1,1);
 			vga_PRINT_STR("Форматирование...",&FONT_6x8);
 		 
-			vga_SET_POS_TEXT(1,20);
+			vga_SET_POS_TEXT(1,1);
 			sprintf(str_out2,"%.1f%%", (1000 - ii)/10.0);		 								
 			vga_PRINT_STR(str_out2,&FONT_6x8);
 			vga_UPDATE();			
@@ -543,7 +561,56 @@ void progressbar_percent(void)
 	 
 }
 
+void progressbar(unsigned int value)
+{
+	int ii = 0;
+	char str_out2[5];
+	float k = 0;
+	
+	vga_SET_DRAW_MODE(drMODE_NORMAL);
+	vga_RECTANGLE(1,30,vga_GET_WIDTH_DISPLAY-3,33,drRECT_NO_FILL);
 
+	k = value * 1.24;
+	
+	while (ii++ <= k)
+	{		
+		vga_SET_DRAW_MODE(drMODE_NORMAL);				 	
+		vga_RECTANGLE(1,30, ii,33,drRECT_FILL);		
+	}		
+		
+	vga_SET_POS_TEXT(1,1);
+  vga_PRINT_STR("Форматирование:", &FONT_6x8);	
+	vga_SET_POS_TEXT(103,1);
+	sprintf(str_out2,"%d%%", value);
+	vga_PRINT_STR(str_out2, &FONT_6x8);
+	vga_UPDATE();	
+	
+}
+
+
+unsigned int FAT_Init(void)
+{
+  u32 res;
+	unsigned int e = 0;
+  
+	SPI_SETUP();		
+	
+	res = disk_initialize(0);
+	
+	if (res != 0) 
+	{
+		while(e++ < 5)
+		{
+			res = disk_initialize(0);	
+			if (res == 0) break;
+			Delay(10000);
+		}
+	}
+	
+	finit();   
+
+  return res;	 
+}
 
 //процедура форматирования дискаа
 TStatus FORMAT(void)
@@ -553,43 +620,24 @@ TStatus FORMAT(void)
 	s8 i;
 	char str_out[5];
 	int i2=0;
-	long res = 0;
+	unsigned char res = 0;
+	uint8_t buf[512];
 
-	finit();
-	Delay(100000);
-	fat_init();
+	FAT_Init();
 	
-		
+	SET_CLOCK_SPEED(CLK_72MHz);
+
+	IWDG_ReloadCounter();	
+	
 	vga_CLEAR();
-	men_SHOW_MESSAGE("Форматирование...","",0);
-	
-	
-	/// Прогресс-бар
-	vga_SET_DRAW_MODE(drMODE_NORMAL);
-	vga_RECTANGLE(1,30,vga_GET_WIDTH_DISPLAY-3,33,drRECT_NO_FILL);
-	vga_UPDATE();	
-	vga_SET_DRAW_MODE(drMODE_NORMAL);
-	vga_RECTANGLE(1,30,20,33,drRECT_FILL);
-	vga_UPDATE();	
-	
-	IWDG_ReloadCounter();
-	
-	memset(temp_data,0,512);
-	
-	IWDG_ReloadCounter();
-	
-  //форматирование
-  mmc_format();//очистка флэш, создание таблицы FAT
+		
+  res = mmc_format();//очистка флэш, создание таблицы FAT
 
-
-	vga_SET_DRAW_MODE(drMODE_NORMAL);
-	vga_RECTANGLE(1,30,vga_GET_WIDTH_DISPLAY-3,33,drRECT_NO_FILL);
-	vga_UPDATE();		
-	vga_SET_DRAW_MODE(drMODE_NORMAL);
-	vga_RECTANGLE(1,30,60,33,drRECT_FILL);
-	vga_UPDATE();	
+//	while (i++ < 3 || res == 0)		
+//	res = mmc_format();			
 	
-	
+	SET_CLOCK_SPEED(CLK_8MHz);
+		
 	IWDG_ReloadCounter();
 	
  	REGW(NUMFILE,1);
@@ -597,32 +645,23 @@ TStatus FORMAT(void)
 	REGW(ROUTE_NUM,0);
 	REGW(BEYOND_ROAD,1);
 
-  IWDG_ReloadCounter();
-
-
-	vga_SET_DRAW_MODE(drMODE_NORMAL);
-	vga_RECTANGLE(1,30,vga_GET_WIDTH_DISPLAY-3,33,drRECT_NO_FILL);
-	vga_UPDATE();	
-	vga_SET_DRAW_MODE(drMODE_NORMAL);
-	vga_RECTANGLE(1,30,100,33,drRECT_FILL);
-	vga_UPDATE();	
-
-	IWDG_ReloadCounter();
-
+  for(i = 60; i<80; i++) 
+	{
+		progressbar(i);
+		Delay(500);
+	}
+	
+	FAT_Init();
 	
 	res = rod_CreateFile_edit();	
 	
+	for(i = 80; i<=100; i++) 
+	{
+		progressbar(i);
+		Delay(500);
+	}
 	
-	vga_CLEAR();
-	men_SHOW_MESSAGE("Форматирование...","",0);
-	vga_SET_DRAW_MODE(drMODE_NORMAL);
-	vga_RECTANGLE(1,30,vga_GET_WIDTH_DISPLAY-3,33,drRECT_NO_FILL);
-	vga_UPDATE();	
-	vga_SET_DRAW_MODE(drMODE_NORMAL);
-	vga_RECTANGLE(1,30,vga_GET_WIDTH_DISPLAY-3,33,drRECT_FILL);
-	vga_UPDATE();	
-
-	Delay(1400000);
+	Delay(1500000);		
 	
 	vga_CLEAR();
 	vga_SET_POS_TEXT(1,1);
@@ -632,50 +671,33 @@ TStatus FORMAT(void)
 	vga_SET_POS_TEXT(1,12);
 	sprintf(str_out,"завершено.");		 								
 	vga_PRINT_STR(str_out,&FONT_6x8);
-	vga_UPDATE();	
-			
-
+	vga_UPDATE();				
 
 	IWDG_ReloadCounter();
+	
+//	vga_SET_POS_TEXT(10,1);
+//	sprintf(str_out,"%d",res);		 								
+//	vga_PRINT_STR(str_out,&FONT_6x8);
+//	vga_UPDATE();		
 
-	Delay(1500000);
+	Delay(1500000);		
 	
-
-	vga_CLEAR();
-  vga_SET_POS_TEXT(28,25);  
-	vga_PRINT_STR("ВЫКЛЮЧЕНИЕ",&FONT_7x10_bold);
-	vga_UPDATE();
-	
-	Delay(1500000);
-	
+//	vga_CLEAR();
+//  vga_SET_POS_TEXT(28,25);  
+//	vga_PRINT_STR("ВЫКЛЮЧЕНИЕ",&FONT_7x10_bold);
+//	vga_UPDATE();
+//	
+//	Delay(1500000);		
+//	
 	BKP_WriteBackupRegister(BKP_DR12, 0); ///Индикация A,V
-		
-	pin_OFF();
+//		
+//	pin_OFF();	
 	
 	return _OK;
 	
-	
 }
 
-TStatus FAT_Init(void)
-{
-  u32 res;
-  
-  //тест FAT
-  res = finit();
 
-  if (res==1)
-    //ошибка Flash
-	return _ERR;
-  else
-  	if (res>1) 
-		{
-			
-			return FORMAT();	 //пытаемся отформатировать
-		}	  
-
-  return _OK;	 
-}
 
 void CONTROL_BAT(unsigned char MIN_VAL_BAT)
 {
@@ -718,6 +740,9 @@ void CONTROL_BAT(unsigned char MIN_VAL_BAT)
 							vga_PRINT_STR("ВЫКЛЮЧЕНИЕ",&FONT_7x10_bold);
 							vga_UPDATE();
 						
+							//Принудительно сбрасываем счетчик емкости, если прибор отключился по напряжению 
+							BKP_WriteBackupRegister(BKP_DR10, 0);
+						 
 							Delay(2500000);						
 
 
@@ -733,7 +758,7 @@ void CONTROL_BAT(unsigned char MIN_VAL_BAT)
 	else
 	{	
 	
-					 if (adc_BAT_PERCENT_edit() <= 10 && adc_BAT_PERCENT_edit() > 2 && message_status == 0 && measure_stat == 0)   //если заряд меньше 10		
+					 if (adc_BAT_PERCENT_edit() <= 10 && adc_BAT_PERCENT_edit() > 1 && message_status == 0 && measure_stat == 0)   //если заряд меньше 10		
 
 					 {
 								 
@@ -863,10 +888,11 @@ void CONTROL_POWER(u8 RESET)
 {
 		 if (key_STATE > 0) POWER_OFF = TIME_POWER_OFF; 
 
-		 if (pin_USB_5V) POWER_OFF = TIME_POWER_OFF; 	
+		 if (pin_USB_5V == 1) POWER_OFF = TIME_POWER_OFF; 	
 	
 		 ///if (measure_stat == 2) POWER_OFF = TIME_POWER_OFF; 
-			
+		
+		 if (autooff == 1) 	
 		 if (POWER_OFF <= 0) 	
 		 {
 				pin_OFF();
@@ -1013,13 +1039,13 @@ void JumpToApplication(uint32_t addr)
 //Считаем емкость нового аккума (Ампер/часы).
 float CAPACITY ()
 {
-
 	
 						//Мгновенный ток, Ампер.
 						akbtemp = (float) adc_BAT_MEASURE_NEW_AMPER() / 4096 * 3.3;								
 						akbtemp = (float) 1.65 - akbtemp;
 						//akbtemp = (float) sqrt(akbtemp*akbtemp) / (float)(60 * 0.082);
 						akbtemp = (float) akbtemp / (float)(60 * 0.082) * 1.03; //Коэф. усиления операц. и сопротивление шунта. + поправочный.
+						//akbtemp = (float) akbtemp * 1.3;//Еще один поправочный, для соответствия со счетчиком
 		
 						//Мгновенное напряжение, Вольт.
 						akbemk_volt = (float) adc_BAT_MEASURE_NEW_VOLT() / 4096 * 3.3 * 2.11;		
@@ -1038,28 +1064,223 @@ float CAPACITY ()
 						//Счетчик емкости, работа
 						if (usb_charge_state == 0) akbemk_count -= akbemk;
 		
-						if (akbemk_count <= 0) akbemk_count = 0;
+						//if (akbemk_count <= 0) akbemk_count = 0;
 
 						//Читаем значение емкости из регистра меню
-						if (REG(AKB_EMK_COUNT) == 0) akbemk_menu = 0.6;
-						else akbemk_menu = 1.2;
+						//if (REG(AKB_EMK_COUNT) == 0) akbemk_menu = 0.6;
+						//else akbemk_menu = 1.2;
 						
 						//Проценты с учетом напряжения
 						if (akbemk_volt <= 2.6) akbemk_percent = 0;
-							else akbemk_percent = (akbemk_count * 100) / (float) akbemk_menu;
+						else akbemk_percent = (akbemk_count * 100) / (float) akbemk_menu;
 		
 		
 						//Разрешить запись в область BKP 
 						//PWR->CR |=  PWR_CR_DBP;
 		
 						//Запоминаем емкость, масштабируем для записи в BKP через коэф. преобразования (1,2 / 65535 = 0.00001831082)
-						BKP_WriteBackupRegister(BKP_DR10, (int) ceil(akbemk_count / 0.00001831082)); 						
-									
+						if (akbemk_count > 0) BKP_WriteBackupRegister(BKP_DR10, (int) ceil(akbemk_count / 0.00001831082)); 						
+						
 
 						//Запретить запись в BKP
 						//PWR->CR &= ~PWR_CR_DBP;
 
 						return akbemk_count;
+}
+
+///Подсчет кол-ва маршрутов на sd-карте
+unsigned int ROADS_COUNTING(void)
+{
+			unsigned int i = 0,j = 0;
+			char 		  FileName[25];
+			FIL Fil;
+			
+//			f_mount(&fls, "0:", 1);
+//							
+//			//for (j=0;j<=255;j++)
+//			for (j=0; j<10; j++)
+//			{
+//				sprintf(FileName,"0:Road.%03d",j);						
+//				if (f_stat(FileName, &fno) == FR_OK) i++;						
+//			}
+
+//			f_mount(0,"0:", 0);
+//			
+//			return i + 1;
+	
+//			if ((pRFile = fopen ("Roads.txt","r")) != NULL)
+//			{
+//				fseek(pRFile,9*(road_pos),SEEK_SET);
+//				if (fscanf(pRFile, "%s", temp) != 1) 
+//				{
+//					road_pos--;
+//					exist = 0;
+//				}
+//				else exist = 1;
+//				fclose(pRFile);
+//			}	
+	
+	
+			f_mount(&fls, "0:", 1);
+			res_t = f_open(&Fil,"Roads.txt", FA_OPEN_ALWAYS | FA_READ);
+			if (res_t == 0) 
+			{
+				for (j=0; j<10; j++)
+				{
+					res_t = f_lseek(&Fil, 9*j);
+					f_gets(FileName,9,&Fil);
+					if (f_stat(FileName, &fno) == FR_OK) i++;	
+				}
+			}
+			f_close(&Fil);			
+			f_mount(0,"0:", 0);
+	
+	
+			return i;
+	
+}
+
+
+void flashing_bootloader(void)
+{
+	
+		unsigned int i = 0, j = 0, res = 0, a, carry_flag, f_res;
+		FATFS fatfs;
+		FIL Fil;
+		uint8_t bf[2];
+		unsigned int br = 1;
+		uint16_t crc = 0xffff;
+		uint32_t bt[4];
+		char t_str[20];
+		uint32_t calculated_crc;
+		
+	
+		vga_CLEAR();
+		vga_SET_POS_TEXT(1,1);			
+		vga_PRINT_STR("Обновление",&FONT_6x8);			
+		vga_SET_POS_TEXT(1,15);
+		vga_PRINT_STR("загрузчика...",&FONT_6x8);
+		vga_SET_POS_TEXT(1,30);
+		vga_PRINT_STR("Подключите",&FONT_6x8);
+		vga_SET_POS_TEXT(1,45);
+		vga_PRINT_STR("зарядное устройство.",&FONT_6x8);
+		vga_UPDATE();							
+					
+					
+		while (1)
+		{
+				if (key_CHECK_EV(key_EVENT_PRESSED_ESC_MENU)) JumpToApplication(0x8000000);
+				if (pin_USB_5V == 1) break; 															
+				IWDG_ReloadCounter();	
+		}
+		
+		__disable_fiq();
+		__disable_irq();		
+		
+		res = f_mount(&fatfs, "0:", 1);		
+		res = f_open(&Fil, "boot1.bin", FA_OPEN_ALWAYS | FA_READ);
+		
+		while (1)
+		{			
+			res = f_read(&Fil, bf, sizeof(uint8_t), &br);
+			if (br == 0) break;
+				
+			crc = crc^bf[0];
+				
+			for (j = 0; j < 8; j++)
+			{
+					a = crc;
+					carry_flag = a & 0x0001;
+					crc = crc >> 1;
+					if (carry_flag == 1) crc = crc ^ 0xA001;
+			}			
+
+			IWDG_ReloadCounter();				
+		}			
+			
+
+		if (crc != 0) 
+		{
+				vga_CLEAR();
+				vga_SET_POS_TEXT(1,1);
+				vga_PRINT_STR("Файл поврежден, ",&FONT_6x8);
+				vga_SET_POS_TEXT(1,15);
+				vga_PRINT_STR("ошибка CRC.",&FONT_6x8);
+				vga_SET_POS_TEXT(1,30);
+				vga_PRINT_STR("Отключите зарядное",&FONT_6x8);
+				vga_SET_POS_TEXT(1,45);
+				vga_PRINT_STR("устройство.",&FONT_6x8);			
+				vga_UPDATE();								
+				
+				while(pin_USB_5V) IWDG_ReloadCounter();	
+				
+				JumpToApplication(0x8000000);						
+					
+		}						
+		else
+		{			
+			
+			vga_CLEAR();
+			vga_SET_POS_TEXT(1,1);			
+			vga_PRINT_STR("Обновление",&FONT_6x8);			
+			vga_SET_POS_TEXT(1,20);
+			vga_PRINT_STR("загрузчика...",&FONT_6x8);
+			vga_UPDATE();							
+			
+			FLASH_Unlock();		
+
+			
+			for(i = 0; i < 32; i++)
+			{			
+				FLASH_ErasePage(0x8000000+i*0x800);
+			}			
+			
+			
+			res = f_open(&Fil, "boot1.bin", FA_OPEN_ALWAYS | FA_READ);
+			
+			if (res == 0)
+			{
+				i = 0;
+				
+				while (1)
+				{						
+						res = f_read( &Fil, bt, sizeof(unsigned int), &br );		
+						
+						if (br == 0) break;
+					
+						if  (f_res = FLASH_ProgramWord(0x8000000+i*4,bt[0]) == FLASH_COMPLETE)	i++;						
+						else break;
+						
+						IWDG_ReloadCounter();	
+				}
+			}
+			
+			res = f_close(&Fil);				
+						
+			FLASH_Lock();				
+			
+			vga_CLEAR();
+			vga_SET_POS_TEXT(1,1);
+			vga_PRINT_STR("Обновление завершено.",&FONT_6x8);
+			vga_SET_POS_TEXT(1,20);
+			vga_PRINT_STR("Отключите зарядное",&FONT_6x8);
+			vga_SET_POS_TEXT(1,35);
+			vga_PRINT_STR("устройство.",&FONT_6x8);			
+			vga_UPDATE();	
+			
+			while (pin_USB_5V) IWDG_ReloadCounter(); 
+						
+			res = f_unlink("boot1.bin");						
+			res = f_mount(0, "0:", 0);		
+			
+			JumpToApplication(0x8000000);			
+
+		}
+		
+		__enable_fiq();
+		__enable_irq();	
+			
+		res = f_mount(0, "0:", 0);		
 }
 
 
@@ -1069,10 +1290,9 @@ float CAPACITY ()
 int main(void)
 
 {
-
-
   unsigned int fl=0;
-  unsigned int temp_reg;  
+  volatile unsigned int temp_reg;  
+	volatile unsigned int temp_reg2 = 0;
   unsigned int i = 0, j = 0;
   char 		  FileName[25];
 	char temp[25];
@@ -1080,161 +1300,143 @@ int main(void)
   FILE * pRFile;
 	unsigned char persent_bat_char = 5;	
 	uint16_t Number,Num;	
-	measure_stat = 0;	
+	unsigned char result;
+	TStatus Err;
+	volatile unsigned int tempreg=0;
+	unsigned int res = 1;
 	
-	
+	measure_stat = 0;		
 		
   GPIO_SETUP();
 
-  Delay(100000);
-  Delay(100000);
-  Delay(100000);	
-
-	
-
+  Delay(300000);
+  	
   //подать 13В
   pin_13V(HIGTH);
-  Delay(100000);
-  Delay(100000);
-  Delay(100000);
   
+	Delay(300000);
+    
   SystemInit();
-  SET_CLOCK_SPEED(CLK_72MHz); 
-  //инициализация внутреннего АЦП -----------------------------//
+  
+	SET_CLOCK_SPEED(CLK_72MHz); 
+  
+	//инициализация внутреннего АЦП -----------------------------//
   adc_SETUP();
   
-
-  USB_Init();                                        // USB Initialization
-  vga_INIT();
-	
-	
-  first_flag = 1; /// Флаг первого включения
-	
-
-	
-	
-  //минимальная диагностика----------------------------------------------------------//
-  if (rtc_SETUP()==_ERR) GLOBAL_ERROR|=0x01;	//тест часов
-  if (FAT_Init() ==_ERR) GLOBAL_ERROR|=0x04;;	//тест фат
-  if (reg_SETUP()==_ERR) GLOBAL_ERROR|=0x02;	//начальная инициализация регистров
-  GLOBAL_ERROR = 0;
+  USB_Init(); // USB Initialization                                        
   
+	vga_INIT();
+	
+	///Флаг первого включения
+  first_flag = 1; 
+	
+	///Инициализация часов
+	Err = rtc_SETUP();
+	if (Err == _ERR) GLOBAL_ERROR |= 0x01;
+	
+	///Инициализация sd карты
+	result = FAT_Init();	
+	if (result != 0) 
+	{
+			SD_SWITCH = 0;
+		
+			vga_CLEAR();					
+			vga_SET_POS_TEXT(5,10);
+			vga_PRINT_STR("Функционал работы", &FONT_6x8);
+			vga_SET_POS_TEXT(5,20);
+			vga_PRINT_STR("прибора ограничен.",&FONT_6x8);
+			vga_SET_POS_TEXT(5,40);
+			vga_PRINT_STR("Обратитесь в",&FONT_6x8);					
+			vga_SET_POS_TEXT(5,50);
+			vga_PRINT_STR("сервисный центр.",&FONT_6x8);					
+			vga_UPDATE();	
+			Delay(50000000);
+		
+			GLOBAL_ERROR |= 0x02;
+	}
+	else
+	{
+			///Включаем чтение служебных регистров с SD карты
+			SD_SWITCH = 1;
+	}
+	
+	///Инициализация служебных регистров
+	Err = reg_SETUP();
+	if (Err == _ERR) GLOBAL_ERROR |= 0x04;
+		
+	///Коррекция точности хода
+	BKP->RTCCR = REG(TIME_EDIT);	
+	
+	///Копируем параметры sd-карты в глоб. переменную для иниц. карты по usb 
+	sdinfo = get_mmc();	
 	
 
 	
+//  //минимальная диагностика----------------------------------------------------------//
+//  if (rtc_SETUP()==_ERR) GLOBAL_ERROR|=0x01;	//тест часов
+//  if (FAT_Init() ==_ERR) GLOBAL_ERROR|=0x04;;	//тест фат
+//  if (reg_SETUP()==_ERR) GLOBAL_ERROR|=0x02;	//начальная инициализация регистров
+//GLOBAL_ERROR = 0;
 	
-	if (GLOBAL_ERROR>0) 	 //если есть ошибка
-			{	   
-						 temp_reg = 0;
-						 //выводим сообщение об ошибке 
-						 vga_PRINT_STR("ERROR:",&FONT_6x8);
-						 
-						 if (GLOBAL_ERROR&0x01)   {vga_SET_POS_TEXT(5,++temp_reg*10);vga_PRINT_STR("Часы",&FONT_6x8);}
-						 if (GLOBAL_ERROR&0x02)   {vga_SET_POS_TEXT(5,++temp_reg*10);vga_PRINT_STR("Инициализация FLASH",&FONT_6x8);}
-						 if (GLOBAL_ERROR&0x04)   {vga_SET_POS_TEXT(5,++temp_reg*10);vga_PRINT_STR("Инициализация FAT16",&FONT_6x8);}
-						 
-						 vga_UPDATE();						 
-						 
-						 Delay(700000); 
-						 ShowPowerOffForm();
-						 Delay(700000); 						 
-						 pin_OFF();
-			}
+//	if (GLOBAL_ERROR>0) 	 //если есть ошибка
+//	{	   
+//						 temp_reg = 0;
+//						 //выводим сообщение об ошибке 
+//						 vga_PRINT_STR("ERROR:",&FONT_6x8);
+//						 
+//						 if (GLOBAL_ERROR&0x01)   {vga_SET_POS_TEXT(5,++temp_reg*10);vga_PRINT_STR("Часы",&FONT_6x8);}
+//						 if (GLOBAL_ERROR&0x02)   {vga_SET_POS_TEXT(5,++temp_reg*10);vga_PRINT_STR("Инициализация FLASH",&FONT_6x8);}
+//						 if (GLOBAL_ERROR&0x04)   {vga_SET_POS_TEXT(5,++temp_reg*10);vga_PRINT_STR("Инициализация FAT",&FONT_6x8);}
+//						 
+//						 vga_UPDATE();						 
+//						 
+////						 Delay(700000); 
+////						 ShowPowerOffForm();
+////						 Delay(700000); 						 
+////						 pin_OFF();
+//	}
 
 		
-					
-
-						
-   if (REG(NUMFILE)==0) //установлен лок байт
-    {
-	 //форматируем
-	 vga_SET_POS_TEXT(1,1);
-	 vga_PRINT_STR("Ошибка записи FAT16",&FONT_6x8);
-	 vga_SET_POS_TEXT(1,25);
-	 vga_PRINT_STR("Форматировать...?",&FONT_6x8);
-	 vga_UPDATE();
-	 //сохринить калибровочный параметр
-	 //BKP_WriteBackupRegister(BKP_DR2, REG(K_VIBRO));
-		IWDG_ReloadCounter();
-		SET_CLOCK_SPEED(CLK_8MHz);
-			
-		while(1)	
-		if (key_CHECK_EV(key_EVENT_PRESSED_ENTER)) 
-		{ 
-			vga_CLEAR();
-			vga_UPDATE();
-			FORMAT();				   //нужно ли форматировать!!!!!!!! плохо это!!!!
-			
-			ShowPowerOffForm();
-			Delay(700000); 
-			vga_CLEAR();
-			vga_UPDATE();	
-			pin_OFF();
-		}
-		else
-		{
-			if (key_CHECK_EV(key_EVENT_PRESSED_ESC_MENU)) 
-			{
-				ShowPowerOffForm();
-				Delay(700000); 
-				vga_CLEAR();
-				vga_UPDATE();	
-				pin_OFF();
-			}
-		}
 	
-
-	}
-   else
-    {
-	  REGW(NUMFILE_CURENT,REG(NUMFILE));
-	}
-  
-	
-	//---------------------------------------------------------------------------------//
-	if (REG(LOCK_REG) != 100)
-	{
 	MakeTIK();
 	vga_UPDATE();		
 	for(i=0;i<0x2FFFFF;i++){__NOP();}
-	}	
 
-  ext_adc_SETUP(20);//16 - 62.5 кГц//20 - 50кГц
-  
+  ext_adc_SETUP(20);//16 - 62.5 кГц//20 - 50кГц  
 	
-	men_SETUP();
-  	
+	men_SETUP();  
 
+	///Подсчет кол-ва маршрутов на sd
+	Num_of_Signals = ROADS_COUNTING();
+	///Установка флага для скрола
+	if (Num_of_Signals > 5) exist = 1;
+	else exist = 0;
+	
   SET_CLOCK_SPEED(CLK_8MHz); 
-
 
   //задаем новую конфигурацию меню, если нажаты кнопки "верх","вниз"
   if ((key_CHECK_ST(key_UP))&&(key_CHECK_ST(key_DOWN))) 
-   men_SET_CONFIG(0x80);
-
+   men_SET_CONFIG(0x80);	
 
   k_reg = ((float)REG(K_VIBRO)/1000);
-  k_reg = k_reg/(30*10); 
-
+  k_reg = k_reg/(30*10);
 
   //загружаем мотосекунды
-  Moto_Sec = BKP_ReadBackupRegister(BKP_DR3);
-	
-	
+  Moto_Sec = BKP_ReadBackupRegister(BKP_DR3);		
 		
-	/// Вспоминаем номер маршрута для отображения A и V	
+	///Вспоминаем номер маршрута для отображения A и V	
 	road_indicator = BKP_ReadBackupRegister(BKP_DR12); 
 	
 	///Получаем идентификатор АКБ
-	id_akb = GPIO_ReadInputDataBit(GPIOB,GPIO_Pin_15);
-	
+	id_akb = GPIO_ReadInputDataBit(GPIOB,GPIO_Pin_15);	
 		
 	///Вспоминаем емкость АКБ	
 	akbemk_count = (float) BKP_ReadBackupRegister(BKP_DR10) * 0.00001831082;
 	
-	//Читаем значение емкости из регистра меню
-	if (REG(AKB_EMK_COUNT) == 0) akbemk_menu = 0.6;
-	else akbemk_menu = 1.2;
+	///Читаем значение емкости из регистра меню
+	akbemk_menu = 0.6;
+	//if (REG(AKB_EMK_COUNT) == 0) akbemk_menu = 0.6; //возникали сбои в показаниях при разряде акб
+	//else akbemk_menu = 1.2;
 	
 	///Расчитываем проценты для индикации батарейки
 	akbemk_percent = (akbemk_count * 100) / (float) akbemk_menu;	
@@ -1242,9 +1444,18 @@ int main(void)
 	/// Индикация батарейки при первом включении
 	if (id_akb == 0) frzbat1 = akbemk_percent; 			
 	else frzbat1 = adc_BAT_PERCENT_edit(); 			
-
 	
+	///Если старый аккум., PA3 настраиваем на выход
+	if ( GPIO_ReadInputDataBit(GPIOB,GPIO_Pin_15) == 1) 
+	{		
+		GPIO_InitStructure.GPIO_Pin = GPIO_Pin_3;		
+		GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;
+		GPIO_ResetBits(GPIOA,GPIO_Pin_3);	 
+		GPIO_Init(GPIOA, &GPIO_InitStructure);		
+	}
 	
+	//tempreg = REG(K_VIBRO);
+ 
 	
 	while (1) //начало основного цикла
   {		
@@ -1276,14 +1487,17 @@ int main(void)
   IWDG_Enable();
 
 		
-	//Считаем емкость АКБ
+	///Считаем емкость АКБ
 	CAPACITY();	
-
+		
+	///Читаем регистр автоотключения
+	autooff = REG(AUTOPOWEROFF); 
 
 	if (USB_SWITCH == 1)
 	{
 			
-		 usb_addr = USB_DeviceAddress; /// Адрес присвоенный хостом при подключении USB
+		 /// Адрес присвоенный хостом при подключении USB
+		 usb_addr = USB_DeviceAddress; 
 		
 		 //----------- USB ---------------------------------------------------------//
 		 if (USB_CONNECT != pin_USB_5V)
@@ -1300,15 +1514,15 @@ int main(void)
 					rod_DEINIT();	
 					Delay(200000);				   //антидребезговая задержка								
 					
-					//жесткий костыль ))
-					if (REG(LOCK_REG) == 100) REGW(LOCK_REG,99);
-					else 
-					{
-						REGW(LOCK_REG,100);
-						__enable_irq();
-						__enable_fiq();
-						NVIC_SystemReset();
-					}			
+//					//жесткий костыль ))
+//					if (REG(LOCK_REG) == 100) REGW(LOCK_REG,99);
+//					else 
+//					{
+//						REGW(LOCK_REG,100);
+//						__enable_irq();
+//						__enable_fiq();
+//						NVIC_SystemReset();
+//					}			
 				 
 				 
 				 SET_CLOCK_SPEED(CLK_72MHz);								
@@ -1329,7 +1543,8 @@ int main(void)
 						vga_PRINT_STR("Подождите...",&FONT_6x8);
 						vga_UPDATE();
 						temp_reg = 0;
-								
+						temp_reg2 = 0;
+							
 					
 						__disable_irq();
 						__disable_fiq();
@@ -1339,8 +1554,9 @@ int main(void)
 					
 						for (j=0;j<=255;j++)
 						{
-							sprintf(FileName,"M:\\%03u.%03u\\Signal %d.dat",0,0,j);						
-							if (f_stat(FileName, &fno) == FR_OK) temp_reg++;						
+							sprintf(FileName,"0:%03u.%03u/Signal %d.dat",0,0,j);						
+							if (f_stat(FileName, &fno) == FR_OK) temp_reg++;	
+							IWDG_ReloadCounter();								
 						}
 						
 						
@@ -1355,11 +1571,12 @@ int main(void)
 						
 						for(i=1;i<255;i++)
 						{
-							sprintf(FileName,"Road.%03u",i);
+							sprintf(FileName,"Road.%03d",i);
 							if (f_stat(FileName, &fno) == FR_OK)
 							{
 								f_printf(&FileTmp,FileName);
 								f_putc('\n',&FileTmp);
+								temp_reg2++;
 							}						
 
 							IWDG_ReloadCounter();							
@@ -1369,9 +1586,9 @@ int main(void)
 						f_close(&FileTmp);
 
 						f_getlabel("", FileName, 0);
-						if(strcmp(FileName, "PION-3"))
+						if(strcmp(FileName, "PION"))
 						{
-							f_setlabel("PION-3");
+							f_setlabel("PION");
 						}
 							
 						f_mount(0,"0:", 0);
@@ -1380,7 +1597,8 @@ int main(void)
 						__enable_fiq();
 							
 						
-						Num_of_Signals = temp_reg;
+						//Num_of_Signals = temp_reg;
+						Num_of_Signals = ROADS_COUNTING();
 						
 						REGW(BEYOND_ROAD,temp_reg+1);
 						i = 0;
@@ -1395,7 +1613,18 @@ int main(void)
 						road_cursor_pos = 0;
 				}	
 
-						
+				
+				f_mount(&fls, "0:", 1);		
+				res = f_stat("boot1.bin", &fno);
+				if (res == 0)
+				{		
+						road_pos = 0;
+						road_cursor_pos = 0;												
+						res = f_mount(0, "0:", 0);			
+						flashing_bootloader();	
+				}
+				
+				f_mount(0, "0:", 0);				
 		
 				SET_CLOCK_SPEED(CLK_8MHz); 
 				Delay(200000);				   //антидребезговая задержка
@@ -1440,10 +1669,13 @@ int main(void)
 						
 						usb_transit = 0; 
 								
+						///Автоотключение
+						if (REG(AUTOPOWEROFF) == 1) CONTROL_POWER(1);	
+		
 						LED_CHARGE_OFF();
 						CHARGE_OFF();
 
-						if (measure_stat == 0) CONTROL_BAT(0); ///Проверка АКБ на разряд (вне режима измерения)
+						if (measure_stat == 0) CONTROL_BAT(0); ///Проверка АКБ на разряд (вне режима измерения)						
 		
 						//Alex
 						if ((measure_stat == 0)&&key_CHECK_EV(key_EVENT_PRESSED_MESUARE)) measure_stat = 1; 
@@ -1465,8 +1697,7 @@ int main(void)
 						
 						//ловим событие отжатия кн. "измерение"
 						if (measure_stat == 0)
-						{						
-											
+						{										
 								STOP_MESUARE();
 
 								if (ext_adc_GET_STATUS()==ext_adc_STATUS_STOP)
@@ -1475,10 +1706,7 @@ int main(void)
 								}
 
 								SET_CLOCK_SPEED(CLK_8MHz);							
-							
-						}
-
-					 
+						}				 
 					 
 						//расчет скз или выборка
 						if ((REG(PION_STATUS)&ST_MESUARE)>0)
@@ -1499,10 +1727,8 @@ int main(void)
 							
 						ext_adc_OVER = 0;										 //сбрасываем признак перегрузка канала
 					
-
-					
 						//контроль вывода
-						if (men_MENU_CONTROL()) if (REG(AUTOPOWEROFF) == 1) CONTROL_POWER(1); ///Выключение в теч. 10 мин., если не нажата кнопка
+						men_MENU_CONTROL();
 						
 						
 						//обновить режим
@@ -1512,8 +1738,7 @@ int main(void)
 	}	//конец - "работаем в нормальном режиме"
 		
 	else  
-	{
-		if (REG(AUTOPOWEROFF) == 1) CONTROL_POWER(1);
+	{		
 	
 			if (USB_Configuration == 0) 
 				{ 			
@@ -1533,9 +1758,10 @@ int main(void)
 				}			
 			else men_SHOW_MAINFORMS(form_USB);			
 		
-	}
+				
+		
+	}		
 	
-
  } //конец основного цикла
 	
 	

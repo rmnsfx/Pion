@@ -1,7 +1,8 @@
 
 
 #define MAX_ITEMS     50		//количество элементов меню
-#define COUNT_ENUM    6		//количество перечилсяемых элементов
+//#define COUNT_ENUM    6		//количество перечилсяемых элементов
+#define COUNT_ENUM    134		//количество перечилсяемых элементов
 #define last_enum     COUNT_ENUM - 1
 
 
