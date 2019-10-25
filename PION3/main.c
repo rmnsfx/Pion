@@ -296,6 +296,14 @@ void GPIO_SETUP()
    GPIO_Init(GPIOA, &GPIO_InitStructure);
 
    //входы A8-A15 пропускаем
+	 
+	 //PA10 (вход с подтяжкой к питанию, 0 - новый / 1- старый дисплей)
+	 GPIO_InitStructure.GPIO_Pin = GPIO_Pin_10;
+   GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IPU;
+   GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
+   GPIO_SetBits(GPIOA,GPIO_Pin_10);
+   GPIO_Init(GPIOA, &GPIO_InitStructure);
+	 
 
    //включаем порт B
    RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOB | RCC_APB2Periph_AFIO, ENABLE);
