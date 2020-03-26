@@ -243,6 +243,7 @@ void ssd_OLED_INIT(void)
 {
  		ssd_RESET();
 	
+
 		if ( GPIO_ReadInputDataBit(GPIOA,GPIO_Pin_10) == 1 ) ssd_INIT_OLD();
 		else ssd_INIT_NEW();
 	

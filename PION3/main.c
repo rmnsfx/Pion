@@ -489,8 +489,6 @@ void EXTI9_5_IRQHandler ( void )
 	uint32_t i;
 	
 	
-  
-	
 	if ( (pin_USB_5V) || (usb_transit) )
 	{
 		
@@ -511,9 +509,7 @@ void EXTI9_5_IRQHandler ( void )
 			DISPLAY_OFF();
 			pin_OFF();	
 			while(1) IWDG_ReloadCounter();
-	}
-	
-	
+	}	
 	
 }
 
