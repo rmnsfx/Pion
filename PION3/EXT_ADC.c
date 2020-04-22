@@ -15,8 +15,8 @@ u16 ext_adc_XCOUNT;
 s16	ext_adc_SIM[ext_SAMPLING_SIZE];
 int64_t ext_adc_VALUE;
 u16 ext_mode_reg;
-u32 ext_adc_DELAY;
-s32  ext_adc_VAL;
+uint64_t ext_adc_DELAY;
+int64_t  ext_adc_VAL;
 
 u8	ext_adc_OVER = 0; //индикатор перегруза канала виброускорени€
 
@@ -24,7 +24,7 @@ float k_reg_mul = 1;
 s16 dec_koef = 1;
 
 //переменные дециматора
-s32 SAMPLE[4];
+int64_t SAMPLE[4];
 u8  INDEX;
 u8  DECIMATOR;
 
@@ -355,11 +355,17 @@ void TIM1_UP_IRQHandler(void)
 		{
 				if (DECIMATOR==0x01) ext_adc_VALUE = (SAMPLE[0]+SAMPLE[1])>>1;
 				else				 ext_adc_VALUE = (SAMPLE[0]+SAMPLE[1]+SAMPLE[2]+SAMPLE[3])>>2;
-
-								
+							
 				//if ((ext_adc_VALUE * dec_koef > 32500000) || (ext_adc_VALUE * k_reg_mul < -32500000))  		
-				if ((ext_adc_VALUE > 32500) || (ext_adc_VALUE < -32500))  		
-				if (!ext_adc_DELAY) ext_adc_OVER = 1;   //выставл€ем признак перегруза канала
+				if ((ext_adc_VALUE > 32500) || (ext_adc_VALUE < -32500))
+				{					
+					
+					if (!ext_adc_DELAY) ext_adc_OVER = 1;   //выставл€ем признак перегруза канала
+					{
+						if (ext_adc_VALUE >= 32500) ext_adc_VALUE = 32500;
+						if (ext_adc_VALUE <= -32500) ext_adc_VALUE = -32500;
+					}
+				}
 				
 				//”множаем на настроечный коэф.	 
 //				ext_adc_VALUE = ((ext_adc_VALUE * dec_koef) / 1000);
