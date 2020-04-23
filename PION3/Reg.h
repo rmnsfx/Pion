@@ -36,8 +36,8 @@ typedef struct
 	
 
 TStatus 	   reg_SETUP(void);											  //инициализация уставок
-TStatus 	   reg_WRITE(unsigned int num_reg, unsigned short data);	  //запись уставки в энергонезависимую память и обновление буфера
-unsigned short reg_READ(unsigned int num_reg);							  //чтение уставки из буфера
+TStatus 	   reg_WRITE(unsigned int num_reg, unsigned int data);	  //запись уставки в энергонезависимую память и обновление буфера
+unsigned int reg_READ(unsigned int num_reg);							  //чтение уставки из буфера
 TStatus 	   reg_READ_ARRAY(unsigned int num_reg, unsigned short *data, unsigned short count); //чтение массива уставок из буфера
 
 #define 	   REG_MAX(num)   PARAMS[num].Max

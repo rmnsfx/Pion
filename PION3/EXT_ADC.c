@@ -347,6 +347,7 @@ void TIM1_UP_IRQHandler(void)
 
 		ext_adc_VALUE = ext_adc_READ()-0x8000;
 
+	
 		SAMPLE[INDEX&DECIMATOR] = ext_adc_VALUE;
 
 		INDEX++;
@@ -728,10 +729,10 @@ void ext_adc_WAIT(void)
 }
 
 
-u16 ext_adc_READ()
+uint64_t ext_adc_READ()
 {
  
- u32 value = 0;
+ uint64_t value = 0;
  
  //pin_ADC_CS(LOW);
  pin_ADC_CS_RES;

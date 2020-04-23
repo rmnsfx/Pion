@@ -70,7 +70,7 @@ extern FATINFO sdinfo;
 void progressbar(unsigned int value);
 
 ///Выключатель usb для отладки 
-#define USB_SWITCH 0
+#define USB_SWITCH 1
 
 ///Выключатель функций работы с SD-картой, при чтении служебных регистров
 extern unsigned char SD_SWITCH; 
@@ -79,6 +79,6 @@ extern unsigned int GLOBAL_ERROR;
 
 extern unsigned int ROADS_COUNTING(void);
 
-#define VER 374
+#define VER 380
 
 #endif

@@ -901,9 +901,9 @@ void CONTROL_POWER(u8 RESET)
 void MESUARE_PROCESS(void)
 {
   //unsigned int temp_reg;
-  float		   reg_1;
-  float		   reg_2;
-  float		   rms_reg;
+  double		   reg_1;
+  double		   reg_2;
+  double		   rms_reg;
  
   	  //расчет RMS
 		  k_reg = ((float)REG(K_VIBRO)/1000);  //коэффициент
