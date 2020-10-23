@@ -668,7 +668,7 @@ void ext_adc_START(void)
 						 iir_DEC_FILTER_SET(FILTER_6_TWO_SECTION, pLPF_2section);
 
 						 DECIMATOR = 0x01;//деление частоты на 2
-						 ext_adc_DELAY = 62500;//50000;//40000; //2.5 секунда						 						
+						 ext_adc_DELAY = 25000;//62500;//50000;//40000; //2.5 секунда						 						
 						 iir_DETECTOR_RESET(&DETECTOR,25000);//25000//50000
 
 			default: 	 break;		

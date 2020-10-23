@@ -3,7 +3,7 @@
 <title>Static Call Graph - [.\Main_project.axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image .\Main_project.axf</H1><HR>
-<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5050106: Last Updated: Thu Jul 16 09:30:42 2020
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5050106: Last Updated: Fri Oct 23 11:33:59 2020
 <BR><P>
 <H3>Maximum Stack Usage =       2588 bytes + Unknown(Functions without stacksize, Cycles, Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
@@ -638,7 +638,7 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[6b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 </UL>
 
-<P><STRONG><a name="[6b]"></a>main</STRONG> (Thumb, 2150 bytes, Stack size 88 bytes, main_1.o(.text))
+<P><STRONG><a name="[6b]"></a>main</STRONG> (Thumb, 2142 bytes, Stack size 88 bytes, main_1.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 2588 + Unknown Stack Size
 <LI>Call Chain = main &rArr; men_MENU_CONTROL &rArr; men_ES_MENU &rArr; men_SHOW_MAINFORMS &rArr; men_SHOW_REFRESH &rArr; men_EN_MENU &rArr; FORMAT &rArr; rod_CreateFile_edit &rArr; f_open &rArr; dir_register &rArr; dir_find &rArr; dir_next &rArr; create_chain &rArr; put_fat &rArr; move_window &rArr; sync_window &rArr; disk_write &rArr; send_cmd &rArr;  send_cmd (Cycle)
 </UL>
@@ -999,7 +999,7 @@ Global Symbols
 
 <P><STRONG><a name="[365]"></a>mmc_init</STRONG> (Thumb, 4 bytes, Stack size 0 bytes, flash.o(.text), UNUSED)
 
-<P><STRONG><a name="[10e]"></a>mmc_write_sect</STRONG> (Thumb, 72 bytes, Stack size 24 bytes, flash.o(.text))
+<P><STRONG><a name="[10e]"></a>mmc_write_sect</STRONG> (Thumb, 64 bytes, Stack size 24 bytes, flash.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 252<LI>Call Chain = mmc_write_sect &rArr; f_mount &rArr; find_volume &rArr; check_fs &rArr; move_window &rArr; sync_window &rArr; disk_write &rArr; send_cmd &rArr;  send_cmd (Cycle)
 </UL>
 <BR>[Calls]<UL><LI><a href="#[110]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;disk_write
@@ -1012,7 +1012,7 @@ Global Symbols
 <LI><a href="#[1e7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;write_sector
 </UL>
 
-<P><STRONG><a name="[111]"></a>mmc_read_sect</STRONG> (Thumb, 72 bytes, Stack size 24 bytes, flash.o(.text))
+<P><STRONG><a name="[111]"></a>mmc_read_sect</STRONG> (Thumb, 64 bytes, Stack size 24 bytes, flash.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 252<LI>Call Chain = mmc_read_sect &rArr; f_mount &rArr; find_volume &rArr; check_fs &rArr; move_window &rArr; sync_window &rArr; disk_write &rArr; send_cmd &rArr;  send_cmd (Cycle)
 </UL>
 <BR>[Calls]<UL><LI><a href="#[10f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;disk_status
@@ -1119,7 +1119,7 @@ Global Symbols
 <BR><BR>[Called By]<UL><LI><a href="#[a9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;START_MESUARE
 </UL>
 
-<P><STRONG><a name="[aa]"></a>ext_adc_START</STRONG> (Thumb, 1198 bytes, Stack size 8 bytes, ext_adc.o(.text))
+<P><STRONG><a name="[aa]"></a>ext_adc_START</STRONG> (Thumb, 1194 bytes, Stack size 8 bytes, ext_adc.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 120<LI>Call Chain = ext_adc_START &rArr; iir_DEC_FILTER_CHANGE &rArr; lrint &rArr; _dfix_r &rArr; __fpl_dnaninf
 </UL>
 <BR>[Calls]<UL><LI><a href="#[126]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;TIM_ITConfig
@@ -4520,7 +4520,7 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[27c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;men_EN_MENU
 </UL>
 
-<P><STRONG><a name="[27c]"></a>men_EN_MENU</STRONG> (Thumb, 3372 bytes, Stack size 200 bytes, menu.o(.text))
+<P><STRONG><a name="[27c]"></a>men_EN_MENU</STRONG> (Thumb, 3356 bytes, Stack size 200 bytes, menu.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 2372 + Unknown Stack Size
 <LI>Call Chain = men_EN_MENU &rArr; FORMAT &rArr; rod_CreateFile_edit &rArr; f_open &rArr; dir_register &rArr; dir_find &rArr; dir_next &rArr; create_chain &rArr; put_fat &rArr; move_window &rArr; sync_window &rArr; disk_write &rArr; send_cmd &rArr;  send_cmd (Cycle)
 </UL>
@@ -4571,7 +4571,7 @@ Global Symbols
 <LI><a href="#[281]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;men_SHOW_REFRESH
 </UL>
 
-<P><STRONG><a name="[281]"></a>men_SHOW_REFRESH</STRONG> (Thumb, 4184 bytes, Stack size 104 bytes, menu.o(.text))
+<P><STRONG><a name="[281]"></a>men_SHOW_REFRESH</STRONG> (Thumb, 4176 bytes, Stack size 104 bytes, menu.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 2476 + Unknown Stack Size
 <LI>Call Chain = men_SHOW_REFRESH &rArr; men_EN_MENU &rArr; FORMAT &rArr; rod_CreateFile_edit &rArr; f_open &rArr; dir_register &rArr; dir_find &rArr; dir_next &rArr; create_chain &rArr; put_fat &rArr; move_window &rArr; sync_window &rArr; disk_write &rArr; send_cmd &rArr;  send_cmd (Cycle)
 </UL>

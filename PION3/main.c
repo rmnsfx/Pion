@@ -1548,8 +1548,8 @@ int main(void)
 						temp_reg2 = 0;
 							
 					
-						__disable_irq();
-						__disable_fiq();
+//						__disable_irq();
+//						__disable_fiq();
 						
 					
 						f_mount(&fls, "0:", 1);
@@ -1595,8 +1595,8 @@ int main(void)
 							
 						f_mount(0,"0:", 0);
 							
-						__enable_irq();
-						__enable_fiq();
+//						__enable_irq();
+//						__enable_fiq();
 							
 						
 						//Num_of_Signals = temp_reg;
