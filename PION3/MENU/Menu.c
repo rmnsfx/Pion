@@ -810,8 +810,8 @@ void men_SHOW_REFRESH(void)
 										road_pos_int = atoi(&road_pos_edit_2); /// Â int
 										
 									
-										__disable_irq();
-										__disable_fiq();
+//										__disable_irq();
+//										__disable_fiq();
 										
 										
 										sprintf(t_str,"M:\\%03u.%03u\\Signal %d.dat",Road_Number,REG(ROUTE_NUM),NEl.Number);
@@ -832,8 +832,8 @@ void men_SHOW_REFRESH(void)
 										f_close(&Fil);			
 										f_mount(0,"0:", 0);							
 										
-										__enable_irq();
-										__enable_fiq();	
+//										__enable_irq();
+//										__enable_fiq();	
 										
 
 										crtflag = 0;
@@ -2865,8 +2865,8 @@ void men_EN_MENU(void)
 
 								IWDG_ReloadCounter();
 											
-								__disable_fiq();
-								__disable_irq();
+//								__disable_fiq();
+//								__disable_irq();
 								
 								finit();
 								f_mount(&fls, "0:", 1);
@@ -2877,8 +2877,8 @@ void men_EN_MENU(void)
 								f_close(&Fil);
 								f_mount(0,"0:", 0);		
 								
-								__enable_fiq();
-								__enable_irq();								
+//								__enable_fiq();
+//								__enable_irq();								
 								
 								
 								if (iout < 50000)	

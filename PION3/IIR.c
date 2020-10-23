@@ -161,7 +161,7 @@ signed int iir_DEC_INTEGRATOR_2ORD(d_FILTER *F, signed int newval)
 
 
 
-signed int iir_DEC_FILTER_1ORD(d_FILTER *F, signed int newval)
+signed long long iir_DEC_FILTER_1ORD(d_FILTER *F, signed long long newval)
 {
   signed long long SUM = 0;
 
@@ -191,7 +191,7 @@ signed int iir_DEC_FILTER_1ORD(d_FILTER *F, signed int newval)
 
 }
 
-signed int iir_DEC_FILTER_2ORD(d_FILTER *F, signed int newval)
+signed long long iir_DEC_FILTER_2ORD(d_FILTER *F, signed long long newval)
 {
   signed long long SUM = 0;
 
@@ -223,7 +223,7 @@ signed int iir_DEC_FILTER_2ORD(d_FILTER *F, signed int newval)
 
 }
 
-signed int iir_DEC_FILTER_4ORD(d_FILTER *F1, d_FILTER *F2, signed int newval)
+signed long long iir_DEC_FILTER_4ORD(d_FILTER *F1, d_FILTER *F2, signed long long newval)
 {
   signed long long SUM = 0;
   //первая секция фильтра

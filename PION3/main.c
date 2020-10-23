@@ -489,8 +489,6 @@ void EXTI9_5_IRQHandler ( void )
 	uint32_t i;
 	
 	
-  
-	
 	if ( (pin_USB_5V) || (usb_transit) )
 	{
 		
@@ -511,9 +509,7 @@ void EXTI9_5_IRQHandler ( void )
 			DISPLAY_OFF();
 			pin_OFF();	
 			while(1) IWDG_ReloadCounter();
-	}
-	
-	
+	}	
 	
 }
 
@@ -905,9 +901,9 @@ void CONTROL_POWER(u8 RESET)
 void MESUARE_PROCESS(void)
 {
   //unsigned int temp_reg;
-  float		   reg_1;
-  float		   reg_2;
-  float		   rms_reg;
+  double		   reg_1;
+  double		   reg_2;
+  double		   rms_reg;
  
   	  //расчет RMS
 		  k_reg = ((float)REG(K_VIBRO)/1000);  //коэффициент
@@ -1309,7 +1305,13 @@ int main(void)
 		
   GPIO_SETUP();
 
-  Delay(300000);
+	for(i = 0; i < 3; i++)
+	{
+		LED_CHARGE_ON();	//Зажигаем светодиод для проверки включения прибора, в случаях когда на дисплее нет питания	
+		Delay(600000);	
+		LED_CHARGE_OFF();	//Выключаем светодиод
+		Delay(600000);
+	}
   	
   //подать 13В
   pin_13V(HIGTH);
@@ -1546,8 +1548,8 @@ int main(void)
 						temp_reg2 = 0;
 							
 					
-						__disable_irq();
-						__disable_fiq();
+//						__disable_irq();
+//						__disable_fiq();
 						
 					
 						f_mount(&fls, "0:", 1);
@@ -1593,8 +1595,8 @@ int main(void)
 							
 						f_mount(0,"0:", 0);
 							
-						__enable_irq();
-						__enable_fiq();
+//						__enable_irq();
+//						__enable_fiq();
 							
 						
 						//Num_of_Signals = temp_reg;

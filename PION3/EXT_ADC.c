@@ -15,8 +15,8 @@ u16 ext_adc_XCOUNT;
 s16	ext_adc_SIM[ext_SAMPLING_SIZE];
 int64_t ext_adc_VALUE;
 u16 ext_mode_reg;
-u32 ext_adc_DELAY;
-s32  ext_adc_VAL;
+uint64_t ext_adc_DELAY;
+int64_t  ext_adc_VAL;
 
 u8	ext_adc_OVER = 0; //индикатор перегруза канала виброускорени€
 
@@ -24,7 +24,7 @@ float k_reg_mul = 1;
 s16 dec_koef = 1;
 
 //переменные дециматора
-s32 SAMPLE[4];
+int64_t SAMPLE[4];
 u8  INDEX;
 u8  DECIMATOR;
 
@@ -66,20 +66,20 @@ d_COEFF_FILTER FILTER_3_TWO_SECTION	=	{0.14692024016978588,   0.1469202401697858
 									 	 1,						0.70615951966042867,	 0};
 
 
-/*
+
 //фильтр „ебышева 1 рода низких частот 3 пор€дка на 5000 √ц 0.2 dB нелинейность ј„’, 25к√ц /2 секции
 d_COEFF_FILTER FILTER_4_ONE_SECTION	=	{0.31915372734296987, 	0.31915372734296987*2,  0.31915372734296987,
 									 	 1,						0.21709887495801744,	-0.49371378432989704};
 d_COEFF_FILTER FILTER_4_TWO_SECTION	=	{0.37180655604847523,   0.37180655604847523, 	 0,
 									 	 1,						0.25638688790304948,	 0};
 
-*/
 
-//фильтр „ебышева 1 рода низких частот 3 пор€дка на 5000 √ц 0.4 dB нелинейность ј„’, 25к√ц /2 секции
-d_COEFF_FILTER FILTER_4_ONE_SECTION	=	{0.29866872495474456, 	0.29866872495474456*2,  0.29866872495474456,
-									 	 1,						0.34573057845827115,	-0.54040547827724927};
-d_COEFF_FILTER FILTER_4_TWO_SECTION	=	{0.32765865296189323,   0.32765865296189323, 	 0,
-									 	 1,						0.34468269407621366,	 0};
+
+////фильтр „ебышева 1 рода низких частот 3 пор€дка на 5000 √ц 0.4 dB нелинейность ј„’, 25к√ц /2 секции
+//d_COEFF_FILTER FILTER_4_ONE_SECTION	=	{0.29866872495474456, 	0.29866872495474456*2,  0.29866872495474456,
+//									 	 1,						0.34573057845827115,	-0.54040547827724927};
+//d_COEFF_FILTER FILTER_4_TWO_SECTION	=	{0.32765865296189323,   0.32765865296189323, 	 0,
+//									 	 1,						0.34468269407621366,	 0};
 
 
 
@@ -347,6 +347,7 @@ void TIM1_UP_IRQHandler(void)
 
 		ext_adc_VALUE = ext_adc_READ()-0x8000;
 
+	
 		SAMPLE[INDEX&DECIMATOR] = ext_adc_VALUE;
 
 		INDEX++;
@@ -355,11 +356,17 @@ void TIM1_UP_IRQHandler(void)
 		{
 				if (DECIMATOR==0x01) ext_adc_VALUE = (SAMPLE[0]+SAMPLE[1])>>1;
 				else				 ext_adc_VALUE = (SAMPLE[0]+SAMPLE[1]+SAMPLE[2]+SAMPLE[3])>>2;
-
-								
+							
 				//if ((ext_adc_VALUE * dec_koef > 32500000) || (ext_adc_VALUE * k_reg_mul < -32500000))  		
-				if ((ext_adc_VALUE > 32500) || (ext_adc_VALUE < -32500))  		
-				if (!ext_adc_DELAY) ext_adc_OVER = 1;   //выставл€ем признак перегруза канала
+				if ((ext_adc_VALUE > 32500) || (ext_adc_VALUE < -32500))
+				{					
+					
+					if (!ext_adc_DELAY) ext_adc_OVER = 1;   //выставл€ем признак перегруза канала
+					{
+						if (ext_adc_VALUE >= 32500) ext_adc_VALUE = 32500;
+						if (ext_adc_VALUE <= -32500) ext_adc_VALUE = -32500;
+					}
+				}
 				
 				//”множаем на настроечный коэф.	 
 //				ext_adc_VALUE = ((ext_adc_VALUE * dec_koef) / 1000);
@@ -661,7 +668,7 @@ void ext_adc_START(void)
 						 iir_DEC_FILTER_SET(FILTER_6_TWO_SECTION, pLPF_2section);
 
 						 DECIMATOR = 0x01;//деление частоты на 2
-						 ext_adc_DELAY = 62500;//50000;//40000; //2.5 секунда						 						
+						 ext_adc_DELAY = 25000;//62500;//50000;//40000; //2.5 секунда						 						
 						 iir_DETECTOR_RESET(&DETECTOR,25000);//25000//50000
 
 			default: 	 break;		
@@ -722,10 +729,10 @@ void ext_adc_WAIT(void)
 }
 
 
-u16 ext_adc_READ()
+uint64_t ext_adc_READ()
 {
  
- u32 value = 0;
+ uint64_t value = 0;
  
  //pin_ADC_CS(LOW);
  pin_ADC_CS_RES;

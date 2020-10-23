@@ -7,7 +7,7 @@
 
 TData_reg DATA_REG;
 
-unsigned short reg_READ(unsigned int num_reg)
+unsigned int reg_READ(unsigned int num_reg)
 { 
 	unsigned short data;
 
@@ -60,7 +60,7 @@ TStatus status = _OK;
  return status; 
 }	*/
 
-TStatus reg_WRITE(unsigned int num_reg, unsigned short data)
+TStatus reg_WRITE(unsigned int num_reg, unsigned int data)
 {
  if (num_reg>=COUNT_REG) return _ERR;
 

@@ -559,7 +559,7 @@ void SPI_I2S_SendData(SPI_TypeDef* SPIx, uint16_t Data)
   *   - 2 or 3 in I2S mode
   * @retval The value of the received data.
   */
-uint16_t SPI_I2S_ReceiveData(SPI_TypeDef* SPIx)
+uint64_t SPI_I2S_ReceiveData(SPI_TypeDef* SPIx)
 {
   /* Check the parameters */
   assert_param(IS_SPI_ALL_PERIPH(SPIx));

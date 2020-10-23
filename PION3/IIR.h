@@ -58,9 +58,9 @@ float 		iir_FLO_FILTER_2ORD(f_FILTER *F, float newval);
 d_FILTER 	*iir_CreateFilterDec(double *A, double *B, unsigned char N);
 void 		 iir_DEC_FILTER_RESET(d_FILTER *F);								 		//сбросить значения фильтра
 void 		 iir_DEC_FILTER_CHANGE(double *A, double *B, d_FILTER *F);				 //задать новые коэффициенты фильтру
-signed int 	 iir_DEC_FILTER_1ORD(d_FILTER *F, signed int newval);	 				//фильтр 1-ого порядка
-signed int 	 iir_DEC_FILTER_2ORD(d_FILTER *F, signed int newval);	 				//фильтра 2-ого порядка
-signed int 	 iir_DEC_FILTER_4ORD(d_FILTER *F1, d_FILTER *F2, signed int newval);	//фильтр 4-ого порядка состоящий из двух секций (2 фильтра 2-ого порядка)
+signed long long 	 iir_DEC_FILTER_1ORD(d_FILTER *F, signed long long newval);	 				//фильтр 1-ого порядка
+signed long long 	 iir_DEC_FILTER_2ORD(d_FILTER *F, signed long long newval);	 				//фильтра 2-ого порядка
+signed long long 	 iir_DEC_FILTER_4ORD(d_FILTER *F1, d_FILTER *F2, signed long long newval);	//фильтр 4-ого порядка состоящий из двух секций (2 фильтра 2-ого порядка)
 
 signed int   iir_DEC_INTEGRATOR_2ORD(d_FILTER *F, signed int newval);
 

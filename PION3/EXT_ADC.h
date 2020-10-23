@@ -17,7 +17,7 @@ void ext_adc_SAMPLING(s16 *data_in, u16 count_sample);
 void ext_adc_SAMPLING_RESET(s16 *data_in, u16 count_sample); //סבנמס
 void ext_adc_START(void);
 void ext_adc_STOP(void);
-u16  ext_adc_READ(void);
+uint64_t  ext_adc_READ(void);
 
 void ext_adc_WAIT(void);
 u8   ext_adc_GET_STATUS(void);

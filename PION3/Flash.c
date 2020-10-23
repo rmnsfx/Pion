@@ -45,13 +45,13 @@ BOOL mmc_write_sect (U32 sect, U8 *buf, U32 cnt)
 		res = disk_status(0);	
 		if (res != 0) res = f_mount(&fls, "0:", 1);	
 										
-		__disable_irq();
-		__disable_fiq();
+//		__disable_irq();
+//		__disable_fiq();
    
 		res = disk_write(0, buf, sect, 1);
 		
-		__enable_irq();
-		__enable_fiq();
+//		__enable_irq();
+//		__enable_fiq();
 
 		res = f_mount(0,"0:", 0);
 		
@@ -67,13 +67,13 @@ BOOL mmc_read_sect (U32 sect, U8 *buf, U32 cnt)
 		res = disk_status(0);
 		if (res != 0) res = f_mount(&fls, "0:", 1);	
 		
-		__disable_irq();
-		__disable_fiq();
+//		__disable_irq();
+//		__disable_fiq();
 
 		res = disk_read(0, buf, sect, 1);
 	
-		__enable_irq();
-		__enable_fiq();
+//		__enable_irq();
+//		__enable_fiq();
 		
 		res = f_mount(0,"0:", 0);	
 
