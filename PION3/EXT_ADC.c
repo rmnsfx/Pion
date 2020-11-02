@@ -458,10 +458,7 @@ void TIM1_UP_IRQHandler(void)
 
 								 break;
 					case 0x0800: //канал выборки, 2-10000Гц
-								 //ext_adc_VALUE  = iir_DEC_FILTER_4ORD(pLPF_1section,pLPF_2section,ext_adc_VALUE);  //фильтр ВЧ
-					
-								ext_adc_VALUE = iir_DEC_FILTER_2ORD(pINTEGRAL_1section,ext_adc_VALUE);
-								 				
+								 ext_adc_VALUE  = iir_DEC_FILTER_4ORD(pLPF_1section,pLPF_2section,ext_adc_VALUE);  //фильтр ВЧ
 
 								 break;
 					default: 	 break;		
@@ -667,10 +664,8 @@ void ext_adc_START(void)
 						 
 						 break;
 			case 0x0800: //канал выборки
-//						 iir_DEC_FILTER_SET(FILTER_6_ONE_SECTION, pLPF_1section);	//2Гц фильтр
-//						 iir_DEC_FILTER_SET(FILTER_6_TWO_SECTION, pLPF_2section);
-			
-							iir_DEC_FILTER_SET(INTEGRATOR_2Hz, pINTEGRAL_1section);
+						 iir_DEC_FILTER_SET(FILTER_6_ONE_SECTION, pLPF_1section);	//2Гц фильтр
+						 iir_DEC_FILTER_SET(FILTER_6_TWO_SECTION, pLPF_2section);
 
 						 DECIMATOR = 0x01;//деление частоты на 2
 						 ext_adc_DELAY = 25000;//62500;//50000;//40000; //2.5 секунда						 						
