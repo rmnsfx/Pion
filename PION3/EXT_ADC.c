@@ -90,19 +90,26 @@ d_COEFF_FILTER FILTER_5_ONE_SECTION =	{0.79244066840254967, 	0.79244066840254967
 d_COEFF_FILTER FILTER_5_TWO_SECTION =	{0.71487112950893494,   0.71487112950893494, 	 0,
 									 	 1,					   -0.42974225901786994,	 0};
 
-
+/*
 //фильтр „ебышева 1 рода высоких частот 3 пор€дка на 2 √ц 0.2 dB нелинейность ј„’, 25к√ц /2 секции
 d_COEFF_FILTER FILTER_6_ONE_SECTION =	{0.9998551434467251,   -0.9998551434467251*2,    0.9998551434467251,
 									 	 1,					    1.9997101975399763,	    -0.99971037624692438};
 d_COEFF_FILTER FILTER_6_TWO_SECTION =	{0.99969157945534226,  -0.99969157945534226, 	 0,
 									 	 1,					    0.99938315891068441,	 0};
+*/
 
+//фильтр „ебышева 1 рода высоких частот 3 пор€дка на 5.0 √ц 0.5 dB нелинейность ј„’, 12.5к√ц /2 секции
+d_COEFF_FILTER FILTER_6_ONE_SECTION =	{0.9993100220600506,   -0.9993100220600506*2,    0.9993100220600506,
+									 	 1,					    1.998617281545052,	    -0.99862280669515058};
+d_COEFF_FILTER FILTER_6_TWO_SECTION =	{0.99799807001840368,  -0.99799807001840368, 	 0,
+									 	 1,					    0.99599614003680736,	 0};
 
-////фильтр „ебышева 1 рода высоких частот 3 пор€дка на 5.0 √ц 0.5 dB нелинейность ј„’, 12.5к√ц /2 секции
-//d_COEFF_FILTER FILTER_6_ONE_SECTION =	{0.9993100220600506,   -0.9993100220600506*2,    0.9993100220600506,
-//									 	 1,					    1.998617281545052,	    -0.99862280669515058};
-//d_COEFF_FILTER FILTER_6_TWO_SECTION =	{0.99799807001840368,  -0.99799807001840368, 	 0,
-//									 	 1,					    0.99599614003680736,	 0};
+										 
+//Chebyshev Type 1, Fpass=2 Hz, Fs=25000 Hz, Order=3, Passband Ripple=0.2 dB 										 
+//d_COEFF_FILTER FILTER_SAMPLE_ONE_SECTION =	{ 1*0.99987502948583629, -2*0.99987502948583629, 1*0.99987502948583629, 1.9997499319202028, -0.99975018602314236 };      
+//d_COEFF_FILTER FILTER_SAMPLE_TWO_SECTION =	{ 1*0.99949167421360274, -1*0.99949167421360274, 0, 0.99898334842720549, 0 };  										 
+										 
+ 										 
 
 /*
 //фильтр „ебышева 1 рода высоких частот 3 пор€дка на 10 √ц 0.2 dB нелинейность ј„’, 25к√ц /2 секции
@@ -458,7 +465,9 @@ void TIM1_UP_IRQHandler(void)
 
 								 break;
 					case 0x0800: //канал выборки, 2-10000√ц
-								 ext_adc_VALUE  = iir_DEC_FILTER_4ORD(pLPF_1section,pLPF_2section,ext_adc_VALUE);  //фильтр ¬„
+								 ext_adc_VALUE  = iir_DEC_FILTER_4ORD(pLPF_1section,pLPF_2section,ext_adc_VALUE);
+								 
+								 
 
 								 break;
 					default: 	 break;		
@@ -664,10 +673,10 @@ void ext_adc_START(void)
 						 
 						 break;
 			case 0x0800: //канал выборки
-						 iir_DEC_FILTER_SET(FILTER_6_ONE_SECTION, pLPF_1section);	//2√ц фильтр
-						 iir_DEC_FILTER_SET(FILTER_6_TWO_SECTION, pLPF_2section);
+						 iir_DEC_FILTER_SET(FILTER_7_TWO_SECTION, pLPF_1section);
+						 iir_DEC_FILTER_SET(FILTER_7_TWO_SECTION, pLPF_2section);
 
-						 DECIMATOR = 0x01;//деление частоты на 2
+						 DECIMATOR = 0x01;
 						 ext_adc_DELAY = 25000;//62500;//50000;//40000; //2.5 секунда						 						
 						 iir_DETECTOR_RESET(&DETECTOR,25000);//25000//50000
 
