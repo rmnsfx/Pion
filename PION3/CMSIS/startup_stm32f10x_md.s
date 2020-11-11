@@ -1,4 +1,4 @@
-;******************** (C) COPYRIGHT 2009 STMicroelectronics ********************
+	;******************** (C) COPYRIGHT 2009 STMicroelectronics ********************
 ;* File Name          : startup_stm32f10x_md.s
 ;* Author             : MCD Application Team
 ;* Version            : V3.1.0
@@ -125,12 +125,15 @@ __Vectors_Size  EQU  __Vectors_End - __Vectors
                 AREA    |.text|, CODE, READONLY
 
 ; Reset handler routine
-Reset_Handler    PROC
-                 EXPORT  Reset_Handler             [WEAK]
-        IMPORT  __main
-                 LDR     R0, =__main
-                 BX      R0
-                 ENDP
+Reset_Handler   PROC
+                EXPORT  Reset_Handler              [WEAK]
+                IMPORT  __main
+                IMPORT  SystemInit
+                LDR     R0, =SystemInit
+                BLX     R0
+                LDR     R0, =__main
+                BX      R0
+                ENDP
 
 ; Dummy Exception Handlers (infinite loops which can be modified)
 

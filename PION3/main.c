@@ -1318,7 +1318,7 @@ int main(void)
   
 	Delay(300000);
     
-  SystemInit();
+  //SystemInit();
   
 	SET_CLOCK_SPEED(CLK_72MHz); 
   
@@ -1458,6 +1458,7 @@ int main(void)
 	
 	//tempreg = REG(K_VIBRO);
  
+	__enable_irq();
 	
 	while (1) //начало основного цикла
   {		
