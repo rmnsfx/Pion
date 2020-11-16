@@ -895,15 +895,15 @@ uint16_t calc_from_dat_A ( const char *FileName)
 	if (FTemp != NULL)
 	{
 	fseek(FTemp,4,SEEK_SET);
-	iir_DEC_FILTER_SET(FILTER_4_ONE_SECTION, pHPF_1section);
-	iir_DEC_FILTER_SET(FILTER_4_TWO_SECTION, pHPF_2section);
-	iir_DEC_FILTER_SET(FILTER_7_ONE_SECTION, pLPF_1section);
-	iir_DEC_FILTER_SET(FILTER_7_TWO_SECTION, pLPF_2section);
+	//iir_DEC_FILTER_SET(FILTER_4_ONE_SECTION, pHPF_1section);
+	//iir_DEC_FILTER_SET(FILTER_4_TWO_SECTION, pHPF_2section);
+	iir_DEC_FILTER_SET(FILTER_SAMPLE_ONE_SECTION, pLPF_1section);
+	iir_DEC_FILTER_SET(FILTER_SAMPLE_TWO_SECTION, pLPF_2section);
 		
 	while (fread(tem,sizeof(s16),1,FTemp)==1)
 	{
 		t_element=(s32)((tem[0]<<15)-16384);
-		t_element  = iir_DEC_FILTER_4ORD(pHPF_1section,pHPF_2section,t_element);  //ôèëüòð Í×
+		//t_element  = iir_DEC_FILTER_4ORD(pHPF_1section,pHPF_2section,t_element);
 		t_element  = iir_DEC_FILTER_4ORD(pLPF_1section,pLPF_2section,t_element);
 		iir_DETECTOR(&DETECTOR,t_element/300);
 	}
@@ -940,12 +940,14 @@ uint16_t calc_from_dat_V ( const char *FileName)
 	iir_DEC_FILTER_SET(FILTER_4_ONE_SECTION, pHPF_1section);
 	iir_DEC_FILTER_SET(FILTER_4_TWO_SECTION, pHPF_2section);
 	iir_DEC_FILTER_SET(FILTER_8_ONE_SECTION, pLPF_1section); 
+	//iir_DEC_FILTER_SET(FILTER_SAMPLE_TWO_SECTION, pLPF_2section);
 	iir_DEC_FILTER_SET(INTEGRATOR_10Hz, pINTEGRAL_1section);
 	while (fread(tem,sizeof(s16),1,FTemp)==1)
 	{
 		t_element=(s32)((tem[0]<<15)-16384);
 		t_element  = iir_DEC_FILTER_4ORD(pHPF_1section,pHPF_2section,t_element);	
-  	t_element = iir_DEC_FILTER_2ORD(pINTEGRAL_1section,t_element);
+		//t_element = iir_DEC_FILTER_4ORD(pLPF_1section,pLPF_2section,t_element);
+		t_element = iir_DEC_FILTER_2ORD(pINTEGRAL_1section,t_element);
 		t_element = iir_DEC_FILTER_1ORD(pLPF_1section,t_element);
 		iir_DETECTOR(&DETECTOR,t_element*20.916/300);
 	}
