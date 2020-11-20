@@ -146,6 +146,12 @@ d_COEFF_FILTER FILTER_11_ONE_SECTION =	{0.99849430491967095,   -0.99849430491967
 d_COEFF_FILTER FILTER_12_ONE_SECTION =	{0.99937207592298405,   -0.99937207592298405,    0,
 									 	 1,					    0.99874415184596799,	     0};
 
+//Butterworth highpass, Fs=25000, Order=3, Fc=15
+d_COEFF_FILTER FILTER_13_ONE_SECTION =	{1*0.99811504886014635,  -2*0.99811504886014635,  1*0.99811504886014635,  
+										 1,  1.9962230049830032, -0.99623719045758208};
+d_COEFF_FILTER FILTER_13_TWO_SECTION =	{1*0.99811858855661251,  -1*0.99811858855661251,  0,  
+										 1,  0.99623717711322513,  0};										 
+
 /*
 //банд пас фильтр Ѕатерворта Ќ„ 2 пор€дка на 1.3-2.7 √ц - 25 к√ц / 
 d_COEFF_FILTER INTEGRATOR_2Hz = 		{0.00017589824497515666,0,-0.00017589824497515666,
@@ -191,11 +197,40 @@ d_COEFF_FILTER FILTER_70_ONE_SECTION =	{0.998825961571007,   -0.998825961571007*
 d_COEFF_FILTER FILTER_70_TWO_SECTION =	{0.9966014781789202,  -0.9966014781789202, 	 0,
 									 	 1,					    0.99320295635784028,	 0};
 
+#if IS_NEW_PION == true
+////Butterworth lowpass, Fs=25000, Order=3, Fc=9000
+//d_COEFF_FILTER FILTER_SAMPLE_HS_ONE_SECTION = {1*0.59101828660026468,  2*0.59101828660026468,  1*0.59101828660026468,  
+//1,  -0.92029733683575832,  -0.44377580956530038};
+//d_COEFF_FILTER FILTER_SAMPLE_HS_TWO_SECTION = {1*0.68001107654787829,  1*0.68001107654787829,  0,  
+//1,  -0.36002215309575664,  0};
+////Butterworth lowpass, Fs=25000, Order=3, Fc=9500
+//d_COEFF_FILTER FILTER_SAMPLE_HS_ONE_SECTION = {1*0.64404480875119319,  2*0.64404480875119319,  1*0.64404480875119319,  
+//1,  -1.0861699924155108,  -0.49000924258926176};
+//d_COEFF_FILTER FILTER_SAMPLE_HS_TWO_SECTION = {1*0.71636932112371288,  1*0.71636932112371288,  0,  
+//1,  -0.43273864224742575,  0};
+//Butterworth lowpass, Fs=25000, Order=3, Fc=10000
+d_COEFF_FILTER FILTER_SAMPLE_HS_ONE_SECTION = {1*0.69905993658954935,  2*0.69905993658954935,  1*0.69905993658954935,  
+1,  -1.2505164308487398,  -0.54572331550945774};
+d_COEFF_FILTER FILTER_SAMPLE_HS_TWO_SECTION = {1*0.7547627247472144,  1*0.7547627247472144,  0,  
+1,  -0.50952544949442879,  0};
+//
+//Chebyshev Type 1, Fpass=2 Hz, Fs=25000 Hz, Order=3, Passband Ripple=0.2 dB
+d_COEFF_FILTER FILTER_SAMPLE_LS_ONE_SECTION =	{ 1*0.99987502948583629,  -2*0.99987502948583629,  1*0.99987502948583629,  
+1,  1.9997499319202028,   -0.99975018602314236 };
+d_COEFF_FILTER FILTER_SAMPLE_LS_TWO_SECTION =	{ 1*0.99949167421360274,  -1*0.99949167421360274,  0,  
+1,  0.99898334842720549,  0 };
+////Chebyshev Type 1, Fpass=2 Hz, Fs=25000 Hz, Order=3, Passband Ripple=0.2 dB (tougher)
+//d_COEFF_FILTER FILTER_SAMPLE_LS_ONE_SECTION =	{1*0.99974867259829225,  -2*0.99974867259829225,  1*0.99974867259829225,  
+//1,  1.9994972188973932, -0.99949747149577572};
+//d_COEFF_FILTER FILTER_SAMPLE_LS_TWO_SECTION =	{1*0.99974873573202072,  -1*0.99974873573202072,  0,  
+//1,  0.99949747146404133,  0};
+#else
 //Chebyshev Type 1, Fpass=1 Hz, Fs=25000 Hz, Order=3, Passband Ripple=0.2 dB 										 
-d_COEFF_FILTER FILTER_SAMPLE_ONE_SECTION =	{ 1*0.99992757764745543,  -2*0.99992757764745543,  1*0.99992757764745543,  
+d_COEFF_FILTER FILTER_SAMPLE_LS_ONE_SECTION =	{ 1*0.99992757764745543,  -2*0.99992757764745543,  1*0.99992757764745543,  
 										 1,  1.9998551329549248, -0.99985517763489695 };       
-d_COEFF_FILTER FILTER_SAMPLE_TWO_SECTION =	{ 1*0.99984576594563035,  -1*0.99984576594563035,  0,                      
+d_COEFF_FILTER FILTER_SAMPLE_LS_TWO_SECTION =	{ 1*0.99984576594563035,  -1*0.99984576594563035,  0,                      
 										 1,  0.99969153189126081, 0 };
+#endif
 
 d_FILTER *pHPF_1section,
 		 *pHPF_2section,
@@ -456,7 +491,7 @@ void TIM1_UP_IRQHandler(void)
 								 break;
 					case 0x0401: //канал перемещени€, 10-1000√ц
 								 //фильтр на 300гц	
-								 ext_adc_VALUE  = iir_DEC_FILTER_4ORD(pHPF_1section,pHPF_2section,ext_adc_VALUE);	
+								 ext_adc_VALUE  = iir_DEC_FILTER_4ORD(pHPF_1section,pHPF_2section,ext_adc_VALUE);
 								 //ext_adc_VALUE = iir_DEC_FILTER_1ORD(pLPF_1section,ext_adc_VALUE);
 									ext_adc_VALUE  = iir_DEC_FILTER_4ORD(pLPF_1section,pLPF_2section,ext_adc_VALUE);  //фильтр ¬„
 									 //интегратор 2-го пор€дка + фильтр 
@@ -464,6 +499,9 @@ void TIM1_UP_IRQHandler(void)
 
 								 break;
 					case 0x0800: //канал выборки, 2-10000√ц
+								 #if IS_NEW_PION == true
+								 ext_adc_VALUE  = iir_DEC_FILTER_4ORD(pHPF_1section,pHPF_2section,ext_adc_VALUE);
+								 #endif
 								 ext_adc_VALUE  = iir_DEC_FILTER_4ORD(pLPF_1section,pLPF_2section,ext_adc_VALUE);
 								 
 								 
@@ -672,8 +710,13 @@ void ext_adc_START(void)
 						 
 						 break;
 			case 0x0800: //канал выборки
-						 iir_DEC_FILTER_SET(FILTER_SAMPLE_ONE_SECTION, pLPF_1section);
-						 iir_DEC_FILTER_SET(FILTER_SAMPLE_TWO_SECTION, pLPF_2section);
+						 #if IS_NEW_PION == true
+						 iir_DEC_FILTER_SET(FILTER_SAMPLE_HS_ONE_SECTION, pHPF_1section);
+						 iir_DEC_FILTER_SET(FILTER_SAMPLE_HS_TWO_SECTION, pHPF_2section);
+						 #endif
+			
+						 iir_DEC_FILTER_SET(FILTER_SAMPLE_LS_ONE_SECTION, pLPF_1section);
+						 iir_DEC_FILTER_SET(FILTER_SAMPLE_LS_TWO_SECTION, pLPF_2section);
 
 						 DECIMATOR = 0x01;
 						 ext_adc_DELAY = 25000;//62500;//50000;//40000; //2.5 секунда						 						
@@ -895,16 +938,10 @@ uint16_t calc_from_dat_A ( const char *FileName)
 	if (FTemp != NULL)
 	{
 	fseek(FTemp,4,SEEK_SET);
-	//iir_DEC_FILTER_SET(FILTER_4_ONE_SECTION, pHPF_1section);
-	//iir_DEC_FILTER_SET(FILTER_4_TWO_SECTION, pHPF_2section);
-	iir_DEC_FILTER_SET(FILTER_SAMPLE_ONE_SECTION, pLPF_1section);
-	iir_DEC_FILTER_SET(FILTER_SAMPLE_TWO_SECTION, pLPF_2section);
 		
 	while (fread(tem,sizeof(s16),1,FTemp)==1)
 	{
 		t_element=(s32)((tem[0]<<15)-16384);
-		//t_element  = iir_DEC_FILTER_4ORD(pHPF_1section,pHPF_2section,t_element);
-		t_element  = iir_DEC_FILTER_4ORD(pLPF_1section,pLPF_2section,t_element);
 		iir_DETECTOR(&DETECTOR,t_element/300);
 	}
 	/*
@@ -939,16 +976,15 @@ uint16_t calc_from_dat_V ( const char *FileName)
 	iir_DETECTOR_RESET(&DETECTOR,25000);
 	iir_DEC_FILTER_SET(FILTER_4_ONE_SECTION, pHPF_1section);
 	iir_DEC_FILTER_SET(FILTER_4_TWO_SECTION, pHPF_2section);
-	iir_DEC_FILTER_SET(FILTER_8_ONE_SECTION, pLPF_1section); 
-	//iir_DEC_FILTER_SET(FILTER_SAMPLE_TWO_SECTION, pLPF_2section);
+	iir_DEC_FILTER_SET(FILTER_13_ONE_SECTION, pLPF_1section);
+	iir_DEC_FILTER_SET(FILTER_13_TWO_SECTION, pLPF_2section);
 	iir_DEC_FILTER_SET(INTEGRATOR_10Hz, pINTEGRAL_1section);
 	while (fread(tem,sizeof(s16),1,FTemp)==1)
 	{
 		t_element=(s32)((tem[0]<<15)-16384);
 		t_element  = iir_DEC_FILTER_4ORD(pHPF_1section,pHPF_2section,t_element);	
-		//t_element = iir_DEC_FILTER_4ORD(pLPF_1section,pLPF_2section,t_element);
 		t_element = iir_DEC_FILTER_2ORD(pINTEGRAL_1section,t_element);
-		t_element = iir_DEC_FILTER_1ORD(pLPF_1section,t_element);
+		t_element = iir_DEC_FILTER_4ORD(pLPF_1section,pLPF_2section,t_element);
 		iir_DETECTOR(&DETECTOR,t_element*20.916/300);
 	}
 	res[1] = iir_RETURN_RMS(&DETECTOR);

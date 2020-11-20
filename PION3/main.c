@@ -67,7 +67,9 @@
 	extern  FRESULT res_t=0; 
 	extern 	FILINFO fno=0;
 
- #define TIME_POWER_OFF	(10*60*1000)
+
+#define TIME_POWER_OFF	(10*60*1000)
+#define IS_NEW_PION			(true)			// false - old pion with charge sensor, true - new pion with ICP sensor
 
 
 int GLOBAL_TIMER_1ms = 0;

@@ -79,6 +79,6 @@ extern unsigned int GLOBAL_ERROR;
 
 extern unsigned int ROADS_COUNTING(void);
 
-#define VER 398
+#define VER 399
 
 #endif
