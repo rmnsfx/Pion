@@ -72,6 +72,8 @@ void progressbar(unsigned int value);
 ///Выключатель usb для отладки 
 #define USB_SWITCH 1
 
+#define IS_NEW_PION    (true)			// false - old pion with charge sensor, true - new pion with ICP sensor
+
 ///Выключатель функций работы с SD-картой, при чтении служебных регистров
 extern unsigned char SD_SWITCH; 
 
